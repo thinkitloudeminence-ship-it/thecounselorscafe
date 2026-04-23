@@ -118,7 +118,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </>
         )}
 
-        {/* Meta row */}
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 mb-6 pb-6 border-b border-white/10">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center text-black font-bold text-xs">
@@ -160,10 +159,8 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* Blog Content */}
         <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
 
-        {/* Like & Share */}
         <div className="flex items-center gap-4 mt-10 pt-8 border-t border-white/10">
           <button
             onClick={handleLike}
@@ -184,7 +181,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </button>
         </div>
 
-        {/* Author Box */}
         {blog.author?.bio && (
           <div className="mt-10 p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-4">
             <div className="w-14 h-14 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-bold text-xl flex-shrink-0">
@@ -197,7 +193,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* CTA */}
         <div className="mt-10 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
           <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance? ☕</h3>
           <p className="text-gray-400 text-sm mb-4">
@@ -211,7 +206,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </Link>
         </div>
 
-        {/* Related Articles */}
         {related.length > 0 && (
           <div className="mt-12">
             <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>

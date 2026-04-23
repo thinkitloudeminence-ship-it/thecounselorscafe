@@ -7,3 +7,4 @@ uploads/blogs/*.jpg
 uploads/blogs/*.png
 uploads/blogs/*.webp
 *.log
+*.bak

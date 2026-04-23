@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import BlogDetailClient from "../BlogClient";
+import BlogDetailClient from "./BlogClient";
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
+  const { slug } = await params;
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-    const res = await fetch(`${apiUrl}/blogs/${params.slug}`, {
+    const res = await fetch(`${apiUrl}/blogs/${slug}`, {
       next: { revalidate: 3600 },
     });
 
@@ -31,12 +32,12 @@ export async function generateMetadata(
       ],
       authors: [{ name: blog.author?.name || "The Counselors Cafe" }],
       alternates: {
-        canonical: `https://thecounselorscafe.com/blog/${params.slug}`,
+        canonical: `https://thecounselorscafe.com/blog/${slug}`,
       },
       openGraph: {
         title: `${title} | The Counselors Cafe`,
         description,
-        url: `https://thecounselorscafe.com/blog/${params.slug}`,
+        url: `https://thecounselorscafe.com/blog/${slug}`,
         type: "article",
         publishedTime: blog.publishedAt,
         authors: [blog.author?.name],
@@ -51,19 +52,20 @@ export async function generateMetadata(
       },
     };
   } catch {
-    const title = params.slug
+    const title = slug
       .replace(/-/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase());
     return {
       title: `${title} | The Counselors Cafe Blog`,
       description: "Expert career guidance articles from verified counselors at The Counselors Cafe.",
       alternates: {
-        canonical: `https://thecounselorscafe.com/blog/${params.slug}`,
+        canonical: `https://thecounselorscafe.com/blog/${slug}`,
       },
     };
   }
 }
 
-export default function BlogDetailPage({ params }: { params: { slug: string } }) {
-  return <BlogDetailClient slug={params.slug} />;
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <BlogDetailClient slug={slug} />;
 }
