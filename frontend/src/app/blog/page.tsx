@@ -95,6 +95,22 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "Stream Selection": <FileText size={14} className="text-yellow-500" />,
 };
 
+// Helper function to get author name (handles both string and object)
+const getAuthorName = (author: any): string => {
+  if (!author) return "The Counselors Cafe";
+  if (typeof author === "string") return author;
+  if (author.name) return author.name;
+  return "The Counselors Cafe";
+};
+
+// Helper function to get valid image URL
+const getImageUrl = (image: any): string | null => {
+  if (!image) return null;
+  if (typeof image === "string" && image.trim() !== "") return image;
+  if (image?.url && image.url.trim() !== "") return image.url;
+  return null;
+};
+
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<any[]>(fallbackBlogs);
   const [search, setSearch] = useState("");
@@ -171,58 +187,67 @@ export default function BlogPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((blog, i) => (
-              <motion.article
-                key={blog._id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                viewport={{ once: true }}
-                className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
-              >
-                {/* Image - Real Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={blog.image}
-                    alt={blog.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-                  
-                  {/* Category Badge */}
-                  <div className="absolute bottom-3 left-3 z-10">
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border ${categoryColors[blog.category] || "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"}`}>
-                      {categoryIcons[blog.category]}
-                      {blog.category}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-5">
-                  <h2 className="font-bold text-white text-base leading-snug mb-2 group-hover:text-yellow-400 transition-colors line-clamp-2">
-                    {blog.title}
-                  </h2>
-                  <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4">{blog.excerpt}</p>
-
-                  <div className="flex items-center justify-between border-t border-white/10 pt-3">
-                    <div className="flex items-center gap-3 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <User size={11} className="text-yellow-500" />
-                        {blog.author.split(" ").slice(0, 2).join(" ")}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock size={11} className="text-yellow-500" />
-                        {blog.readTime} min read
+            {filtered.map((blog, i) => {
+              const imageUrl = getImageUrl(blog.image);
+              return (
+                <motion.article
+                  key={blog._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  viewport={{ once: true }}
+                  className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
+                >
+                  {/* Image - Only render if valid image URL exists */}
+                  <div className="relative h-48 overflow-hidden bg-gray-900">
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt={blog.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                        <BookOpen size={48} className="text-gray-600" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                    
+                    {/* Category Badge */}
+                    <div className="absolute bottom-3 left-3 z-10">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border ${categoryColors[blog.category] || "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"}`}>
+                        {categoryIcons[blog.category]}
+                        {blog.category}
                       </span>
                     </div>
-                    <Link href={`/blog/${blog.slug}`} className="flex items-center gap-1 text-yellow-500 text-xs font-semibold hover:gap-2 transition-all group-hover:text-yellow-400">
-                      Read <ArrowRight size={12} />
-                    </Link>
                   </div>
-                </div>
-              </motion.article>
-            ))}
+
+                  <div className="p-5">
+                    <h2 className="font-bold text-white text-base leading-snug mb-2 group-hover:text-yellow-400 transition-colors line-clamp-2">
+                      {blog.title}
+                    </h2>
+                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4">{blog.excerpt}</p>
+
+                    <div className="flex items-center justify-between border-t border-white/10 pt-3">
+                      <div className="flex items-center gap-3 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <User size={11} className="text-yellow-500" />
+                          {getAuthorName(blog.author).split(" ").slice(0, 2).join(" ")}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock size={11} className="text-yellow-500" />
+                          {blog.readTime} min read
+                        </span>
+                      </div>
+                      <Link href={`/blog/${blog.slug}`} className="flex items-center gap-1 text-yellow-500 text-xs font-semibold hover:gap-2 transition-all group-hover:text-yellow-400">
+                        Read <ArrowRight size={12} />
+                      </Link>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
           </div>
         )}
 
