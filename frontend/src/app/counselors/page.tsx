@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import CounselorsClient from "./CounselorsClient";
 
-
 export const metadata: Metadata = {
   title: "Find Career Counselors | 120+ Verified Experts | The Counselors Cafe",
   description: "Browse 120+ verified career counselors on The Counselors Cafe. Filter by expertise — stream selection, study abroad, CUET, JEE, MBA, resume prep & more. Book a 1-on-1 session today. Starts from ₹599.",
@@ -31,5 +30,5 @@ export const metadata: Metadata = {
 };
 
 export default function CounselorsPage() {
-  return <CounselorsClient id={""} />;
+  return <CounselorsClient id={""} />;  // ✅ Remove id prop
 }

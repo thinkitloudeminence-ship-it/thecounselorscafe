@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CounselorDetailClient from "../CounselorsClient";
 
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }  // ✅ Promise type
 ): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;  // ✅ await params
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
     const res = await fetch(`${apiUrl}/counselors/${id}`, {
@@ -56,7 +56,11 @@ export async function generateMetadata(
   }
 }
 
-export default function CounselorDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function CounselorDetailPage({ 
+  params 
+}: { 
+  params: Promise<{ id: string }>  // ✅ Promise type
+}) {
+  const { id } = await params;  // ✅ await params
   return <CounselorDetailClient id={id} />;
 }
