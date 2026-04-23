@@ -1,0 +1,36 @@
+import { ArrowLeft, Clock, User, Calendar, Tag } from "lucide-react";
+import Link from "next/link";
+
+export default function BlogDetailPage({ params }: { params: { slug: string } }) {
+  return (
+    <div className="min-h-screen pt-20 bg-white">
+      <div className="container-custom px-4 md:px-6 py-10 max-w-3xl">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors text-sm mb-8">
+          <ArrowLeft size={16} /> Back to Blog
+        </Link>
+        <span className="inline-block bg-orange-50 text-orange-700 border border-orange-200 text-xs font-medium px-3 py-1.5 rounded-full mb-4">Career Guidance</span>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
+          Article: {params.slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+        </h1>
+        <div className="flex items-center gap-4 text-sm text-gray-400 mb-8 pb-8 border-b border-gray-100">
+          <span className="flex items-center gap-1.5"><User size={14} /> Expert Author</span>
+          <span className="flex items-center gap-1.5"><Clock size={14} /> 7 min read</span>
+          <span className="flex items-center gap-1.5"><Calendar size={14} /> {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</span>
+        </div>
+        <div className="prose prose-gray max-w-none">
+          <p className="text-gray-600 leading-relaxed text-lg">
+            This article is fetched dynamically from the backend. Connect the API at <code>/api/blogs/{params.slug}</code> to render full content here.
+          </p>
+          <p className="text-gray-600 leading-relaxed mt-4">
+            Our expert counselors write in-depth articles covering every aspect of career planning — from stream selection to study abroad, from CUET prep to MBA admissions. Stay tuned for expert content.
+          </p>
+          <div className="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-2xl">
+            <h3 className="font-bold text-gray-900 text-lg mb-2">Need personalized guidance?</h3>
+            <p className="text-gray-600 text-sm mb-4">Reading articles is great, but one session with an expert can change everything.</p>
+            <Link href="/counselors" className="btn-primary inline-flex">Talk to a Counselor →</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

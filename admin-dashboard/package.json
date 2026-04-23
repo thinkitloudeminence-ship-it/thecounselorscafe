@@ -1,0 +1,42 @@
+{
+  "name": "counselors-cafe-admin",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@tiptap/core": "^2.3.0",
+    "@tiptap/extension-color": "^2.3.0",
+    "@tiptap/extension-image": "^2.3.0",
+    "@tiptap/extension-link": "^2.3.0",
+    "@tiptap/extension-placeholder": "^2.3.0",
+    "@tiptap/extension-text-style": "^2.3.0",
+    "@tiptap/extension-underline": "^2.3.0",
+    "@tiptap/extension-youtube": "^2.3.0",
+    "@tiptap/react": "^2.3.0",
+    "@tiptap/starter-kit": "^2.3.0",
+    "axios": "^1.7.0",
+    "cross-env": "^7.0.3",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.372.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.23.0",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "start": "cross-env PORT=3001 react-scripts start",
+    "build": "react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": ["react-app"],
+    "rules": {
+      "no-unused-vars": "warn",
+      "react-hooks/exhaustive-deps": "warn"
+    }
+  },
+  "browserslist": {
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version"]
+  },
+  "proxy": "http://localhost:5000"
+}
