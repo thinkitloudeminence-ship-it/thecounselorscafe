@@ -7,28 +7,37 @@ import PerformanceOptimizer from "@/components/PerformanceOptimizer";
 import JsonLd from "@/app/seo/JsonLd";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://counselorscafe.com'),
+  metadataBase: new URL('https://thecounselorscafe.com'),
   title: {
-    default: "CounselorsCafe | India's Most Trusted Career Counselling Platform",
-    template: "%s | CounselorsCafe",
+    default: "The Counselors Cafe | India's #1 Career Counselling Platform",
+    template: "%s | The Counselors Cafe",
   },
-  description: "Get expert career guidance from verified counselors. Stream selection, study abroad, CUET, JEE, NEET, resume prep & more. Book a session today. 50,000+ students helped.",
+  description: "India's most trusted career counselling platform. Get expert 1-on-1 guidance for stream selection, study abroad, CUET, JEE, NEET, MBA, resume prep & career planning. 8,500+ students guided. Book a session today.",
   keywords: [
-    "career counselling India",   
-    "CUET guidance",
-    "study abroad",
-    "stream selection class 10 12",
-    "career counselor",
-    "JEE guidance",
-    "NEET guidance",
-    "MBA counselling",
-    "resume building",
+    "career counselling India",
+    "career counselor online",
+    "stream selection after 10th",
+    "stream selection after 12th",
+    "study abroad guidance India",
+    "CUET counselling",
+    "JEE guidance counsellor",
+    "NEET career guidance",
+    "MBA counselling India",
+    "resume building India",
     "interview preparation",
-    "psychometric test",
+    "career guidance for students",
+    "online career counselor",
+    "career counselling Bhopal",
+    "best career counsellor India",
+    "psychometric test India",
+    "career after 10th class",
+    "career after 12th class",
+    "thecounselorscafe",
+    "counselors cafe",
   ],
-  authors: [{ name: "CounselorsCafe", url: "https://counselorscafe.com" }],
-  creator: "CounselorsCafe",
-  publisher: "CounselorsCafe",
+  authors: [{ name: "The Counselors Cafe", url: "https://thecounselorscafe.com" }],
+  creator: "The Counselors Cafe",
+  publisher: "The Counselors Cafe",
   formatDetection: {
     email: false,
     address: false,
@@ -37,30 +46,31 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://counselorscafe.com",
-    siteName: "CounselorsCafe",
-    title: "CounselorsCafe | Career Counselling for Indian Students",
-    description: "Get expert career guidance from verified counselors. Stream selection, abroad education, resume prep & more.",
+    url: "https://thecounselorscafe.com",
+    siteName: "The Counselors Cafe",
+    title: "The Counselors Cafe | India's #1 Career Counselling Platform",
+    description: "Get expert career guidance from verified counselors. Stream selection, study abroad, CUET, JEE, resume prep & more. 8,500+ students guided.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "CounselorsCafe - Career Counselling Platform",
+        alt: "The Counselors Cafe - Career Counselling Platform India",
+        type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CounselorsCafe | Career Counselling Platform",
-    description: "Get expert career guidance from verified counselors. Book a session today!",
+    title: "The Counselors Cafe | Career Counselling Platform",
+    description: "Expert career guidance for Indian students. Stream selection, study abroad, CUET, JEE & more. Book a session today!",
     images: ["/og-image.jpg"],
     creator: "@counselorscafe",
     site: "@counselorscafe",
   },
   robots: {
-    index: true,   // ❌ index OFF
-    follow: true,  // ❌ links follow OFF
+    index: true,
+    follow: true,
     googleBot: {
       index: true,
       follow: true,
@@ -70,16 +80,20 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "CC3U2Ynj4CajtpTWcj4KM-nPfF_hP5GhvtRzH5vffUU",
   },
   alternates: {
-    canonical: "https://counselorscafe.com",
+    canonical: "https://thecounselorscafe.com",
+    languages: {
+      'en-IN': 'https://thecounselorscafe.com',
+    },
   },
   category: "education",
+  classification: "Career Counselling, Education, Student Guidance",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#EAB308",  // ✅ Already hai, duplicate mat karo
+  themeColor: "#EAB308",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -93,18 +107,44 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* ✅ BAS YEH EK LINE ADD KARO */}
         <link rel="manifest" href="/manifest.json" />
-        
-        {/* Existing preconnect links */}
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NJSNB7CS');`
+          }}
+        />
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E79YGEBVTK" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E79YGEBVTK');`
+          }}
+        />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-NJSNB7CS"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
         <JsonLd />
         <PerformanceOptimizer />
         <Navbar />

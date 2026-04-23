@@ -1,10 +1,65 @@
-"use client";
+import type { Metadata } from "next";
 import { useState, useEffect, use } from "react";
 import { motion } from "framer-motion";
-import { Star, Languages, CheckCircle, ArrowLeft, Sparkles, Award, Users, Mail, Phone, MapPin, Calendar, Clock, GraduationCap} from "lucide-react";
+import { Star, Languages, CheckCircle, ArrowLeft, Sparkles, Award, Users, Mail, Phone, MapPin, Calendar, Clock, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { fetchCounselor } from "@/lib/api";
 import Image from "next/image";
+
+// Dynamic metadata for each counselor profile
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    const res = await fetch(`${apiUrl}/counselors/${params.id}`, {
+      next: { revalidate: 3600 },
+    });
+    
+    if (!res.ok) throw new Error("Counselor not found");
+    const data = await res.json();
+    const c = data.data || data;
+
+    const title = `${c.name} — ${c.title || "Career Counselor"}`;
+    const description = `Book a session with ${c.name}, a verified career counselor at The Counselors Cafe with ${c.experience}+ years of experience in ${(c.expertise || []).slice(0, 3).join(", ")}. ${c.rating}★ rating from ${c.reviews}+ reviews.`;
+
+    return {
+      title: `${title} | The Counselors Cafe`,
+      description,
+      keywords: [
+        c.name,
+        ...(c.expertise || []),
+        "career counselor",
+        "book career counselling",
+        "the counselors cafe",
+      ],
+      alternates: {
+        canonical: `https://thecounselorscafe.com/counselors/${params.id}`,
+      },
+      openGraph: {
+        title: `${title} | The Counselors Cafe`,
+        description,
+        url: `https://thecounselorscafe.com/counselors/${params.id}`,
+        images: [
+          {
+            url: c.image || "/og-image.jpg",
+            width: 800,
+            height: 600,
+            alt: c.name,
+          },
+        ],
+      },
+    };
+  } catch {
+    return {
+      title: "Career Counselor Profile | The Counselors Cafe",
+      description: "Book a 1-on-1 session with a verified career counselor at The Counselors Cafe.",
+      alternates: {
+        canonical: `https://thecounselorscafe.com/counselors/${params.id}`,
+      },
+    };
+  }
+}
 
 // Fallback counselor data
 const counselorsData: Record<string, any> = {
