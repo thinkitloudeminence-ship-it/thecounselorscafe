@@ -123,20 +123,24 @@ export default function CounselorDetailClient({ id }: { id: string }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const data = counselorsData[id];
-    if (data) {
-      setCounselor(data);
-    } else {
-      fetchCounselor(id)
-        .then((res) => {
-          if (res) setCounselor(res);
-          else setCounselor(null);
-        })
-        .catch(() => setCounselor(null));
-    }
-    setLoading(false);
-  }, [id]);
+    const loadData = async () => {
+      try {
+        const data = counselorsData[id];
+        if (data) {
+          setCounselor(data);
+        } else {
+          const res = await fetchCounselor(id);
+          setCounselor(res || null);
+        }
+      } catch {
+        setCounselor(null);
+      } finally {
+        setLoading(false); // ✅ correct place
+      }
+    };
 
+    loadData();
+  }, [id]);
   if (loading) return (
     <div className="min-h-screen pt-20 flex items-center justify-center bg-black">
       <div className="w-10 h-10 border-3 border-yellow-500 border-t-transparent rounded-full animate-spin" />
@@ -195,7 +199,7 @@ export default function CounselorDetailClient({ id }: { id: string }) {
                     )}
                   </div>
                   <p className="text-yellow-500 text-sm mt-1 font-medium">{counselor.title}</p>
-                  
+
                   <div className="flex items-center gap-4 mt-3 flex-wrap text-sm">
                     <span className="flex items-center gap-1">
                       <Star size={14} className="text-yellow-500 fill-yellow-500" />
