@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import BlogDetailClient from "./BlogClient";
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> }  // ✅ Promise type
 ): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = await params;  // ✅ await params
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
     const res = await fetch(`${apiUrl}/blogs/${slug}`, {
@@ -65,7 +65,11 @@ export async function generateMetadata(
   }
 }
 
-export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function BlogDetailPage({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }>  // ✅ Promise type
+}) {
+  const { slug } = await params;  // ✅ await params
   return <BlogDetailClient slug={slug} />;
 }
