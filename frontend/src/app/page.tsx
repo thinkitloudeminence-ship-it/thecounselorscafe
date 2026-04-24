@@ -8,7 +8,7 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import CTABanner from "@/components/sections/CTABanner";
 
 export const metadata: Metadata = {
-  title: "The Counselors Cafe | India's #1 Career Counselling Platform",
+  title: "Counselors Cafe | India's #1 Career Counselling Platform",
   description: "Get expert 1-on-1 career guidance from verified counselors. Stream selection after 10th & 12th, study abroad, CUET, JEE, NEET, MBA counselling, resume prep & more. 8,500+ students guided across India. Book your session today.",
   keywords: [
     "career counselling India",
@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     "best career counsellor",
   ],
   alternates: {
-    canonical: "https://thecounselorscafe.com",
+    canonical: "https://counselorscafe.com",
   },
   openGraph: {
-    title: "The Counselors Cafe | India's #1 Career Counselling Platform",
+    title: "counselors cafe | India's #1 Career Counselling Platform",
     description: "Expert 1-on-1 career guidance for Indian students. Stream selection, study abroad, CUET, JEE & more. 8,500+ students helped. Book now!",
-    url: "https://thecounselorscafe.com",
+    url: "https://counselorscafe.com",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

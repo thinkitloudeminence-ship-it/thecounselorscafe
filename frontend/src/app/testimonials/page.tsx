@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import TestimonialsClient from "./TestimonialsClient";
 
 export const metadata: Metadata = {
-  title: "Student Reviews & Testimonials | The Counselors Cafe",
-  description: "Read real success stories from 8,500+ students who got career clarity with The Counselors Cafe. Verified reviews from students across India — stream selection, study abroad, JEE, CUET, MBA & resume counselling.",
+  title: "Student Reviews & Testimonials | counselors cafe",
+  description: "Read real success stories from 8,500+ students who got career clarity with counselors cafe. Verified reviews from students across India — stream selection, study abroad, JEE, CUET, MBA & resume counselling.",
   keywords: [
     "counselors cafe reviews",
     "career counselling testimonials India",
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
     "career guidance success stories",
   ],
   alternates: {
-    canonical: "https://thecounselorscafe.com/testimonials",
+    canonical: "https://counselorscafe.com/testimonials",
   },
   openGraph: {
-    title: "Real Student Reviews | The Counselors Cafe",
+    title: "Real Student Reviews | counselors cafe",
     description: "8,500+ students found career clarity. Read verified reviews from students guided by our expert counselors.",
-    url: "https://thecounselorscafe.com/testimonials",
+    url: "https://counselorscafe.com/testimonials",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

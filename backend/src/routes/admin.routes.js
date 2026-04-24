@@ -6,12 +6,9 @@ const { protect, requireSuperAdmin } = require("../middleware/auth.middleware");
 
 const router = express.Router();
 
-// All admin routes require auth
 router.use(protect);
 
 // ─── DASHBOARD STATS ─────────────────────────────────────────────────────────
-
-// GET /api/admin/stats
 router.get("/stats", async (req, res) => {
   try {
     const [
@@ -45,13 +42,14 @@ router.get("/stats", async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("Stats error:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
 // ─── BLOG MANAGEMENT ─────────────────────────────────────────────────────────
 
-// GET /api/admin/blogs — all blogs (any status)
+// GET /api/admin/blogs
 router.get("/blogs", async (req, res) => {
   try {
     const { status, category, search, page = 1, limit = 20 } = req.query;
@@ -62,15 +60,16 @@ router.get("/blogs", async (req, res) => {
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: "i" } },
-        { author: { $regex: search, $options: "i" } },
+        { "author.name": { $regex: search, $options: "i" } },
       ];
     }
 
     const skip = (Number(page) - 1) * Number(limit);
     const total = await Blog.countDocuments(query);
 
+    // ✅ No populate — avoids CmsAdmin ref mismatch
     const blogs = await Blog.find(query)
-      .populate("createdBy", "name email")
+      .select("-__v")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(Number(limit));
@@ -78,25 +77,32 @@ router.get("/blogs", async (req, res) => {
     res.json({
       success: true,
       data: blogs,
-      pagination: { page: Number(page), total, pages: Math.ceil(total / Number(limit)) },
+      pagination: {
+        page: Number(page),
+        total,
+        pages: Math.ceil(total / Number(limit)),
+      },
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Get blogs error:", error);
+    res.status(500).json({ success: false, message: error.message || "Server error" });
   }
 });
 
 // GET /api/admin/blogs/:id
 router.get("/blogs/:id", async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate("createdBy", "name email");
+    // ✅ No populate
+    const blog = await Blog.findById(req.params.id).select("-__v");
     if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
     res.json({ success: true, data: blog });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Get blog error:", error);
+    res.status(500).json({ success: false, message: error.message || "Server error" });
   }
 });
 
-// POST /api/admin/blogs — create new blog
+// POST /api/admin/blogs
 router.post("/blogs", async (req, res) => {
   try {
     const {
@@ -135,7 +141,7 @@ router.post("/blogs", async (req, res) => {
   }
 });
 
-// PUT /api/admin/blogs/:id — update blog
+// PUT /api/admin/blogs/:id
 router.put("/blogs/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -155,11 +161,12 @@ router.put("/blogs/:id", async (req, res) => {
 
     res.json({ success: true, message: "Blog updated successfully", data: blog });
   } catch (error) {
+    console.error("Update blog error:", error);
     res.status(500).json({ success: false, message: error.message || "Server error" });
   }
 });
 
-// PATCH /api/admin/blogs/:id/status — quick status change
+// PATCH /api/admin/blogs/:id/status
 router.patch("/blogs/:id/status", async (req, res) => {
   try {
     const { status } = req.body;
@@ -167,27 +174,35 @@ router.patch("/blogs/:id/status", async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid status" });
     }
 
-    const blog = await Blog.findByIdAndUpdate(
-      req.params.id,
-      { status, updatedBy: req.admin._id, ...(status === "published" ? { publishedAt: new Date() } : {}) },
-      { new: true }
-    );
+    const update = {
+      status,
+      updatedBy: req.admin._id,
+    };
+    if (status === "published") {
+      update.publishedAt = new Date();
+    }
 
+    const blog = await Blog.findByIdAndUpdate(req.params.id, update, { new: true });
     if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
+
     res.json({ success: true, message: `Blog ${status}`, data: blog });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-// PATCH /api/admin/blogs/:id/featured — toggle featured
+// PATCH /api/admin/blogs/:id/featured
 router.patch("/blogs/:id/featured", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
     blog.isFeatured = !blog.isFeatured;
     await blog.save();
-    res.json({ success: true, message: `Blog ${blog.isFeatured ? "featured" : "unfeatured"}`, data: blog });
+    res.json({
+      success: true,
+      message: `Blog ${blog.isFeatured ? "featured" : "unfeatured"}`,
+      data: blog,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
@@ -204,9 +219,8 @@ router.delete("/blogs/:id", async (req, res) => {
   }
 });
 
-// ─── CONTACT MANAGEMENT ─────────────────────────────────────────────────────
+// ─── CONTACT MANAGEMENT ──────────────────────────────────────────────────────
 
-// GET /api/admin/contacts
 router.get("/contacts", async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
@@ -218,13 +232,16 @@ router.get("/contacts", async (req, res) => {
       .skip((Number(page) - 1) * Number(limit))
       .limit(Number(limit));
 
-    res.json({ success: true, data: contacts, pagination: { total, page: Number(page) } });
+    res.json({
+      success: true,
+      data: contacts,
+      pagination: { total, page: Number(page) },
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-// PATCH /api/admin/contacts/:id/status
 router.patch("/contacts/:id/status", async (req, res) => {
   try {
     const contact = await Contact.findByIdAndUpdate(
@@ -238,9 +255,8 @@ router.patch("/contacts/:id/status", async (req, res) => {
   }
 });
 
-// ─── ADMIN USER MANAGEMENT (superadmin only) ─────────────────────────────────
+// ─── ADMIN USER MANAGEMENT ───────────────────────────────────────────────────
 
-// GET /api/admin/users
 router.get("/users", requireSuperAdmin, async (req, res) => {
   try {
     const users = await Admin.find().sort({ createdAt: -1 });
@@ -250,13 +266,13 @@ router.get("/users", requireSuperAdmin, async (req, res) => {
   }
 });
 
-// POST /api/admin/users — create new admin
 router.post("/users", requireSuperAdmin, async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     const exists = await Admin.findOne({ email });
-    if (exists) return res.status(400).json({ success: false, message: "Email already registered" });
-
+    if (exists) {
+      return res.status(400).json({ success: false, message: "Email already registered" });
+    }
     const admin = await Admin.create({ name, email, password, role: role || "editor" });
     res.status(201).json({ success: true, message: "Admin created", data: admin });
   } catch (error) {
@@ -264,11 +280,13 @@ router.post("/users", requireSuperAdmin, async (req, res) => {
   }
 });
 
-// DELETE /api/admin/users/:id
 router.delete("/users/:id", requireSuperAdmin, async (req, res) => {
   try {
     if (req.params.id === req.admin._id.toString()) {
-      return res.status(400).json({ success: false, message: "Cannot delete your own account" });
+      return res.status(400).json({
+        success: false,
+        message: "Cannot delete your own account",
+      });
     }
     await Admin.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Admin deleted" });

@@ -21,23 +21,23 @@ export async function generateMetadata(
     const imageUrl = blog.image?.url || "/og-image.jpg";
 
     return {
-      title: `${title} | The Counselors Cafe`,
+      title: `${title} | counselors cafe`,
       description,
       keywords: [
         ...(blog.seo?.keywords || []),
         ...(blog.tags || []),
         blog.category,
         "career counselling",
-        "the counselors cafe",
+        "counselors cafe",
       ],
-      authors: [{ name: blog.author?.name || "The Counselors Cafe" }],
+      authors: [{ name: blog.author?.name || "counselors cafe" }],
       alternates: {
-        canonical: `https://thecounselorscafe.com/blog/${slug}`,
+        canonical: `https://counselorscafe.com/blog/${slug}`,
       },
       openGraph: {
-        title: `${title} | The Counselors Cafe`,
+        title: `${title} | counselors cafe`,
         description,
-        url: `https://thecounselorscafe.com/blog/${slug}`,
+        url: `https://counselorscafe.com/blog/${slug}`,
         type: "article",
         publishedTime: blog.publishedAt,
         authors: [blog.author?.name],
@@ -46,7 +46,7 @@ export async function generateMetadata(
       },
       twitter: {
         card: "summary_large_image",
-        title: `${title} | The Counselors Cafe`,
+        title: `${title} | counselors cafe`,
         description,
         images: [imageUrl],
       },
@@ -56,10 +56,10 @@ export async function generateMetadata(
       .replace(/-/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase());
     return {
-      title: `${title} | The Counselors Cafe Blog`,
-      description: "Expert career guidance articles from verified counselors at The Counselors Cafe.",
+      title: `${title} | counselors cafe Blog`,
+      description: "Expert career guidance articles from verified counselors at counselors cafe.",
       alternates: {
-        canonical: `https://thecounselorscafe.com/blog/${slug}`,
+        canonical: `https://counselorscafe.com/blog/${slug}`,
       },
     };
   }

@@ -7,10 +7,10 @@ import PerformanceOptimizer from "@/components/PerformanceOptimizer";
 import JsonLd from "@/app/seo/JsonLd";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://thecounselorscafe.com'),
+  metadataBase: new URL('https://counselorscafe.com'),
   title: {
-    default: "The Counselors Cafe | India's #1 Career Counselling Platform",
-    template: "%s | The Counselors Cafe",
+    default: "counselors cafe | India's #1 Career Counselling Platform",
+    template: "%s | counselors cafe",
   },
   description: "India's most trusted career counselling platform. Get expert 1-on-1 guidance for stream selection, study abroad, CUET, JEE, NEET, MBA, resume prep & career planning. 8,500+ students guided. Book a session today.",
   keywords: [
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     "thecounselorscafe",
     "counselors cafe",
   ],
-  authors: [{ name: "The Counselors Cafe", url: "https://thecounselorscafe.com" }],
-  creator: "The Counselors Cafe",
-  publisher: "The Counselors Cafe",
+  authors: [{ name: "counselors cafe", url: "https://counselorscafe.com" }],
+  creator: "counselors cafe",
+  publisher: "counselors cafe",
   formatDetection: {
     email: false,
     address: false,
@@ -46,23 +46,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://thecounselorscafe.com",
-    siteName: "The Counselors Cafe",
-    title: "The Counselors Cafe | India's #1 Career Counselling Platform",
+    url: "https://counselorscafe.com",
+    siteName: "counselors cafe",
+    title: "counselors cafe | India's #1 Career Counselling Platform",
     description: "Get expert career guidance from verified counselors. Stream selection, study abroad, CUET, JEE, resume prep & more. 8,500+ students guided.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "The Counselors Cafe - Career Counselling Platform India",
+        alt: "counselors cafe - Career Counselling Platform India",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Counselors Cafe | Career Counselling Platform",
+    title: "counselors cafe | Career Counselling Platform",
     description: "Expert career guidance for Indian students. Stream selection, study abroad, CUET, JEE & more. Book a session today!",
     images: ["/og-image.jpg"],
     creator: "@counselorscafe",
@@ -83,9 +83,9 @@ export const metadata: Metadata = {
     google: "CC3U2Ynj4CajtpTWcj4KM-nPfF_hP5GhvtRzH5vffUU",
   },
   alternates: {
-    canonical: "https://thecounselorscafe.com",
+    canonical: "https://counselorscafe.com",
     languages: {
-      'en-IN': 'https://thecounselorscafe.com',
+      'en-IN': 'https://counselorscafe.com',
     },
   },
   category: "education",

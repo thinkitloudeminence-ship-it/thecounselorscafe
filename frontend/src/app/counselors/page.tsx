@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import CounselorsClient from "./CounselorsClient";
 
 export const metadata: Metadata = {
-  title: "Find Career Counselors | 120+ Verified Experts | The Counselors Cafe",
-  description: "Browse 120+ verified career counselors on The Counselors Cafe. Filter by expertise — stream selection, study abroad, CUET, JEE, MBA, resume prep & more. Book a 1-on-1 session today. Starts from ₹599.",
+  title: "Find Career Counselors | 120+ Verified Experts | counselors cafe",
+  description: "Browse 120+ verified career counselors on counselors cafe. Filter by expertise — stream selection, study abroad, CUET, JEE, MBA, resume prep & more. Book a 1-on-1 session today. Starts from ₹599.",
   keywords: [
     "career counselors India",
     "verified career counselor",
@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     "career guidance expert",
   ],
   alternates: {
-    canonical: "https://thecounselorscafe.com/counselors",
+    canonical: "https://counselorscafe.com/counselors",
   },
   openGraph: {
-    title: "Find Verified Career Counselors | The Counselors Cafe",
+    title: "Find Verified Career Counselors | counselors cafe",
     description: "Browse 120+ verified career counselors. Expert guidance for stream selection, study abroad, CUET, JEE & more. Book now!",
-    url: "https://thecounselorscafe.com/counselors",
+    url: "https://counselorscafe.com/counselors",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

@@ -16,25 +16,25 @@ export async function generateMetadata(
     const c = data.data || data;
 
     const title = `${c.name} — ${c.title || "Career Counselor"}`;
-    const description = `Book a session with ${c.name}, a verified career counselor at The Counselors Cafe with ${c.experience}+ years of experience in ${(c.expertise || []).slice(0, 3).join(", ")}. ${c.rating}★ rating from ${c.reviews}+ reviews.`;
+    const description = `Book a session with ${c.name}, a verified career counselor at counselors cafe with ${c.experience}+ years of experience in ${(c.expertise || []).slice(0, 3).join(", ")}. ${c.rating}★ rating from ${c.reviews}+ reviews.`;
 
     return {
-      title: `${title} | The Counselors Cafe`,
+      title: `${title} | counselors cafe`,
       description,
       keywords: [
         c.name,
         ...(c.expertise || []),
         "career counselor",
         "book career counselling",
-        "the counselors cafe",
+        "counselors cafe",
       ],
       alternates: {
-        canonical: `https://thecounselorscafe.com/counselors/${id}`,
+        canonical: `https://counselorscafe.com/counselors/${id}`,
       },
       openGraph: {
-        title: `${title} | The Counselors Cafe`,
+        title: `${title} | counselors cafe`,
         description,
-        url: `https://thecounselorscafe.com/counselors/${id}`,
+        url: `https://counselorscafe.com/counselors/${id}`,
         images: [
           {
             url: c.image || "/og-image.jpg",
@@ -47,10 +47,10 @@ export async function generateMetadata(
     };
   } catch {
     return {
-      title: "Career Counselor Profile | The Counselors Cafe",
-      description: "Book a 1-on-1 session with a verified career counselor at The Counselors Cafe.",
+      title: "Career Counselor Profile | counselors cafe",
+      description: "Book a 1-on-1 session with a verified career counselor at counselors cafe.",
       alternates: {
-        canonical: `https://thecounselorscafe.com/counselors/${id}`,
+        canonical: `https://counselorscafe.com/counselors/${id}`,
       },
     };
   }

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { submitContact } from "@/lib/api";
 
 const contactInfo = [
-  { icon: Mail, label: "Email Us", value: "hello@thecounselorscafe.com", href: "mailto:hello@thecounselorscafe.com" },
+  { icon: Mail, label: "Email Us", value: "hello@counselorscafe.com", href: "mailto:hello@counselorscafe.com" },
   { icon: Phone, label: "Call Us", value: "+91 98765 43210", href: "tel:+919876543210" },
   { icon: MapPin, label: "Office", value: "New Delhi, India", href: "#" },
   { icon: Clock, label: "Response Time", value: "Within 24 hours", href: "#" },

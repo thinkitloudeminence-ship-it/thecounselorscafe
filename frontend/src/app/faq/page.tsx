@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import FAQClient from "./FAQClient";
 
 export const metadata: Metadata = {
-  title: "FAQ | Career Counselling Questions Answered | The Counselors Cafe",
-  description: "Answers to frequently asked questions about The Counselors Cafe — how sessions work, pricing, booking process, counselor verification, refund policy, and more. Get all your doubts cleared.",
+  title: "FAQ | Career Counselling Questions Answered | counselors cafe",
+  description: "Answers to frequently asked questions about counselors cafe — how sessions work, pricing, booking process, counselor verification, refund policy, and more. Get all your doubts cleared.",
   keywords: [
     "career counselling FAQ",
     "counselors cafe questions",
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
     "verified counselor FAQ",
   ],
   alternates: {
-    canonical: "https://thecounselorscafe.com/faq",
+    canonical: "https://counselorscafe.com/faq",
   },
   openGraph: {
-    title: "FAQ | The Counselors Cafe — Your Questions Answered",
+    title: "FAQ | counselors cafe — Your Questions Answered",
     description: "Everything you need to know about career counselling sessions, pricing, booking, and our counselor verification process.",
-    url: "https://thecounselorscafe.com/faq",
+    url: "https://counselorscafe.com/faq",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

@@ -97,10 +97,10 @@ const categoryIcons: Record<string, React.ReactNode> = {
 
 // Helper function to get author name (handles both string and object)
 const getAuthorName = (author: any): string => {
-  if (!author) return "The Counselors Cafe";
+  if (!author) return "counselors cafe";
   if (typeof author === "string") return author;
   if (author.name) return author.name;
-  return "The Counselors Cafe";
+  return "counselors cafe";
 };
 
 // Helper function to get valid image URL

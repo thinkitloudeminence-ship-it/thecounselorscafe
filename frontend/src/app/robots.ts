@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/_next/'],
       },
     ],
-    sitemap: 'https://thecounselorscafe.com/sitemap.xml',
-    host: 'https://thecounselorscafe.com',
+    sitemap: 'https://counselorscafe.com/sitemap.xml',
+    host: 'https://counselorscafe.com',
   }
 }

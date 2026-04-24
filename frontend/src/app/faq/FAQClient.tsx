@@ -33,7 +33,7 @@ const faqs = [
   {
     category: "For Schools & Institutions",
     items: [
-      { q: "Do you offer bulk/school packages?", a: "Yes! We have special packages for schools, coaching institutes, and colleges. Contact us at hello@thecounselorscafe.com or fill the contact form for a custom quote." },
+      { q: "Do you offer bulk/school packages?", a: "Yes! We have special packages for schools, coaching institutes, and colleges. Contact us at hello@counselorscafe.com or fill the contact form for a custom quote." },
       { q: "Can counselors come to our school?", a: "We currently offer online sessions only, but we're launching offline session capabilities in 2025. Subscribe to our newsletter to be notified." },
     ],
   },
