@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getContacts, updateContactStatus } from "../lib/api";
 import toast from "react-hot-toast";
-import { MessageSquare, Mail, Phone, Clock, CheckCircle, XCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Mail, Phone, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 
 const STATUS_TABS = [
@@ -36,7 +36,7 @@ export default function ContactsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { load(); }, [statusFilter]);
+ useEffect(() => { load(); }, [statusFilter, load]);
 
   const handleStatus = async (id, status) => {
     try {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDashboardStats } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
-import { FileText, Eye, MessageSquare, TrendingUp, PlusCircle, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { FileText, Eye, MessageSquare, TrendingUp, PlusCircle, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 export default function DashboardPage() {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAdminUsers, createAdminUser, deleteAdminUser } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
-import { UserPlus, Trash2, Shield, Edit3 } from "lucide-react";
+import { UserPlus, Trash2, Shield } from "lucide-react";
 import { format } from "date-fns";
 
 export default function UsersPage() {
