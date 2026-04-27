@@ -33,12 +33,13 @@ app.use("/api/", limiter);
 
 // ── Core Middleware ─────────────────────────────────────
 app.use(cors({
-  origin: [
-    process.env.CLIENT_URL || "http://localhost:3000",
-    "http://localhost:3001", // Admin dashboard
-    "http://localhost:3000",
-  ],
-  credentials: true,
+ origin: [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://www.counselorscafe.com",
+  "https://thecounselorscafe-uzdc.vercel.app"
+],
+credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 }));
 
