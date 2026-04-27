@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getContacts, updateContactStatus } from "../lib/api";
 import toast from "react-hot-toast";
 import { Mail, Phone, Clock, ChevronDown, ChevronUp } from "lucide-react";
@@ -26,7 +26,7 @@ export default function ContactsPage() {
   const [expanded, setExpanded] = useState(null);
   const [noteInput, setNoteInput] = useState("");
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true);
     const params = {};
     if (statusFilter !== "all") params.status = statusFilter;
@@ -34,9 +34,11 @@ export default function ContactsPage() {
       .then((res) => setContacts(res.data.data))
       .catch(console.error)
       .finally(() => setLoading(false));
-  };
+  }, [statusFilter]);
 
- useEffect(() => { load(); }, [statusFilter, load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const handleStatus = async (id, status) => {
     try {

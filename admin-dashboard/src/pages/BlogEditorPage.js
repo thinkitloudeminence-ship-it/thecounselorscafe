@@ -4,7 +4,7 @@ import { getAdminBlog, createBlog, updateBlog, uploadBlogImage } from "../lib/ap
 import { useAuth } from "../context/AuthContext";
 import RichTextEditor from "../components/editor/RichTextEditor";
 import toast from "react-hot-toast";
-import { Save, Globe, Clock, Archive, ArrowLeft, Image as ImageIcon, X, ChevronDown, ChevronUp, Star } from "lucide-react";
+import { Globe, Clock, ArrowLeft, Image as ImageIcon, X, ChevronDown, ChevronUp } from "lucide-react";
 
 const CATEGORIES = ["Career Guidance", "Exam Guidance", "Study Abroad", "Stream Selection", "Scholarship", "College Admissions", "Skills & Jobs", "Mental Health", "Other"];
 
