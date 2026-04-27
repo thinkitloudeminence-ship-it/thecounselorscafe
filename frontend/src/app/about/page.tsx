@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "About Us | counselors cafe — Our Story & Mission",
   description: "Learn about counselors cafe — India's most trusted career counselling platform. Founded in 2020 to end career confusion for Indian students. Meet our team of verified expert counselors.",
   keywords: [
-    "about counselors cafe",
+    "about cd ",
     "career counselling platform India",
     "career guidance mission",
     "verified career counselors India",
