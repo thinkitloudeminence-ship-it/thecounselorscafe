@@ -1,22 +1,53 @@
 import axios from "axios";
 
-// Yeh fix kiya - ab /api double nahi hoga
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+/**
+ * Get Base URL - Works for both local and production
+ * Supports:
+ * 1. REACT_APP_API_URL=http://localhost:5000/api (with /api)
+ * 2. REACT_APP_API_URL=http://localhost:5000 (without /api)
+ * 3. REACT_APP_API_URL=https://thecounselorscafe.onrender.com/api (with /api)
+ * 4. REACT_APP_API_URL=https://thecounselorscafe.onrender.com (without /api)
+ * 5. No env variable -> defaults to localhost:5000/api
+ */
+const getBaseURL = () => {
+  const envUrl = process.env.REACT_APP_API_URL;
+  
+  // Default for local development
+  if (!envUrl) {
+    return "http://localhost:5000/api";
+  }
+  
+  // Remove trailing slash if present
+  let cleanUrl = envUrl.replace(/\/$/, "");
+  
+  // If URL already ends with /api, use as is
+  if (cleanUrl.endsWith("/api")) {
+    return cleanUrl;
+  }
+  
+  // Add /api at the end
+  return `${cleanUrl}/api`;
+};
 
 export const api = axios.create({
-  baseURL: API_URL + "/api",  // Ab single /api hoga
+  baseURL: getBaseURL(),
   timeout: 15000,
   headers: { "Content-Type": "application/json" },
 });
 
+// Debug log - shows which API URL is being used (remove in production if needed)
+console.log("🔗 API Base URL:", getBaseURL());
+
 // Attach JWT token to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("cc_admin_token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// Handle 401 globally
+// Handle 401 globally - redirect to login
 api.interceptors.response.use(
   (res) => res,
   (error) => {
@@ -29,7 +60,7 @@ api.interceptors.response.use(
   }
 );
 
-// ─── Auth ────────────────────────────────────────────────
+// ==================== AUTH API ====================
 export const adminLogin = (email, password) =>
   api.post("/auth/login", { email, password });
 
@@ -38,10 +69,10 @@ export const getMe = () => api.get("/auth/me");
 export const changePassword = (data) =>
   api.post("/auth/change-password", data);
 
-// ─── Dashboard ───────────────────────────────────────────
+// ==================== DASHBOARD API ====================
 export const getDashboardStats = () => api.get("/admin/stats");
 
-// ─── Blogs ──────────────────────────────────────────────
+// ==================== BLOGS API ====================
 export const getAdminBlogs = (params) =>
   api.get("/admin/blogs", { params });
 
@@ -59,21 +90,21 @@ export const updateBlogStatus = (id, status) =>
 export const toggleBlogFeatured = (id) =>
   api.patch(`/admin/blogs/${id}/featured`);
 
-// ─── Contacts ───────────────────────────────────────────
+// ==================== CONTACTS API ====================
 export const getContacts = (params) =>
   api.get("/admin/contacts", { params });
 
 export const updateContactStatus = (id, status, adminNote) =>
   api.patch(`/admin/contacts/${id}/status`, { status, adminNote });
 
-// ─── Users ──────────────────────────────────────────────
+// ==================== USERS API ====================
 export const getAdminUsers = () => api.get("/admin/users");
 
 export const createAdminUser = (data) => api.post("/admin/users", data);
 
 export const deleteAdminUser = (id) => api.delete(`/admin/users/${id}`);
 
-// ─── Upload ─────────────────────────────────────────────
+// ==================== UPLOAD API ====================
 export const uploadBlogImage = (formData) =>
   api.post("/upload/blog-image", formData, {
     headers: { "Content-Type": "multipart/form-data" },

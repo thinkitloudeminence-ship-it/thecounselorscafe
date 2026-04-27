@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -8,6 +8,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import Youtube from "@tiptap/extension-youtube";
+import CharacterCount from "@tiptap/extension-character-count";
 import { uploadBlogImage } from "../../lib/api";
 import toast from "react-hot-toast";
 
@@ -18,41 +19,91 @@ const ToolBtn = ({ onClick, active, title, children, disabled }) => (
     disabled={disabled}
     onClick={onClick}
     style={{
-      padding: "5px 8px", minWidth: 30, borderRadius: 6, border: "none", cursor: disabled ? "not-allowed" : "pointer",
-      background: active ? "rgba(245,197,24,0.2)" : "transparent",
+      padding: "6px 10px",
+      minWidth: 32,
+      borderRadius: 6,
+      border: "none",
+      cursor: disabled ? "not-allowed" : "pointer",
+      background: active ? "rgba(245,197,24,0.15)" : "transparent",
       color: active ? "#f5c518" : "#888",
-      fontWeight: active ? 700 : 400, fontSize: 13,
-      transition: "all 0.15s", display: "inline-flex", alignItems: "center", justifyContent: "center",
+      fontWeight: active ? 600 : 400,
+      fontSize: 13,
+      transition: "all 0.15s",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
     }}
   >
     {children}
   </button>
 );
 
-const Divider = () => <div style={{ width: 1, height: 20, background: "#2a2a2a", margin: "0 4px" }} />;
+const Divider = () => <div style={{ width: 1, height: 24, background: "#2a2a2a", margin: "0 6px" }} />;
 
 export default function RichTextEditor({ content, onChange }) {
+  const [charCount, setCharCount] = useState(0);
+  const [wordCount, setWordCount] = useState(0);
+
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3, 4] },
+      }),
       Underline,
       TextStyle,
       Color,
-      Link.configure({ openOnClick: false, HTMLAttributes: { class: "editor-link" } }),
-      Image.configure({ inline: false, allowBase64: true }),
-      Placeholder.configure({ placeholder: "Start writing your blog post here… Use H2 for main sections, H3 for sub-sections. Add images, links, and lists to make it engaging." }),
-      Youtube.configure({ controls: true }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { class: "editor-link", target: "_blank", rel: "noopener noreferrer" },
+      }),
+      Image.configure({ inline: false, allowBase64: false }),
+      Placeholder.configure({
+        placeholder: "Start writing your blog post here… Use H2 for main sections, H3 for sub-sections. Add images, links, and lists to make it engaging.",
+      }),
+      Youtube.configure({ controls: true, modestbranding: true, rel: 0 }),
+      CharacterCount.configure({ limit: 50000 }), // 50k characters limit
     ],
     content,
-    onUpdate: ({ editor }) => onChange(editor.getHTML()),
+    editorProps: {
+      attributes: {
+        class: "rich-text-editor",
+        style: "min-height: 500px; outline: none; padding: 20px; line-height: 1.8;",
+      },
+      handlePaste: (view, event, slice) => {
+        // Clean paste - remove unwanted formatting
+        return false; // Let TipTap handle it
+      },
+    },
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      const text = editor.getText();
+      const words = text.trim().split(/\s+/).filter(Boolean).length;
+      const chars = text.length;
+      setWordCount(words);
+      setCharCount(chars);
+      onChange(html);
+    },
   });
+
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   const setLink = useCallback(() => {
     const prev = editor.getAttributes("link").href;
     const url = window.prompt("Enter URL:", prev || "https://");
     if (url === null) return;
-    if (url === "") { editor.chain().focus().extendMarkRange("link").unsetLink().run(); return; }
-    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+    let finalUrl = url;
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      finalUrl = "https://" + url;
+    }
+    editor.chain().focus().extendMarkRange("link").setLink({ href: finalUrl }).run();
   }, [editor]);
 
   const addImage = useCallback(async () => {
@@ -62,73 +113,103 @@ export default function RichTextEditor({ content, onChange }) {
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image too large. Max 5MB");
+        return;
+      }
       const formData = new FormData();
       formData.append("image", file);
       toast.promise(
         uploadBlogImage(formData).then((res) => {
-          editor.chain().focus().setImage({ src: res.data.data.url, alt: file.name }).run();
+          editor.chain().focus().setImage({ src: res.data.data.url, alt: file.name, title: file.name }).run();
         }),
-        { loading: "Uploading...", success: "Image inserted!", error: "Upload failed" }
+        { loading: "Uploading image...", success: "Image inserted!", error: "Upload failed" }
       );
     };
     input.click();
   }, [editor]);
 
   const addYoutube = useCallback(() => {
-    const url = window.prompt("Enter YouTube URL:");
-    if (url) editor.chain().focus().setYoutubeVideo({ src: url }).run();
+    const url = window.prompt("Enter YouTube URL (e.g., https://youtu.be/... or https://youtube.com/watch?v=...):");
+    if (url) {
+      editor.chain().focus().setYoutubeVideo({ src: url }).run();
+    }
   }, [editor]);
 
   if (!editor) return null;
 
   return (
     <div style={s.wrap}>
-      {/* Toolbar */}
+      {/* Sticky Toolbar */}
       <div style={s.toolbar}>
-        {/* Headings */}
-        <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} active={editor.isActive("heading", { level: 1 })} title="Heading 1">H1</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} active={editor.isActive("heading", { level: 2 })} title="Heading 2">H2</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} active={editor.isActive("heading", { level: 3 })} title="Heading 3">H3</ToolBtn>
+        <div style={s.toolbarInner}>
+          {/* Headings */}
+          <select
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "paragraph") editor.chain().focus().setParagraph().run();
+              else if (value === "h1") editor.chain().focus().setHeading({ level: 1 }).run();
+              else if (value === "h2") editor.chain().focus().setHeading({ level: 2 }).run();
+              else if (value === "h3") editor.chain().focus().setHeading({ level: 3 }).run();
+              else if (value === "h4") editor.chain().focus().setHeading({ level: 4 }).run();
+            }}
+            style={s.headingSelect}
+            value={
+              editor.isActive("heading", { level: 1 }) ? "h1" :
+              editor.isActive("heading", { level: 2 }) ? "h2" :
+              editor.isActive("heading", { level: 3 }) ? "h3" :
+              editor.isActive("heading", { level: 4 }) ? "h4" :
+              editor.isActive("paragraph") ? "paragraph" : "paragraph"
+            }
+          >
+            <option value="paragraph">Normal</option>
+            <option value="h1">Heading 1</option>
+            <option value="h2">Heading 2</option>
+            <option value="h3">Heading 3</option>
+            <option value="h4">Heading 4</option>
+          </select>
 
-        <Divider />
+          <Divider />
 
-        {/* Formatting */}
-        <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Bold"><b>B</b></ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} title="Italic"><i>I</i></ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleUnderline().run()} active={editor.isActive("underline")} title="Underline"><u>U</u></ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleStrike().run()} active={editor.isActive("strike")} title="Strikethrough"><s>S</s></ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleCode().run()} active={editor.isActive("code")} title="Inline code">{"<>"}</ToolBtn>
+          {/* Formatting */}
+          <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Bold (Ctrl+B)"><b>B</b></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} title="Italic (Ctrl+I)"><i>I</i></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleUnderline().run()} active={editor.isActive("underline")} title="Underline (Ctrl+U)"><u>U</u></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleStrike().run()} active={editor.isActive("strike")} title="Strikethrough"><s>S</s></ToolBtn>
 
-        <Divider />
+          <Divider />
 
-        {/* Lists */}
-        <ToolBtn onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")} title="Bullet list">• ≡</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} title="Ordered list">1. ≡</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} title="Blockquote">❝</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().toggleCodeBlock().run()} active={editor.isActive("codeBlock")} title="Code block">{"{ }"}</ToolBtn>
+          {/* Lists */}
+          <ToolBtn onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")} title="Bullet list">• List</ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} title="Ordered list">1. List</ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} title="Quote">" Quote</ToolBtn>
 
-        <Divider />
+          <Divider />
 
-        {/* Links & Media */}
-        <ToolBtn onClick={setLink} active={editor.isActive("link")} title="Insert link">🔗</ToolBtn>
-        <ToolBtn onClick={addImage} title="Insert image">🖼️</ToolBtn>
-        <ToolBtn onClick={addYoutube} title="Embed YouTube">▶️</ToolBtn>
+          {/* Links & Media */}
+          <ToolBtn onClick={setLink} active={editor.isActive("link")} title="Insert link">🔗 Link</ToolBtn>
+          <ToolBtn onClick={addImage} title="Insert image">🖼️ Image</ToolBtn>
+          <ToolBtn onClick={addYoutube} title="Embed YouTube">▶️ YouTube</ToolBtn>
 
-        <Divider />
+          <Divider />
 
-        {/* Utilities */}
-        <ToolBtn onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Horizontal rule">—</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Undo">↩</ToolBtn>
-        <ToolBtn onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="Redo">↪</ToolBtn>
+          {/* Utilities */}
+          <ToolBtn onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Divider">—</ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Undo (Ctrl+Z)">↩ Undo</ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="Redo (Ctrl+Shift+Z)">↪ Redo</ToolBtn>
 
-        {/* Word count */}
-        <div style={s.wordCount}>
-          {editor.storage.characterCount?.words?.() || editor.getText().split(/\s+/).filter(Boolean).length} words
+          {/* Word & Character Count */}
+          <div style={s.stats}>
+            <span title="Words">{wordCount} words</span>
+            <span style={{ marginLeft: 12 }} title="Characters">{charCount} chars</span>
+          </div>
         </div>
       </div>
 
-      {/* Editor */}
-      <EditorContent editor={editor} style={s.editorBody} />
+      {/* Editor Content */}
+      <div style={s.scrollContainer}>
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }
@@ -136,10 +217,137 @@ export default function RichTextEditor({ content, onChange }) {
 const s = {
   wrap: { border: "1px solid #2a2a2a", borderRadius: 12, overflow: "hidden", background: "#0f0f0f" },
   toolbar: {
-    display: "flex", flexWrap: "wrap", gap: 2, alignItems: "center",
-    padding: "8px 10px", borderBottom: "1px solid #2a2a2a",
-    background: "#111", position: "sticky", top: 56, zIndex: 10,
+    position: "sticky",
+    top: 0,
+    zIndex: 20,
+    background: "#111",
+    borderBottom: "1px solid #2a2a2a",
+    overflowX: "auto",
+    overflowY: "hidden",
   },
-  wordCount: { marginLeft: "auto", fontSize: 11, color: "#444", fontStyle: "italic" },
-  editorBody: { minHeight: 450, cursor: "text" },
+  toolbarInner: {
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 2,
+    padding: "8px 12px",
+    minWidth: "min-content",
+  },
+  headingSelect: {
+    background: "#1a1a1a",
+    border: "1px solid #2a2a2a",
+    borderRadius: 6,
+    padding: "5px 8px",
+    color: "#f0f0f0",
+    fontSize: 13,
+    cursor: "pointer",
+  },
+  stats: {
+    marginLeft: "auto",
+    fontSize: 11,
+    color: "#555",
+    fontStyle: "italic",
+    paddingLeft: 16,
+    whiteSpace: "nowrap",
+  },
+  scrollContainer: {
+    maxHeight: "calc(100vh - 250px)",
+    overflowY: "auto",
+    overflowX: "hidden",
+  },
 };
+
+// Global styles for editor content
+const editorStyles = `
+  .rich-text-editor {
+    min-height: 500px;
+    outline: none;
+    padding: 24px;
+    line-height: 1.8;
+    color: #e0e0e0;
+  }
+  .rich-text-editor p {
+    margin-bottom: 1em;
+  }
+  .rich-text-editor h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 1em 0 0.5em;
+    color: #f0f0f0;
+  }
+  .rich-text-editor h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0.8em 0 0.4em;
+    color: #f0f0f0;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 8px;
+  }
+  .rich-text-editor h3 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 0.6em 0 0.3em;
+    color: #f0f0f0;
+  }
+  .rich-text-editor ul, .rich-text-editor ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+  }
+  .rich-text-editor li {
+    margin: 0.25em 0;
+  }
+  .rich-text-editor blockquote {
+    border-left: 3px solid #f5c518;
+    margin: 1em 0;
+    padding-left: 1em;
+    color: #aaa;
+    font-style: italic;
+  }
+  .rich-text-editor code {
+    background: #1a1a1a;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+  .rich-text-editor pre {
+    background: #1a1a1a;
+    padding: 12px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1em 0;
+  }
+  .rich-text-editor pre code {
+    background: none;
+    padding: 0;
+  }
+  .rich-text-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1em 0;
+  }
+  .rich-text-editor a {
+    color: #f5c518;
+    text-decoration: underline;
+  }
+  .rich-text-editor hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+    margin: 2em 0;
+  }
+  .rich-text-editor .is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: #444;
+    pointer-events: none;
+    height: 0;
+  }
+`;
+
+// Inject styles
+if (typeof document !== "undefined") {
+  const styleTag = document.createElement("style");
+  styleTag.textContent = editorStyles;
+  document.head.appendChild(styleTag);
+}

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@tiptap/core": "^2.3.0",
+    "@tiptap/extension-character-count": "^2.27.2",
     "@tiptap/extension-color": "^2.3.0",
     "@tiptap/extension-image": "^2.3.0",
     "@tiptap/extension-link": "^2.3.0",
@@ -28,15 +29,24 @@
     "build": "react-scripts build"
   },
   "eslintConfig": {
-    "extends": ["react-app"],
+    "extends": [
+      "react-app"
+    ],
     "rules": {
       "no-unused-vars": "warn",
       "react-hooks/exhaustive-deps": "warn"
     }
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version"
+    ]
   },
   "proxy": "http://localhost:5000"
 }
