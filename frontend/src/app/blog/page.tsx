@@ -6,81 +6,6 @@ import Image from "next/image";
 import { Clock, User, ArrowRight, Search, Sparkles, BookOpen, GraduationCap, Globe, FileText } from "lucide-react";
 import { fetchBlogs } from "@/lib/api";
 
-const fallbackBlogs = [
-  { 
-    _id: "1", 
-    title: "CUET 2026: Complete Guide for Class 12 Students", 
-    slug: "cuet-2026-complete-guide", 
-    excerpt: "Everything you need to know about CUET 2026 — exam pattern, registration dates, top universities, and preparation strategy.", 
-    category: "Exam Guidance", 
-    tags: ["CUET", "DU", "Class 12"], 
-    author: "Dr. Priya Sharma", 
-    readTime: 8, 
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=400&fit=crop",
-    createdAt: new Date().toISOString() 
-  },
-  { 
-    _id: "2", 
-    title: "Top 10 Career Options After Class 10 (Beyond Engineering)", 
-    slug: "career-options-after-class-10", 
-    excerpt: "Explore 10 exciting, high-paying career paths that most students and parents don't know about.", 
-    category: "Career Guidance", 
-    tags: ["Career", "Stream Selection"], 
-    author: "Meera Pillai", 
-    readTime: 6, 
-    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop",
-    createdAt: new Date().toISOString() 
-  },
-  { 
-    _id: "3", 
-    title: "Study in Canada 2025: Complete Roadmap for Indian Students", 
-    slug: "study-in-canada-2025", 
-    excerpt: "Step-by-step guide to studying in Canada — from choosing universities to visa process and scholarship opportunities.", 
-    category: "Study Abroad", 
-    tags: ["Canada", "Study Abroad"], 
-    author: "Rahul Mehta", 
-    readTime: 12, 
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop",
-    createdAt: new Date().toISOString() 
-  },
-  { 
-    _id: "4", 
-    title: "How to Build a Winning Resume as a Fresher", 
-    slug: "fresher-resume-guide", 
-    excerpt: "Practical tips to create a standout resume even with zero work experience — format, keywords, and common mistakes.", 
-    category: "Career Guidance", 
-    tags: ["Resume", "Placement"], 
-    author: "Anjali Verma", 
-    readTime: 7, 
-    image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop",
-    createdAt: new Date().toISOString() 
-  },
-  { 
-    _id: "5", 
-    title: "IIT JEE Preparation: Complete Strategy for 2026", 
-    slug: "jee-preparation-strategy-2026", 
-    excerpt: "Proven strategies to crack IIT JEE with top rank. Study plan, time management, and important topics.", 
-    category: "Exam Guidance", 
-    tags: ["JEE", "Engineering"], 
-    author: "Vikram Singh", 
-    readTime: 10, 
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop",
-    createdAt: new Date().toISOString() 
-  },
-  { 
-    _id: "6", 
-    title: "MBA in India vs Abroad: Which is Better?", 
-    slug: "mba-india-vs-abroad", 
-    excerpt: "Compare MBA options in India and abroad. ROI, placements, and career growth analysis.", 
-    category: "Study Abroad", 
-    tags: ["MBA", "Abroad"], 
-    author: "Rahul Mehta", 
-    readTime: 9, 
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=400&fit=crop",
-    createdAt: new Date().toISOString() 
-  },
-];
-
 const categoryColors: Record<string, string> = {
   "Exam Guidance": "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
   "Career Guidance": "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
@@ -112,16 +37,18 @@ const getImageUrl = (image: any): string | null => {
 };
 
 export default function BlogPage() {
-  const [blogs, setBlogs] = useState<any[]>(fallbackBlogs);
+  const [blogs, setBlogs] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const categories = ["All", ...Array.from(new Set(blogs.map((b) => b.category)))];
 
   useEffect(() => {
     fetchBlogs()
-      .then((res) => { if (res?.data?.length) setBlogs(res.data); })
+      .then((res) => { 
+        if (res?.data?.length) setBlogs(res.data); 
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
