@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+// Yeh fix kiya - ab /api double nahi hoga
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 export const api = axios.create({
-  baseURL: API_URL + "/api",
+  baseURL: API_URL + "/api",  // Ab single /api hoga
   timeout: 15000,
   headers: { "Content-Type": "application/json" },
 });
