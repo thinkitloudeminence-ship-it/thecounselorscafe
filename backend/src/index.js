@@ -37,7 +37,8 @@ app.use(cors({
     "http://localhost:3000",
     "http://localhost:3001",
     "https://www.counselorscafe.com",
-    "https://thecounselorscafe-uzdc.vercel.app"
+    "https://thecounselorscafe-uzdc.vercel.app",
+    /\.vercel\.app$/  // Allow all vercel preview URLs
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],

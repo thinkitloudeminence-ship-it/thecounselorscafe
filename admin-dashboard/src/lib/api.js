@@ -1,32 +1,12 @@
 import axios from "axios";
 
-/**
- * Get Base URL - Works for both local and production
- * Supports:
- * 1. REACT_APP_API_URL=http://localhost:5000/api (with /api)
- * 2. REACT_APP_API_URL=http://localhost:5000 (without /api)
- * 3. REACT_APP_API_URL=https://thecounselorscafe.onrender.com/api (with /api)
- * 4. REACT_APP_API_URL=https://thecounselorscafe.onrender.com (without /api)
- * 5. No env variable -> defaults to localhost:5000/api
- */
 const getBaseURL = () => {
-  const envUrl = process.env.REACT_APP_API_URL;
-  
-  // Default for local development
-  if (!envUrl) {
-    return "http://localhost:5000/api";
+  // Production - use relative URL
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return '/api';
   }
-  
-  // Remove trailing slash if present
-  let cleanUrl = envUrl.replace(/\/$/, "");
-  
-  // If URL already ends with /api, use as is
-  if (cleanUrl.endsWith("/api")) {
-    return cleanUrl;
-  }
-  
-  // Add /api at the end
-  return `${cleanUrl}/api`;
+  // Local development
+  return 'http://localhost:5000/api';
 };
 
 export const api = axios.create({
@@ -35,10 +15,9 @@ export const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// Debug log - shows which API URL is being used (remove in production if needed)
 console.log("🔗 API Base URL:", getBaseURL());
 
-// Attach JWT token to every request
+// Attach JWT token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("cc_admin_token");
   if (token) {
@@ -47,7 +26,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 globally - redirect to login
+// Handle 401
 api.interceptors.response.use(
   (res) => res,
   (error) => {

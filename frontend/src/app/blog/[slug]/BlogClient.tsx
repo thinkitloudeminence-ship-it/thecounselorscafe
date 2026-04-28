@@ -5,6 +5,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchBlog } from "@/lib/api";
 
+// Helper function to fix image URLs for local development
+const getImageUrl = (url: string | undefined) => {
+  if (!url) return null;
+  
+  // Agar localhost pe hai toh replace karo
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    if (url.includes('thecounselorscafe.onrender.com')) {
+      return url.replace('https://thecounselorscafe.onrender.com', 'http://localhost:5000');
+    }
+  }
+  return url;
+};
+
 function NotFound({ slug }: { slug: string }) {
   const title = slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
   return (
@@ -94,11 +107,11 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           {blog.title}
         </h1>
 
-        {/* Featured Image - Below heading (not above) */}
+        {/* Featured Image - Below heading with URL fix for local development */}
         {blog.image?.url && (
           <div className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
             <Image
-              src={blog.image.url}
+              src={getImageUrl(blog.image.url) || blog.image.url}
               alt={blog.image.alt || blog.title}
               fill
               className="object-cover"
@@ -155,8 +168,18 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* Main Content */}
-        <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+        {/* Main Content - Images inside content will also be fixed */}
+        <div 
+          className="blog-content" 
+          dangerouslySetInnerHTML={{ 
+            __html: blog.content?.replace(
+              /src="https:\/\/thecounselorscafe\.onrender\.com/g,
+              typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+                ? 'src="http://localhost:5000' 
+                : 'src="https://thecounselorscafe.onrender.com'
+            ) 
+          }} 
+        />
 
         {/* Like and Share Buttons */}
         <div className="flex items-center gap-4 mt-10 pt-8 border-t border-white/10">
@@ -220,7 +243,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
                   {r.image?.url && (
                     <div className="relative h-36 overflow-hidden">
                       <Image
-                        src={r.image.url}
+                        src={getImageUrl(r.image.url) || r.image.url}
                         alt={r.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform"
