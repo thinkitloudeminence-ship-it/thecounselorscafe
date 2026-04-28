@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeft, Clock, Eye, Calendar, Tag, Heart, Share2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchBlog } from "@/lib/api";
-import { useRouter } from "next/navigation";
 
 // Helper function to fix image URLs for local development
 const getImageUrl = (url: string | undefined) => {
   if (!url) return null;
-  
   if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
     if (url.includes('thecounselorscafe.onrender.com')) {
       return url.replace('https://thecounselorscafe.onrender.com', 'http://localhost:5000');
@@ -37,10 +35,7 @@ function NotFound({ slug }: { slug: string }) {
           <div className="mt-8 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
             <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance?</h3>
             <p className="text-gray-400 text-sm mb-4">One session with an expert can change everything.</p>
-            <Link
-              href="/counselors"
-              className="inline-flex items-center gap-2 bg-yellow-500 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-colors"
-            >
+            <Link href="/counselors" className="inline-flex items-center gap-2 bg-yellow-500 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-colors">
               Talk to a Counselor →
             </Link>
           </div>
@@ -55,26 +50,18 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
   const [related, setRelated] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState(false);
-  const router = useRouter();
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetchBlog(slug);
-      if (res?.data) {
-        setBlog(res.data);
-        setRelated(res.related || []);
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [slug]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchBlog(slug)
+      .then((res: any) => {
+        if (res?.data) {
+          setBlog(res.data);
+          setRelated(res.related || []);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [slug]);
 
   const handleLike = async () => {
     if (liked) return;
@@ -85,12 +72,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         { method: "POST" }
       );
     } catch {}
-  };
-
-  // Refresh page function
-  const refreshPage = () => {
-    router.refresh();
-    fetchData();
   };
 
   if (loading) {
@@ -106,20 +87,9 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
   return (
     <div className="min-h-screen bg-black pt-20">
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
-        <div className="flex justify-between items-center mb-6">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm"
-          >
-            <ArrowLeft size={16} /> Back to Blog
-          </Link>
-          <button
-            onClick={refreshPage}
-            className="text-xs text-gray-500 hover:text-yellow-500 transition-colors"
-          >
-            ↻ Refresh
-          </button>
-        </div>
+        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm mb-6 inline-block">
+          <ArrowLeft size={16} /> Back to Blog
+        </Link>
 
         {/* Category and Title */}
         <span className="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
@@ -138,7 +108,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
               fill
               className="object-cover"
               priority
-              unoptimized // Add this to bypass Next.js image optimization cache
             />
           </div>
         )}
@@ -180,10 +149,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         {blog.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             {blog.tags.map((tag: string) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full"
-              >
+              <span key={tag} className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
                 <Tag size={10} className="text-yellow-500" />
                 {tag}
               </span>
@@ -191,28 +157,18 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* Main Content - Add key to force re-render */}
+        {/* MAIN CONTENT - FIXED: Using proper className for styling */}
         <div 
-          key={blog.updatedAt || blog._id}
-          className="blog-content" 
-          dangerouslySetInnerHTML={{ 
-            __html: blog.content?.replace(
-              /src="https:\/\/thecounselorscafe\.onrender\.com/g,
-              typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-                ? 'src="http://localhost:5000' 
-                : 'src="https://thecounselorscafe.onrender.com'
-            ) 
-          }} 
+          className="blog-content-wrapper"
+          dangerouslySetInnerHTML={{ __html: blog.content }} 
         />
 
-        {/* Rest of the component remains same */}
+        {/* Like and Share Buttons */}
         <div className="flex items-center gap-4 mt-10 pt-8 border-t border-white/10">
           <button
             onClick={handleLike}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all text-sm font-semibold ${
-              liked
-                ? "bg-red-500/10 border-red-500/30 text-red-400"
-                : "bg-white/5 border-white/10 text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30"
+              liked ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-white/5 border-white/10 text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30"
             }`}
           >
             <Heart size={15} className={liked ? "fill-red-400" : ""} />
@@ -226,6 +182,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </button>
         </div>
 
+        {/* Author Bio */}
         {blog.author?.bio && (
           <div className="mt-10 p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-4">
             <div className="w-14 h-14 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-bold text-xl flex-shrink-0">
@@ -238,38 +195,25 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
+        {/* CTA Section */}
         <div className="mt-10 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
           <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance? ☕</h3>
-          <p className="text-gray-400 text-sm mb-4">
-            One session with an expert counsellor can be life-changing.
-          </p>
-          <Link
-            href="/counselors"
-            className="inline-flex items-center gap-2 bg-yellow-500 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-colors text-sm"
-          >
+          <p className="text-gray-400 text-sm mb-4">One session with an expert counsellor can be life-changing.</p>
+          <Link href="/counselors" className="inline-flex items-center gap-2 bg-yellow-500 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-colors text-sm">
             Talk to a Counselor →
           </Link>
         </div>
 
+        {/* Related Articles */}
         {related.length > 0 && (
           <div className="mt-12">
             <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {related.map((r: any) => (
-                <Link
-                  key={r._id}
-                  href={`/blog/${r.slug}`}
-                  className="bg-white/5 border border-white/10 hover:border-yellow-500/30 rounded-xl overflow-hidden group transition-all"
-                >
+                <Link key={r._id} href={`/blog/${r.slug}`} className="bg-white/5 border border-white/10 hover:border-yellow-500/30 rounded-xl overflow-hidden group transition-all">
                   {r.image?.url && (
                     <div className="relative h-36 overflow-hidden">
-                      <Image
-                        src={getImageUrl(r.image.url) || r.image.url}
-                        alt={r.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform"
-                        unoptimized
-                      />
+                      <Image src={getImageUrl(r.image.url) || r.image.url} alt={r.title} fill className="object-cover group-hover:scale-105 transition-transform" />
                     </div>
                   )}
                   <div className="p-4">
@@ -284,23 +228,170 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         )}
       </div>
 
-      <style>{`
-        .blog-content { line-height: 1.85; color: #ccc; }
-        .blog-content h1 { font-size: 2em; font-weight: 800; margin: 1.2em 0 0.5em; color: #fff; }
-        .blog-content h2 { font-size: 1.5em; font-weight: 700; margin: 1.2em 0 0.5em; color: #f0f0f0; padding-bottom: 0.4em; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .blog-content h3 { font-size: 1.2em; font-weight: 600; margin: 1em 0 0.4em; color: #e0e0e0; }
-        .blog-content p { margin-bottom: 1em; }
-        .blog-content ul, .blog-content ol { padding-left: 1.5em; margin-bottom: 1em; }
-        .blog-content li { margin-bottom: 0.4em; }
-        .blog-content blockquote { border-left: 4px solid #f5c518; padding: 0.8em 1.2em; margin: 1.5em 0; background: rgba(245,197,24,0.05); border-radius: 0 8px 8px 0; color: #aaa; font-style: italic; }
-        .blog-content code { background: #1e1e2e; color: #f5c518; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        .blog-content pre { background: #1e1e2e; border-radius: 10px; padding: 1.2em; margin: 1.2em 0; overflow-x: auto; }
-        .blog-content a { color: #f5c518; text-decoration: underline; }
-        .blog-content img { max-width: 100%; border-radius: 10px; margin: 1.5em 0; }
-        .blog-content strong { color: #fff; font-weight: 700; }
-        .blog-content table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-        .blog-content th, .blog-content td { border: 1px solid #2a2a2a; padding: 8px; }
-        .blog-content th { background: #1a1a1a; color: #f0f0f0; }
+      {/* GLOBAL STYLES - MUST BE HERE FOR BLOG CONTENT */}
+      <style jsx global>{`
+        .blog-content-wrapper {
+          line-height: 1.85;
+          color: #ccc;
+        }
+        
+        .blog-content-wrapper > * {
+          max-width: 100%;
+        }
+        
+        .blog-content-wrapper h1 {
+          font-size: 2.2em;
+          font-weight: 800;
+          margin: 1.2em 0 0.5em;
+          color: #fff;
+        }
+        
+        .blog-content-wrapper h2 {
+          font-size: 1.8em;
+          font-weight: 700;
+          margin: 1.2em 0 0.5em;
+          color: #f0f0f0;
+          padding-bottom: 0.4em;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .blog-content-wrapper h3 {
+          font-size: 1.4em;
+          font-weight: 600;
+          margin: 1em 0 0.4em;
+          color: #e0e0e0;
+        }
+        
+        .blog-content-wrapper h4 {
+          font-size: 1.2em;
+          font-weight: 600;
+          margin: 0.8em 0 0.4em;
+          color: #d0d0d0;
+        }
+        
+        .blog-content-wrapper p {
+          margin-bottom: 1.2em;
+          line-height: 1.8;
+        }
+        
+        /* LISTS - IMPORTANT FIX */
+        .blog-content-wrapper ul {
+          list-style-type: disc !important;
+          margin: 1em 0 !important;
+          padding-left: 2em !important;
+          display: block !important;
+        }
+        
+        .blog-content-wrapper ol {
+          list-style-type: decimal !important;
+          margin: 1em 0 !important;
+          padding-left: 2em !important;
+          display: block !important;
+        }
+        
+        .blog-content-wrapper li {
+          margin-bottom: 0.5em !important;
+          line-height: 1.7 !important;
+          display: list-item !important;
+        }
+        
+        .blog-content-wrapper ul ul,
+        .blog-content-wrapper ol ul,
+        .blog-content-wrapper ul ol,
+        .blog-content-wrapper ol ol {
+          margin: 0.5em 0 !important;
+        }
+        
+        /* BLOCKQUOTE */
+        .blog-content-wrapper blockquote {
+          border-left: 4px solid #f5c518;
+          padding: 0.8em 1.2em;
+          margin: 1.5em 0;
+          background: rgba(245, 197, 24, 0.05);
+          border-radius: 0 8px 8px 0;
+          color: #aaa;
+          font-style: italic;
+        }
+        
+        /* CODE */
+        .blog-content-wrapper code {
+          background: #1e1e2e;
+          color: #f5c518;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-size: 0.9em;
+          font-family: monospace;
+        }
+        
+        .blog-content-wrapper pre {
+          background: #1e1e2e;
+          border-radius: 10px;
+          padding: 1.2em;
+          margin: 1.2em 0;
+          overflow-x: auto;
+        }
+        
+        .blog-content-wrapper pre code {
+          background: none;
+          padding: 0;
+        }
+        
+        /* LINKS */
+        .blog-content-wrapper a {
+          color: #f5c518;
+          text-decoration: underline;
+        }
+        
+        .blog-content-wrapper a:hover {
+          color: #ffdd44;
+        }
+        
+        /* IMAGES */
+        .blog-content-wrapper img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 10px;
+          margin: 1.5em 0;
+        }
+        
+        /* TABLES */
+        .blog-content-wrapper table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 1em 0;
+        }
+        
+        .blog-content-wrapper th,
+        .blog-content-wrapper td {
+          border: 1px solid #2a2a2a;
+          padding: 8px;
+        }
+        
+        .blog-content-wrapper th {
+          background: #1a1a1a;
+          color: #f0f0f0;
+        }
+        
+        /* HR */
+        .blog-content-wrapper hr {
+          border: none;
+          height: 1px;
+          background: linear-gradient(to right, transparent, #333, transparent);
+          margin: 2em 0;
+        }
+        
+        /* STRONG/BOLD */
+        .blog-content-wrapper strong,
+        .blog-content-wrapper b {
+          color: #fff;
+          font-weight: 700;
+        }
+        
+        /* EMPHASIS */
+        .blog-content-wrapper em,
+        .blog-content-wrapper i {
+          font-style: italic;
+        }
       `}</style>
     </div>
   );
