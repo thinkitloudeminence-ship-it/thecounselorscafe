@@ -154,13 +154,19 @@ export default function BlogEditorPage() {
       setForm((prev) => ({ ...prev, image: { ...prev.image, url: res.data.data.url, publicId: res.data.data.publicId } }));
       toast.success("Featured image uploaded!");
       setIsDirty(true);
-    } catch { toast.error("Image upload failed"); }
-    finally { setImageUploading(false); }
+    } catch { 
+      toast.error("Image upload failed"); 
+    } finally { 
+      setImageUploading(false); 
+    }
   };
 
   const save = async (statusOverride) => {
     // Only title and content are required, excerpt is optional
-    if (!form.title.trim()) { toast.error("Title is required"); return; }
+    if (!form.title.trim()) { 
+      toast.error("Title is required"); 
+      return; 
+    }
     if (!form.content || form.content === "<p></p>" || form.content === "<p><br></p>") { 
       toast.error("Content is required"); 
       return; 
@@ -186,7 +192,7 @@ export default function BlogEditorPage() {
         // Redirect to admin dashboard after successful save
         navigate("/dashboard");
       } else {
-        const res = await createBlog(payload);
+        await createBlog(payload);
         toast.success("Blog created!");
         setIsDirty(false);
         // Redirect to admin dashboard after successful creation
@@ -194,7 +200,9 @@ export default function BlogEditorPage() {
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Save failed");
-    } finally { setSaving(false); }
+    } finally { 
+      setSaving(false); 
+    }
   };
 
   if (loading) return <div style={{ textAlign: "center", padding: 60, color: "#555" }}>Loading editor...</div>;
