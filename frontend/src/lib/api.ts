@@ -76,7 +76,9 @@ export const fetchBlogs = async (params?: Record<string, string>) => {
 
 export const fetchBlog = async (slug: string) => {
   try {
-    const res = await api.get(`/blogs/${slug}`);
+    // Add timestamp to prevent caching
+    const timestamp = Date.now();
+    const res = await api.get(`/blogs/${slug}?t=${timestamp}`);
     console.log("Blog response:", res.data);
     return res.data;
   } catch (error) {
@@ -116,7 +118,7 @@ export const submitContact = async (payload: {
 // ==================== ADMIN BLOGS CRUD ====================
 // Get admin token from localStorage
 const getAdminToken = () => {
-  const token = localStorage.getItem('adminToken');
+  const token = localStorage.getItem('cc_admin_token'); // Changed from 'adminToken' to match your auth
   if (!token) throw new Error('No admin token found');
   return token;
 };
@@ -236,6 +238,89 @@ export const getDashboardStats = async () => {
     return response.data;
   } catch (error) {
     console.error('Get dashboard stats error:', error);
+    throw error;
+  }
+};
+
+// ==================== AUTH API (for admin dashboard) ====================
+export const adminLogin = async (email: string, password: string) => {
+  try {
+    const response = await api.post('/auth/login', { email, password });
+    return response.data;
+  } catch (error) {
+    console.error('Admin login error:', error);
+    throw error;
+  }
+};
+
+export const getMe = async () => {
+  try {
+    const response = await adminApi().get('/auth/me');
+    return response.data;
+  } catch (error) {
+    console.error('Get me error:', error);
+    throw error;
+  }
+};
+
+export const changePassword = async (data: { currentPassword: string; newPassword: string }) => {
+  try {
+    const response = await adminApi().post('/auth/change-password', data);
+    return response.data;
+  } catch (error) {
+    console.error('Change password error:', error);
+    throw error;
+  }
+};
+
+// ==================== CONTACTS API (for admin dashboard) ====================
+export const getContacts = async (params?: Record<string, any>) => {
+  try {
+    const response = await adminApi().get('/admin/contacts', { params });
+    return response.data;
+  } catch (error) {
+    console.error('Get contacts error:', error);
+    throw error;
+  }
+};
+
+export const updateContactStatus = async (id: string, status: string, adminNote?: string) => {
+  try {
+    const response = await adminApi().patch(`/admin/contacts/${id}/status`, { status, adminNote });
+    return response.data;
+  } catch (error) {
+    console.error('Update contact status error:', error);
+    throw error;
+  }
+};
+
+// ==================== USERS API (for admin dashboard) ====================
+export const getAdminUsers = async () => {
+  try {
+    const response = await adminApi().get('/admin/users');
+    return response.data;
+  } catch (error) {
+    console.error('Get admin users error:', error);
+    throw error;
+  }
+};
+
+export const createAdminUser = async (data: { name: string; email: string; password: string; role: string }) => {
+  try {
+    const response = await adminApi().post('/admin/users', data);
+    return response.data;
+  } catch (error) {
+    console.error('Create admin user error:', error);
+    throw error;
+  }
+};
+
+export const deleteAdminUser = async (id: string) => {
+  try {
+    const response = await adminApi().delete(`/admin/users/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Delete admin user error:', error);
     throw error;
   }
 };

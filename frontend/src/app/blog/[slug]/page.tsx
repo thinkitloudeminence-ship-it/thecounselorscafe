@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import BlogDetailClient from "./BlogClient";
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> }  // ✅ Promise type
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
-  const { slug } = await params;  // ✅ await params
+  const { slug } = await params;
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    // Add cache busting
     const res = await fetch(`${apiUrl}/blogs/${slug}`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 0 }, // Change from 3600 to 0 for no cache
+      cache: 'no-store', // Add this
     });
 
     if (!res.ok) throw new Error("Not found");
@@ -68,8 +70,8 @@ export async function generateMetadata(
 export default async function BlogDetailPage({ 
   params 
 }: { 
-  params: Promise<{ slug: string }>  // ✅ Promise type
+  params: Promise<{ slug: string }>
 }) {
-  const { slug } = await params;  // ✅ await params
+  const { slug } = await params;
   return <BlogDetailClient slug={slug} />;
 }

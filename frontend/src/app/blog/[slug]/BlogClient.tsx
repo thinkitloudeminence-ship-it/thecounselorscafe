@@ -1,15 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ArrowLeft, Clock, Eye, Calendar, Tag, Heart, Share2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchBlog } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 // Helper function to fix image URLs for local development
 const getImageUrl = (url: string | undefined) => {
   if (!url) return null;
   
-  // Agar localhost pe hai toh replace karo
   if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
     if (url.includes('thecounselorscafe.onrender.com')) {
       return url.replace('https://thecounselorscafe.onrender.com', 'http://localhost:5000');
@@ -55,18 +55,26 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
   const [related, setRelated] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState(false);
+  const router = useRouter();
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetchBlog(slug);
+      if (res?.data) {
+        setBlog(res.data);
+        setRelated(res.related || []);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
 
   useEffect(() => {
-    fetchBlog(slug)
-      .then((res: any) => {
-        if (res?.data) {
-          setBlog(res.data);
-          setRelated(res.related || []);
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [slug]);
+    fetchData();
+  }, [fetchData]);
 
   const handleLike = async () => {
     if (liked) return;
@@ -77,6 +85,12 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         { method: "POST" }
       );
     } catch {}
+  };
+
+  // Refresh page function
+  const refreshPage = () => {
+    router.refresh();
+    fetchData();
   };
 
   if (loading) {
@@ -92,14 +106,22 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
   return (
     <div className="min-h-screen bg-black pt-20">
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm mb-6 inline-block"
-        >
-          <ArrowLeft size={16} /> Back to Blog
-        </Link>
+        <div className="flex justify-between items-center mb-6">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm"
+          >
+            <ArrowLeft size={16} /> Back to Blog
+          </Link>
+          <button
+            onClick={refreshPage}
+            className="text-xs text-gray-500 hover:text-yellow-500 transition-colors"
+          >
+            ↻ Refresh
+          </button>
+        </div>
 
-        {/* Category and Title - Always at the top */}
+        {/* Category and Title */}
         <span className="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
           {blog.category}
         </span>
@@ -107,7 +129,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           {blog.title}
         </h1>
 
-        {/* Featured Image - Below heading with URL fix for local development */}
+        {/* Featured Image */}
         {blog.image?.url && (
           <div className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
             <Image
@@ -116,6 +138,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
               fill
               className="object-cover"
               priority
+              unoptimized // Add this to bypass Next.js image optimization cache
             />
           </div>
         )}
@@ -168,8 +191,9 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* Main Content - Images inside content will also be fixed */}
+        {/* Main Content - Add key to force re-render */}
         <div 
+          key={blog.updatedAt || blog._id}
           className="blog-content" 
           dangerouslySetInnerHTML={{ 
             __html: blog.content?.replace(
@@ -181,7 +205,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           }} 
         />
 
-        {/* Like and Share Buttons */}
+        {/* Rest of the component remains same */}
         <div className="flex items-center gap-4 mt-10 pt-8 border-t border-white/10">
           <button
             onClick={handleLike}
@@ -202,7 +226,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </button>
         </div>
 
-        {/* Author Bio */}
         {blog.author?.bio && (
           <div className="mt-10 p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-4">
             <div className="w-14 h-14 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-bold text-xl flex-shrink-0">
@@ -215,7 +238,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* CTA Section */}
         <div className="mt-10 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
           <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance? ☕</h3>
           <p className="text-gray-400 text-sm mb-4">
@@ -229,7 +251,6 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </Link>
         </div>
 
-        {/* Related Articles */}
         {related.length > 0 && (
           <div className="mt-12">
             <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>
@@ -247,6 +268,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
                         alt={r.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform"
+                        unoptimized
                       />
                     </div>
                   )}
