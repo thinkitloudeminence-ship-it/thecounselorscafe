@@ -78,46 +78,36 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
 
   return (
     <div className="min-h-screen bg-black pt-20">
-      {blog.image?.url && (
-        <div className="relative h-[360px] md:h-[460px] w-full overflow-hidden">
-          <Image
-            src={blog.image.url}
-            alt={blog.image.alt || blog.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 max-w-4xl mx-auto">
-            <span className="inline-block bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-xs font-semibold px-3 py-1.5 rounded-full mb-3 uppercase tracking-wider">
-              {blog.category}
-            </span>
-            <h1 className="text-2xl md:text-4xl font-bold text-white leading-tight max-w-3xl">
-              {blog.title}
-            </h1>
-          </div>
-        </div>
-      )}
-
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm mb-6"
+          className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm mb-6 inline-block"
         >
           <ArrowLeft size={16} /> Back to Blog
         </Link>
 
-        {!blog.image?.url && (
-          <>
-            <span className="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
-              {blog.category}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-6">
-              {blog.title}
-            </h1>
-          </>
+        {/* Category and Title - Always at the top */}
+        <span className="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
+          {blog.category}
+        </span>
+        <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-6">
+          {blog.title}
+        </h1>
+
+        {/* Featured Image - Below heading (not above) */}
+        {blog.image?.url && (
+          <div className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden mb-8">
+            <Image
+              src={blog.image.url}
+              alt={blog.image.alt || blog.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
         )}
 
+        {/* Author and Meta Info */}
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 mb-6 pb-6 border-b border-white/10">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center text-black font-bold text-xs">
@@ -143,8 +133,14 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </span>
         </div>
 
-        <p className="text-gray-300 text-lg leading-relaxed mb-8 font-medium">{blog.excerpt}</p>
+        {/* Excerpt */}
+        {blog.excerpt && (
+          <p className="text-gray-300 text-lg leading-relaxed mb-8 font-medium">
+            {blog.excerpt}
+          </p>
+        )}
 
+        {/* Tags */}
         {blog.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             {blog.tags.map((tag: string) => (
@@ -159,8 +155,10 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
+        {/* Main Content */}
         <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }} />
 
+        {/* Like and Share Buttons */}
         <div className="flex items-center gap-4 mt-10 pt-8 border-t border-white/10">
           <button
             onClick={handleLike}
@@ -181,6 +179,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </button>
         </div>
 
+        {/* Author Bio */}
         {blog.author?.bio && (
           <div className="mt-10 p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-4">
             <div className="w-14 h-14 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-bold text-xl flex-shrink-0">
@@ -193,6 +192,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </div>
         )}
 
+        {/* CTA Section */}
         <div className="mt-10 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
           <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance? ☕</h3>
           <p className="text-gray-400 text-sm mb-4">
@@ -206,6 +206,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           </Link>
         </div>
 
+        {/* Related Articles */}
         {related.length > 0 && (
           <div className="mt-12">
             <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>
@@ -252,6 +253,9 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         .blog-content a { color: #f5c518; text-decoration: underline; }
         .blog-content img { max-width: 100%; border-radius: 10px; margin: 1.5em 0; }
         .blog-content strong { color: #fff; font-weight: 700; }
+        .blog-content table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+        .blog-content th, .blog-content td { border: 1px solid #2a2a2a; padding: 8px; }
+        .blog-content th { background: #1a1a1a; color: #f0f0f0; }
       `}</style>
     </div>
   );

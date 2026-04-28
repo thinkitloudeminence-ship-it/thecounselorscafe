@@ -159,9 +159,12 @@ export default function BlogEditorPage() {
   };
 
   const save = async (statusOverride) => {
+    // Only title and content are required, excerpt is optional
     if (!form.title.trim()) { toast.error("Title is required"); return; }
-    if (!form.excerpt.trim()) { toast.error("Excerpt is required"); return; }
-    if (!form.content || form.content === "<p></p>") { toast.error("Content is required"); return; }
+    if (!form.content || form.content === "<p></p>" || form.content === "<p><br></p>") { 
+      toast.error("Content is required"); 
+      return; 
+    }
 
     setSaving(true);
     const payload = {
@@ -180,11 +183,14 @@ export default function BlogEditorPage() {
         await updateBlog(id, payload);
         toast.success(statusOverride === "published" ? "Blog published!" : "Draft saved!");
         setIsDirty(false);
+        // Redirect to admin dashboard after successful save
+        navigate("/dashboard");
       } else {
         const res = await createBlog(payload);
         toast.success("Blog created!");
-        navigate(`/blogs/edit/${res.data.data._id}`, { replace: true });
         setIsDirty(false);
+        // Redirect to admin dashboard after successful creation
+        navigate("/dashboard");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Save failed");
@@ -204,8 +210,8 @@ export default function BlogEditorPage() {
 
       {/* Top bar */}
       <div style={s.topBar}>
-        <button style={s.backBtn} onClick={() => navigate("/blogs")}>
-          <ArrowLeft size={16} /> Back
+        <button style={s.backBtn} onClick={() => navigate("/dashboard")}>
+          <ArrowLeft size={16} /> Back to Dashboard
         </button>
         <div style={s.topTitle}>{isEdit ? "Edit Post" : "New Blog Post"}</div>
         <div style={s.topActions}>
@@ -232,6 +238,12 @@ export default function BlogEditorPage() {
               <span>{new Date().toLocaleDateString()}</span>
             </div>
           </div>
+          {/* Featured image in preview (below heading) */}
+          {form.image?.url && (
+            <div style={s.previewImageContainer}>
+              <img src={form.image.url} alt={form.image.alt || form.title} style={s.previewImage} />
+            </div>
+          )}
           <div style={s.previewContent} dangerouslySetInnerHTML={{ __html: form.content }} />
         </div>
       ) : (
@@ -261,13 +273,13 @@ export default function BlogEditorPage() {
               </div>
             </div>
 
-            {/* Excerpt */}
+            {/* Excerpt - Made Optional */}
             <div style={s.fieldGroup}>
-              <label style={s.label}>Excerpt <span style={s.hint}>(shown on blog listing page)</span></label>
+              <label style={s.label}>Excerpt <span style={s.optionalHint}>(Optional - shown on blog listing page)</span></label>
               <textarea
                 value={form.excerpt}
                 onChange={(e) => set("excerpt", e.target.value)}
-                placeholder="Write a compelling 1-2 sentence summary of this post…"
+                placeholder="Write a compelling 1-2 sentence summary of this post… (optional)"
                 rows={3}
                 style={{ ...s.textarea, resize: "vertical" }}
                 maxLength={500}
@@ -277,7 +289,7 @@ export default function BlogEditorPage() {
 
             {/* Content Editor */}
             <div style={s.fieldGroup}>
-              <label style={s.label}>Content</label>
+              <label style={s.label}>Content <span style={s.requiredHint}>*</span></label>
               <RichTextEditor
                 content={form.content}
                 onChange={(html) => set("content", html)}
@@ -285,7 +297,7 @@ export default function BlogEditorPage() {
             </div>
           </div>
 
-          {/* Sidebar - same as before */}
+          {/* Sidebar */}
           <div style={s.sidebar}>
             {/* Publish settings */}
             <div style={s.panel}>
@@ -502,6 +514,8 @@ const s = {
   panelTitle: { fontSize: 12, fontWeight: 700, color: "#888", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 },
   fieldGroup: { marginBottom: 14 },
   label: { display: "block", fontSize: 12, fontWeight: 600, color: "#666", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.04em" },
+  optionalHint: { textTransform: "none", fontWeight: 400, color: "#444", fontStyle: "italic" },
+  requiredHint: { textTransform: "none", fontWeight: 600, color: "#f5c518" },
   hint: { textTransform: "none", fontWeight: 400, color: "#444" },
   input: { width: "100%", padding: "9px 12px", background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 8, color: "#f0f0f0", fontSize: 13 },
   textarea: { width: "100%", padding: "9px 12px", background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 8, color: "#f0f0f0", fontSize: 13, resize: "none" },
@@ -524,5 +538,7 @@ const s = {
   previewContainer: { background: "#fff", borderRadius: 12, padding: 40, minHeight: "calc(100vh - 200px)", color: "#333" },
   previewHeader: { textAlign: "center", marginBottom: 32, borderBottom: "1px solid #eee", paddingBottom: 20 },
   previewMeta: { fontSize: 14, color: "#666", marginTop: 12, display: "flex", gap: 8, justifyContent: "center" },
+  previewImageContainer: { marginBottom: 32, textAlign: "center" },
+  previewImage: { maxWidth: "100%", maxHeight: 400, borderRadius: 12, objectFit: "cover" },
   previewContent: { fontSize: 16, lineHeight: 1.8, color: "#333" },
 };

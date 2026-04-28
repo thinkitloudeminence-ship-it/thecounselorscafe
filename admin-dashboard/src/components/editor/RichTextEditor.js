@@ -47,6 +47,7 @@ export default function RichTextEditor({ content, onChange }) {
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3, 4] },
+        codeBlock: { HTMLAttributes: { class: "code-block" } },
       }),
       Underline,
       TextStyle,
@@ -55,11 +56,21 @@ export default function RichTextEditor({ content, onChange }) {
         openOnClick: false,
         HTMLAttributes: { class: "editor-link", target: "_blank", rel: "noopener noreferrer" },
       }),
-      Image.configure({ inline: false, allowBase64: false }),
+      Image.configure({ 
+        inline: false, 
+        allowBase64: false,
+        HTMLAttributes: { class: "editor-image" }
+      }),
       Placeholder.configure({
         placeholder: "Start writing your blog post here… Use H2 for main sections, H3 for sub-sections. Add images, links, and lists to make it engaging.",
       }),
-      Youtube.configure({ controls: true, modestbranding: true, rel: 0 }),
+      Youtube.configure({ 
+        controls: true, 
+        modestbranding: true, 
+        rel: 0,
+        width: 640,
+        height: 360,
+      }),
     ],
     content,
     editorProps: {
@@ -68,7 +79,56 @@ export default function RichTextEditor({ content, onChange }) {
         style: "min-height: 500px; outline: none; padding: 20px; line-height: 1.8;",
       },
       handlePaste: (view, event, slice) => {
+        // Handle paste to preserve formatting
+        const { clipboardData } = event;
+        if (!clipboardData) return false;
+        
+        // Get HTML content from clipboard
+        const html = clipboardData.getData('text/html');
+        const text = clipboardData.getData('text/plain');
+        
+        if (html) {
+          // Parse HTML to preserve formatting
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const body = doc.body;
+          
+          // Process the pasted content
+          setTimeout(() => {
+            editor.commands.insertContentAt(view.state.selection.from, body.innerHTML);
+          }, 0);
+          
+          return true; // Prevent default paste
+        } else if (text) {
+          // Fallback to plain text
+          setTimeout(() => {
+            editor.commands.insertContentAt(view.state.selection.from, text);
+          }, 0);
+          return true;
+        }
+        
         return false;
+      },
+      transformPastedHTML: (html) => {
+        // Clean and transform pasted HTML while preserving structure
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Remove unwanted attributes that might cause issues
+        doc.querySelectorAll('*').forEach((el) => {
+          const allowedAttrs = ['href', 'src', 'alt', 'title', 'class'];
+          for (let attr of el.attributes) {
+            if (!allowedAttrs.includes(attr.name)) {
+              el.removeAttribute(attr.name);
+            }
+          }
+        });
+        
+        return doc.body.innerHTML;
+      },
+      transformPastedText: (text) => {
+        // Preserve plain text as is
+        return text;
       },
     },
     onUpdate: ({ editor }) => {
@@ -88,7 +148,7 @@ export default function RichTextEditor({ content, onChange }) {
     }
   }, [content, editor]);
 
-  // Inject styles on mount (important for production)
+  // Inject styles on mount
   useEffect(() => {
     const styleId = "tiptap-editor-styles";
     if (!document.getElementById(styleId)) {
@@ -124,6 +184,12 @@ export default function RichTextEditor({ content, onChange }) {
           font-weight: bold;
           margin: 0.6em 0 0.3em;
           color: #f0f0f0;
+        }
+        .rich-text-editor h4 {
+          font-size: 1.1em;
+          font-weight: bold;
+          margin: 0.5em 0 0.25em;
+          color: #e0e0e0;
         }
         .rich-text-editor ul, .rich-text-editor ol {
           margin: 0.5em 0;
@@ -167,17 +233,61 @@ export default function RichTextEditor({ content, onChange }) {
           color: #f5c518;
           text-decoration: underline;
         }
+        .rich-text-editor a:hover {
+          color: #f5c518;
+          text-decoration: underline;
+        }
         .rich-text-editor hr {
           border: none;
           height: 1px;
           background: linear-gradient(to right, transparent, #2a2a2a, transparent);
           margin: 2em 0;
         }
+        .rich-text-editor table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 1em 0;
+        }
+        .rich-text-editor th, .rich-text-editor td {
+          border: 1px solid #2a2a2a;
+          padding: 8px;
+        }
+        .rich-text-editor th {
+          background: #1a1a1a;
+          color: #f0f0f0;
+        }
         .rich-text-editor .is-editor-empty:first-child::before {
           content: attr(data-placeholder);
           color: #444;
           pointer-events: none;
           height: 0;
+        }
+        .rich-text-editor .editor-image {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+        }
+        .rich-text-editor iframe {
+          max-width: 100%;
+          border-radius: 8px;
+          margin: 1em 0;
+        }
+        
+        /* Scrollbar styling */
+        .rich-text-editor-scroll::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        .rich-text-editor-scroll::-webkit-scrollbar-track {
+          background: #1a1a1a;
+          border-radius: 4px;
+        }
+        .rich-text-editor-scroll::-webkit-scrollbar-thumb {
+          background: #2a2a2a;
+          border-radius: 4px;
+        }
+        .rich-text-editor-scroll::-webkit-scrollbar-thumb:hover {
+          background: #3a3a3a;
         }
       `;
       document.head.appendChild(styleTag);
