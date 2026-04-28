@@ -133,10 +133,9 @@ export default function HeroSection() {
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 lg:py-16 relative z-10">
           {/* Main Banner Box */}
-          <div className="relative max-w-5xl mx-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl">
+          <div className="relative max-w-6xl mx-auto overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl">
             {/* Box Background Image */}
             <div className="absolute inset-0 z-0">
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20 z-10" />
               <Image
                 src="/arpanamam.jpeg"
                 alt="Background"
@@ -146,16 +145,16 @@ export default function HeroSection() {
               />
             </div>
 
-            {/* Box Content */}
-            <div className="relative z-20 p-5 sm:p-6 md:p-8 lg:p-10 xl:p-12">
-              <div className="flex flex-col items-center justify-center text-center">
+            {/* Box Content - Left Side Content, Right Side Empty */}
+            <div className="relative z-20 p-5 sm:p-6 md:p-8 lg:p-10 xl:p-12 bg-gradient-to-r from-black/70 via-black/50 to-transparent">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8 lg:gap-12">
                 
-                {/* Headings */}
+                {/* Left Side - Headings and Content */}
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="w-full"
+                  className="flex-1 text-center lg:text-left"
                 >
                   <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight drop-shadow-lg">
                     Clear Confusions with{" "}
@@ -172,7 +171,7 @@ export default function HeroSection() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -30 }}
                       transition={{ duration: 0.5 }}
-                      className="inline-block"
+                      className="inline-block lg:inline-block"
                     >
                       <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
                         {rotatingHeadings[currentHeadingIndex]}
@@ -180,8 +179,8 @@ export default function HeroSection() {
                     </motion.div>
                   </div>
 
-                  {/* Stats - Responsive grid on mobile */}
-                  <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-5 md:mt-6">
+                  {/* Stats - Responsive */}
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-5 md:mt-6">
                     <div className="flex items-center gap-1.5 sm:gap-2 bg-black/40 backdrop-blur-sm rounded-full px-2 py-1 sm:px-3 sm:py-1.5 md:px-4">
                       <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 fill-yellow-500" />
                       <span className="text-white text-xs sm:text-sm md:text-base">4.9 Rating</span>
@@ -204,6 +203,9 @@ export default function HeroSection() {
                     <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </motion.div>
+
+                {/* Right Side - Empty (Background image dikhegi) */}
+                <div className="flex-1 hidden lg:block" />
               </div>
             </div>
           </div>
@@ -228,7 +230,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Categories - Responsive Grid  */}
+          {/* Categories - Responsive Grid */}
           <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 max-w-7xl mx-auto">
             <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 sm:gap-2 md:gap-3">
               {categories.map((item, i) => (
@@ -261,7 +263,7 @@ export default function HeroSection() {
             </div>
 
             <div className="relative overflow-x-hidden">
-              {/* Gradient masks - smaller on mobile */}
+              {/* Gradient masks */}
               <div className="absolute left-0 top-0 bottom-0 w-8 xs:w-12 sm:w-16 md:w-20 bg-gradient-to-r from-black via-black/50 to-transparent z-10 pointer-events-none" />
               <div className="absolute right-0 top-0 bottom-0 w-8 xs:w-12 sm:w-16 md:w-20 bg-gradient-to-l from-black via-black/50 to-transparent z-10 pointer-events-none" />
 
