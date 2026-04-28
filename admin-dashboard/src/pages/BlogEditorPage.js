@@ -189,14 +189,14 @@ export default function BlogEditorPage() {
         await updateBlog(id, payload);
         toast.success(statusOverride === "published" ? "Blog published!" : "Draft saved!");
         setIsDirty(false);
-        // Redirect to admin dashboard after successful save
-        navigate("/dashboard");
+        // Redirect to admin dashboard (root path)
+        navigate("/");
       } else {
         await createBlog(payload);
         toast.success("Blog created!");
         setIsDirty(false);
-        // Redirect to admin dashboard after successful creation
-        navigate("/dashboard");
+        // Redirect to admin dashboard (root path)
+        navigate("/");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Save failed");
@@ -218,7 +218,7 @@ export default function BlogEditorPage() {
 
       {/* Top bar */}
       <div style={s.topBar}>
-        <button style={s.backBtn} onClick={() => navigate("/dashboard")}>
+        <button style={s.backBtn} onClick={() => navigate("/")}>
           <ArrowLeft size={16} /> Back to Dashboard
         </button>
         <div style={s.topTitle}>{isEdit ? "Edit Post" : "New Blog Post"}</div>

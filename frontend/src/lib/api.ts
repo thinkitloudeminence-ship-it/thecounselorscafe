@@ -3,16 +3,38 @@ import axios from "axios";
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+console.log("🔗 API Base URL:", API_URL);
+
 export const api = axios.create({
   baseURL: API_URL,
-  timeout: 10000,
+  timeout: 30000, // Increased timeout
   headers: { "Content-Type": "application/json" },
 });
 
-api.interceptors.response.use(
-  (response) => response,
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  (config) => {
+    console.log(`📤 ${config.method?.toUpperCase()} ${config.url}`, config.data);
+    return config;
+  },
   (error) => {
-    console.error("API Error:", error?.response?.data || error.message);
+    console.error("Request Error:", error);
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    console.log(`📥 ${response.status} ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error("API Error:", {
+      message: error?.response?.data?.message || error.message,
+      status: error?.response?.status,
+      url: error?.config?.url,
+      data: error?.response?.data
+    });
     return Promise.reject(error);
   }
 );
@@ -23,6 +45,7 @@ export const fetchCounselors = async (params?: Record<string, string>) => {
     const res = await api.get("/counselors", { params });
     return res.data?.data || res.data || [];
   } catch (error) {
+    console.error("Fetch counselors error:", error);
     return [];
   }
 };
@@ -32,6 +55,7 @@ export const fetchCounselor = async (id: string) => {
     const res = await api.get(`/counselors/${id}`);
     return res.data?.data || res.data || null;
   } catch (error) {
+    console.error("Fetch counselor error:", error);
     return null;
   }
 };
@@ -40,20 +64,23 @@ export const fetchCounselor = async (id: string) => {
 export const fetchBlogs = async (params?: Record<string, string>) => {
   try {
     const res = await api.get("/blogs", { params });
+    console.log("Blogs response:", res.data);
     // Backend returns { success, data, pagination }
-    // blog/page.tsx expects { data: [...] }
     return res.data;
   } catch (error) {
-    return null;
+    console.error("Fetch blogs error:", error);
+    // Return empty data structure on error
+    return { success: false, data: [], pagination: { total: 0, page: 1, pages: 1 } };
   }
 };
 
 export const fetchBlog = async (slug: string) => {
   try {
     const res = await api.get(`/blogs/${slug}`);
-    // Returns { success, data: blog, related: [...] }
+    console.log("Blog response:", res.data);
     return res.data;
   } catch (error) {
+    console.error("Fetch blog error:", error);
     return null;
   }
 };
@@ -64,6 +91,7 @@ export const fetchTestimonials = async () => {
     const res = await api.get("/testimonials");
     return res.data?.data || res.data || [];
   } catch (error) {
+    console.error("Fetch testimonials error:", error);
     return [];
   }
 };
@@ -80,15 +108,13 @@ export const submitContact = async (payload: {
     const res = await api.post("/contact", payload);
     return res.data;
   } catch (error) {
+    console.error("Submit contact error:", error);
     throw error;
   }
 };
 
-
-// Add these to your existing api.ts file (after the existing imports)
-
 // ==================== ADMIN BLOGS CRUD ====================
-// Get admin token from localStorage (or your auth context)
+// Get admin token from localStorage
 const getAdminToken = () => {
   const token = localStorage.getItem('adminToken');
   if (!token) throw new Error('No admin token found');
@@ -100,12 +126,23 @@ const adminApi = () => {
   const token = getAdminToken();
   return axios.create({
     baseURL: API_URL,
-    timeout: 10000,
+    timeout: 30000,
     headers: { 
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
   });
+};
+
+// Get single blog by ID (admin)
+export const getAdminBlog = async (id: string) => {
+  try {
+    const response = await adminApi().get(`/admin/blogs/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Get admin blog error:', error);
+    throw error;
+  }
 };
 
 // Get all blogs (admin - includes drafts)
@@ -115,17 +152,6 @@ export const getAdminBlogs = async (params?: Record<string, any>) => {
     return response.data;
   } catch (error) {
     console.error('Get admin blogs error:', error);
-    throw error;
-  }
-};
-
-// Get single blog by ID (admin)
-export const getBlogById = async (id: string) => {
-  try {
-    const response = await adminApi().get(`/admin/blogs/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Get blog by ID error:', error);
     throw error;
   }
 };
@@ -159,6 +185,24 @@ export const deleteBlog = async (id: string) => {
     return response.data;
   } catch (error) {
     console.error('Delete blog error:', error);
+    throw error;
+  }
+};
+
+// Upload blog image
+export const uploadBlogImage = async (formData: FormData) => {
+  try {
+    const token = getAdminToken();
+    const response = await axios.post(`${API_URL}/upload/blog-image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      },
+      timeout: 60000,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Upload image error:', error);
     throw error;
   }
 };

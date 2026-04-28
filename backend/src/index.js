@@ -33,14 +33,15 @@ app.use("/api/", limiter);
 
 // ── Core Middleware ─────────────────────────────────────
 app.use(cors({
- origin: [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "https://www.counselorscafe.com",
-  "https://thecounselorscafe-uzdc.vercel.app"
-],
-credentials: true,
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://www.counselorscafe.com",
+    "https://thecounselorscafe-uzdc.vercel.app"
+  ],
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json({ limit: "10mb" }));
