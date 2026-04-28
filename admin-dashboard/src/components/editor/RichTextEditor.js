@@ -8,7 +8,6 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import Youtube from "@tiptap/extension-youtube";
-import CharacterCount from "@tiptap/extension-character-count";
 import { uploadBlogImage } from "../../lib/api";
 import toast from "react-hot-toast";
 
@@ -61,7 +60,6 @@ export default function RichTextEditor({ content, onChange }) {
         placeholder: "Start writing your blog post here… Use H2 for main sections, H3 for sub-sections. Add images, links, and lists to make it engaging.",
       }),
       Youtube.configure({ controls: true, modestbranding: true, rel: 0 }),
-      CharacterCount.configure({ limit: 50000 }), // 50k characters limit
     ],
     content,
     editorProps: {
@@ -70,8 +68,7 @@ export default function RichTextEditor({ content, onChange }) {
         style: "min-height: 500px; outline: none; padding: 20px; line-height: 1.8;",
       },
       handlePaste: (view, event, slice) => {
-        // Clean paste - remove unwanted formatting
-        return false; // Let TipTap handle it
+        return false;
       },
     },
     onUpdate: ({ editor }) => {
@@ -90,6 +87,102 @@ export default function RichTextEditor({ content, onChange }) {
       editor.commands.setContent(content);
     }
   }, [content, editor]);
+
+  // Inject styles on mount (important for production)
+  useEffect(() => {
+    const styleId = "tiptap-editor-styles";
+    if (!document.getElementById(styleId)) {
+      const styleTag = document.createElement("style");
+      styleTag.id = styleId;
+      styleTag.textContent = `
+        .rich-text-editor {
+          min-height: 500px;
+          outline: none;
+          padding: 24px;
+          line-height: 1.8;
+          color: #e0e0e0;
+        }
+        .rich-text-editor p {
+          margin-bottom: 1em;
+        }
+        .rich-text-editor h1 {
+          font-size: 2em;
+          font-weight: bold;
+          margin: 1em 0 0.5em;
+          color: #f0f0f0;
+        }
+        .rich-text-editor h2 {
+          font-size: 1.5em;
+          font-weight: bold;
+          margin: 0.8em 0 0.4em;
+          color: #f0f0f0;
+          border-bottom: 1px solid #2a2a2a;
+          padding-bottom: 8px;
+        }
+        .rich-text-editor h3 {
+          font-size: 1.25em;
+          font-weight: bold;
+          margin: 0.6em 0 0.3em;
+          color: #f0f0f0;
+        }
+        .rich-text-editor ul, .rich-text-editor ol {
+          margin: 0.5em 0;
+          padding-left: 1.5em;
+        }
+        .rich-text-editor li {
+          margin: 0.25em 0;
+        }
+        .rich-text-editor blockquote {
+          border-left: 3px solid #f5c518;
+          margin: 1em 0;
+          padding-left: 1em;
+          color: #aaa;
+          font-style: italic;
+        }
+        .rich-text-editor code {
+          background: #1a1a1a;
+          padding: 2px 4px;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 0.9em;
+        }
+        .rich-text-editor pre {
+          background: #1a1a1a;
+          padding: 12px;
+          border-radius: 8px;
+          overflow-x: auto;
+          margin: 1em 0;
+        }
+        .rich-text-editor pre code {
+          background: none;
+          padding: 0;
+        }
+        .rich-text-editor img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+          margin: 1em 0;
+        }
+        .rich-text-editor a {
+          color: #f5c518;
+          text-decoration: underline;
+        }
+        .rich-text-editor hr {
+          border: none;
+          height: 1px;
+          background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+          margin: 2em 0;
+        }
+        .rich-text-editor .is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          color: #444;
+          pointer-events: none;
+          height: 0;
+        }
+      `;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
 
   const setLink = useCallback(() => {
     const prev = editor.getAttributes("link").href;
@@ -139,9 +232,9 @@ export default function RichTextEditor({ content, onChange }) {
   if (!editor) return null;
 
   return (
-    <div style={s.wrap}>
+    <div className="rich-text-editor-wrapper" style={s.wrap}>
       {/* Sticky Toolbar */}
-      <div style={s.toolbar}>
+      <div className="rich-text-editor-toolbar" style={s.toolbar}>
         <div style={s.toolbarInner}>
           {/* Headings */}
           <select
@@ -206,8 +299,8 @@ export default function RichTextEditor({ content, onChange }) {
         </div>
       </div>
 
-      {/* Editor Content */}
-      <div style={s.scrollContainer}>
+      {/* Editor Content with scroll */}
+      <div className="rich-text-editor-scroll" style={s.scrollContainer}>
         <EditorContent editor={editor} />
       </div>
     </div>
@@ -215,7 +308,15 @@ export default function RichTextEditor({ content, onChange }) {
 }
 
 const s = {
-  wrap: { border: "1px solid #2a2a2a", borderRadius: 12, overflow: "hidden", background: "#0f0f0f" },
+  wrap: { 
+    border: "1px solid #2a2a2a", 
+    borderRadius: 12, 
+    overflow: "hidden", 
+    background: "#0f0f0f",
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+  },
   toolbar: {
     position: "sticky",
     top: 0,
@@ -224,6 +325,7 @@ const s = {
     borderBottom: "1px solid #2a2a2a",
     overflowX: "auto",
     overflowY: "hidden",
+    flexShrink: 0,
   },
   toolbarInner: {
     display: "flex",
@@ -251,103 +353,10 @@ const s = {
     whiteSpace: "nowrap",
   },
   scrollContainer: {
-    maxHeight: "calc(100vh - 250px)",
+    flex: 1,
     overflowY: "auto",
     overflowX: "hidden",
+    minHeight: 400,
+    maxHeight: "calc(100vh - 200px)",
   },
 };
-
-// Global styles for editor content
-const editorStyles = `
-  .rich-text-editor {
-    min-height: 500px;
-    outline: none;
-    padding: 24px;
-    line-height: 1.8;
-    color: #e0e0e0;
-  }
-  .rich-text-editor p {
-    margin-bottom: 1em;
-  }
-  .rich-text-editor h1 {
-    font-size: 2em;
-    font-weight: bold;
-    margin: 1em 0 0.5em;
-    color: #f0f0f0;
-  }
-  .rich-text-editor h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 0.8em 0 0.4em;
-    color: #f0f0f0;
-    border-bottom: 1px solid #2a2a2a;
-    padding-bottom: 8px;
-  }
-  .rich-text-editor h3 {
-    font-size: 1.25em;
-    font-weight: bold;
-    margin: 0.6em 0 0.3em;
-    color: #f0f0f0;
-  }
-  .rich-text-editor ul, .rich-text-editor ol {
-    margin: 0.5em 0;
-    padding-left: 1.5em;
-  }
-  .rich-text-editor li {
-    margin: 0.25em 0;
-  }
-  .rich-text-editor blockquote {
-    border-left: 3px solid #f5c518;
-    margin: 1em 0;
-    padding-left: 1em;
-    color: #aaa;
-    font-style: italic;
-  }
-  .rich-text-editor code {
-    background: #1a1a1a;
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.9em;
-  }
-  .rich-text-editor pre {
-    background: #1a1a1a;
-    padding: 12px;
-    border-radius: 8px;
-    overflow-x: auto;
-    margin: 1em 0;
-  }
-  .rich-text-editor pre code {
-    background: none;
-    padding: 0;
-  }
-  .rich-text-editor img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 1em 0;
-  }
-  .rich-text-editor a {
-    color: #f5c518;
-    text-decoration: underline;
-  }
-  .rich-text-editor hr {
-    border: none;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #2a2a2a, transparent);
-    margin: 2em 0;
-  }
-  .rich-text-editor .is-editor-empty:first-child::before {
-    content: attr(data-placeholder);
-    color: #444;
-    pointer-events: none;
-    height: 0;
-  }
-`;
-
-// Inject styles
-if (typeof document !== "undefined") {
-  const styleTag = document.createElement("style");
-  styleTag.textContent = editorStyles;
-  document.head.appendChild(styleTag);
-}
