@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useParams, useNavigate, useBlocker } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getAdminBlog, createBlog, updateBlog, uploadBlogImage } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import RichTextEditor from "../components/editor/RichTextEditor";
