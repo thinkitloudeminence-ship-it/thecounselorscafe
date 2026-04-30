@@ -3,7 +3,7 @@ import CounselorsClient from "./CounselorsClient";
 
 export const metadata: Metadata = {
   title: "Find Career Counselors | 120+ Verified Experts | counselors cafe",
-  description: "Browse 120+ verified career counselors on counselors cafe. Filter by expertise — stream selection, study abroad, CUET, JEE, MBA, resume prep & more. Book a 1-on-1 session today. Starts from ₹599.",
+  description: "Browse 120+ verified career counselors on counselors cafe. Filter by expertise — stream selection, study abroad, CUET, JEE, MBA, resume prep & more. Book a 1-on-1 session today.",
   keywords: [
     "career counselors India",
     "verified career counselor",
@@ -30,5 +30,5 @@ export const metadata: Metadata = {
 };
 
 export default function CounselorsPage() {
-  return <CounselorsClient id={""} />;  // ✅ Remove id prop
+  return <CounselorsClient />;
 }

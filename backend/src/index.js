@@ -14,6 +14,7 @@ const blogRoutes = require("./routes/blog.routes");
 const adminRoutes = require("./routes/admin.routes");
 const contactRoutes = require("./routes/contact.routes");
 const uploadRoutes = require("./routes/upload.routes");
+const counselorRoutes = require("./routes/counselor.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -58,6 +59,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/counselors", counselorRoutes);
 
 // ── Health Check ───────────────────────────────────────
 app.get("/api/health", (req, res) => {

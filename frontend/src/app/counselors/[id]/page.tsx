@@ -1,66 +1,40 @@
 import type { Metadata } from "next";
-import CounselorDetailClient from "../CounselorsClient";
+import CounselorDetailClient from "./CounselorDetailClient";
+
+// Fallback data for metadata
+const fallbackCounselors: Record<string, any> = {
+  "1": { name: "Dr. Priya Sharma", title: "Career & Stream Selection Expert", experience: 8, rating: 4.9, reviews: 342 },
+  "2": { name: "Rahul Mehta", title: "Abroad Education Specialist", experience: 6, rating: 4.8, reviews: 218 },
+  "3": { name: "Anjali Verma", title: "Resume & Interview Coach", experience: 5, rating: 4.7, reviews: 187 },
+  "4": { name: "Vikram Nair", title: "Engineering & Tech Career Expert", experience: 10, rating: 4.9, reviews: 421 },
+  "5": { name: "Meera Pillai", title: "Arts & Humanities Specialist", experience: 7, rating: 4.8, reviews: 156 },
+  "6": { name: "Arjun Kapoor", title: "Commerce & Finance Career Expert", experience: 9, rating: 4.9, reviews: 293 },
+};
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ id: string }> }  // ✅ Promise type
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
-  const { id } = await params;  // ✅ await params
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-    const res = await fetch(`${apiUrl}/counselors/${id}`, {
-      next: { revalidate: 3600 },
-    });
-    
-    if (!res.ok) throw new Error("Counselor not found");
-    const data = await res.json();
-    const c = data.data || data;
-
-    const title = `${c.name} — ${c.title || "Career Counselor"}`;
-    const description = `Book a session with ${c.name}, a verified career counselor at counselors cafe with ${c.experience}+ years of experience in ${(c.expertise || []).slice(0, 3).join(", ")}. ${c.rating}★ rating from ${c.reviews}+ reviews.`;
-
+  const { id } = await params;
+  const c = fallbackCounselors[id];
+  
+  if (c) {
     return {
-      title: `${title} | counselors cafe`,
-      description,
-      keywords: [
-        c.name,
-        ...(c.expertise || []),
-        "career counselor",
-        "book career counselling",
-        "counselors cafe",
-      ],
-      alternates: {
-        canonical: `https://counselorscafe.com/counselors/${id}`,
-      },
-      openGraph: {
-        title: `${title} | counselors cafe`,
-        description,
-        url: `https://counselorscafe.com/counselors/${id}`,
-        images: [
-          {
-            url: c.image || "/og-image.jpg",
-            width: 800,
-            height: 600,
-            alt: c.name,
-          },
-        ],
-      },
-    };
-  } catch {
-    return {
-      title: "Career Counselor Profile | counselors cafe",
-      description: "Book a 1-on-1 session with a verified career counselor at counselors cafe.",
-      alternates: {
-        canonical: `https://counselorscafe.com/counselors/${id}`,
-      },
+      title: `${c.name} — ${c.title} | counselors cafe`,
+      description: `Book a session with ${c.name}, a verified career counselor with ${c.experience}+ years of experience. ${c.rating}★ rating from ${c.reviews}+ reviews.`,
     };
   }
+  
+  return {
+    title: "Career Counselor Profile | counselors cafe",
+    description: "Book a 1-on-1 session with a verified career counselor.",
+  };
 }
 
 export default async function CounselorDetailPage({ 
   params 
 }: { 
-  params: Promise<{ id: string }>  // ✅ Promise type
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;  // ✅ await params
+  const { id } = await params;
   return <CounselorDetailClient id={id} />;
 }

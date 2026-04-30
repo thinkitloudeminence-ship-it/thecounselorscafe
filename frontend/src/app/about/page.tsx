@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     "counselors cafe story",
     "best career counselling platform",
   ],
-  alternates: {
-    canonical: "https://counselorscafe.com/about",
+ alternates: {
+    canonical: "https://counselorscafe.com/about",  // ✅ ADD THIS
   },
   openGraph: {
     title: "About counselors cafe | Our Mission to End Career Confusion",

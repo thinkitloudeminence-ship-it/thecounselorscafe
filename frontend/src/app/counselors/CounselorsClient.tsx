@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Star, Languages, CheckCircle, ArrowLeft, Sparkles, Award, Users, Mail, MapPin, Calendar, Clock, GraduationCap } from "lucide-react";
+import { Star, MapPin, Languages, ArrowRight, Search, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
-import { fetchCounselor } from "@/lib/api";
 import Image from "next/image";
+import { fetchCounselors } from "@/lib/api";
 
 // Fallback counselor data
-const counselorsData: Record<string, any> = {
-  "1": {
+const fallbackCounselors = [
+  {
     _id: "1",
     name: "Dr. Priya Sharma",
     title: "Career & Stream Selection Expert",
@@ -20,13 +20,9 @@ const counselorsData: Record<string, any> = {
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 1200,
-    email: "priya.sharma@counselorscafe.com",
     location: "New Delhi, India",
-    education: "Ph.D. in Psychology, Delhi University",
-    bio: "Dr. Priya Sharma has over 8 years of experience in career counselling. She has helped thousands of students choose the right career path. Her expertise includes stream selection, career counselling, and CUET guidance.",
-    achievements: ["Best Career Counselor Award 2023", "Published 10+ research papers", "Guest speaker at 50+ schools"]
   },
-  "2": {
+  {
     _id: "2",
     name: "Rahul Mehta",
     title: "Abroad Education Specialist",
@@ -38,13 +34,9 @@ const counselorsData: Record<string, any> = {
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 890,
-    email: "rahul.mehta@counselorscafe.com",
     location: "Mumbai, India",
-    education: "MBA in International Business, SP Jain",
-    bio: "Rahul Mehta specializes in study abroad guidance. He has helped 500+ students get admission in top universities worldwide including USA, Canada, UK, and Australia.",
-    achievements: ["Certified Study Abroad Counselor", "Former Education Counselor at British Council"]
   },
-  "3": {
+  {
     _id: "3",
     name: "Anjali Verma",
     title: "Resume & Interview Coach",
@@ -56,13 +48,9 @@ const counselorsData: Record<string, any> = {
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 650,
-    email: "anjali.verma@counselorscafe.com",
     location: "Bangalore, India",
-    education: "MBA in HR, XLRI",
-    bio: "Anjali Verma is an expert resume writer and interview coach. She has helped 1000+ professionals land their dream jobs at top companies like Google, Amazon, and Microsoft.",
-    achievements: ["Certified Resume Writer", "LinkedIn Top Voice 2024"]
   },
-  "4": {
+  {
     _id: "4",
     name: "Vikram Nair",
     title: "Engineering & Tech Career Expert",
@@ -74,13 +62,9 @@ const counselorsData: Record<string, any> = {
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 1800,
-    email: "vikram.nair@counselorscafe.com",
     location: "Pune, India",
-    education: "B.Tech IIT Bombay, M.Tech Stanford",
-    bio: "Vikram Nair is an engineering career expert who has guided 2000+ students towards successful tech careers. He specializes in JEE preparation and tech career guidance.",
-    achievements: ["IIT Bombay Alumnus", "Former Google Engineer"]
   },
-  "5": {
+  {
     _id: "5",
     name: "Meera Pillai",
     title: "Arts & Humanities Specialist",
@@ -92,13 +76,9 @@ const counselorsData: Record<string, any> = {
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 780,
-    email: "meera.pillai@counselorscafe.com",
     location: "Kochi, India",
-    education: "MA in Journalism, Delhi University",
-    bio: "Meera Pillai specializes in arts and humanities career guidance. She helps students explore creative career paths in journalism, law, design, and more.",
-    achievements: ["Award-winning Journalist", "Career Coach Certification"]
   },
-  "6": {
+  {
     _id: "6",
     name: "Arjun Kapoor",
     title: "Commerce & Finance Career Expert",
@@ -110,241 +90,214 @@ const counselorsData: Record<string, any> = {
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
     available: false,
     sessionsCompleted: 1100,
-    email: "arjun.kapoor@counselorscafe.com",
     location: "Mumbai, India",
-    education: "CA, MBA from IIM Ahmedabad",
-    bio: "Arjun Kapoor is a finance career expert who has mentored 1000+ students for CA, CS, and MBA careers. He provides guidance for commerce students and finance professionals.",
-    achievements: ["Gold Medalist CA", "IIM Ahmedabad Alumnus"]
-  }
-};
+  },
+];
 
-export default function CounselorDetailClient({ id }: { id: string }) {
-  const [counselor, setCounselor] = useState<any>(null);
+const expertiseList = [
+  "Stream Selection",
+  "Career Counselling",
+  "Study Abroad",
+  "CUET Guidance",
+  "JEE Guidance",
+  "MBA Prep",
+  "Resume Building",
+  "Interview Prep",
+  "CA Guidance",
+  "Tech Careers",
+];
+
+export default function CounselorsClient() {
+  const [counselors, setCounselors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [selectedExpertise, setSelectedExpertise] = useState("");
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadCounselors = async () => {
+      setLoading(true);
       try {
-        const data = counselorsData[id];
-        if (data) {
-          setCounselor(data);
-        } else {
-          const res = await fetchCounselor(id);
-          setCounselor(res || null);
+        setCounselors(fallbackCounselors);
+        const apiCounselors = await fetchCounselors();
+        if (apiCounselors && apiCounselors.length > 0) {
+          setCounselors(apiCounselors);
         }
-      } catch {
-        setCounselor(null);
+      } catch (error) {
+        console.error("Error loading counselors:", error);
       } finally {
-        setLoading(false); // ✅ correct place
+        setLoading(false);
       }
     };
+    loadCounselors();
+  }, []);
 
-    loadData();
-  }, [id]);
-  if (loading) return (
-    <div className="min-h-screen pt-20 flex items-center justify-center bg-black">
-      <div className="w-10 h-10 border-3 border-yellow-500 border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
-
-  if (!counselor) return (
-    <div className="min-h-screen pt-20 flex flex-col items-center justify-center gap-4 bg-black">
-      <p className="text-gray-400">Counselor not found</p>
-      <Link href="/counselors" className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold px-6 py-3 rounded-xl">Browse All Counselors</Link>
-    </div>
-  );
-
-  const initials = counselor.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2) || "C";
+  const filtered = counselors.filter((c) => {
+    const matchSearch = !search || 
+      c.name.toLowerCase().includes(search.toLowerCase()) || 
+      c.title.toLowerCase().includes(search.toLowerCase()) ||
+      c.expertise?.some((e: string) => e.toLowerCase().includes(search.toLowerCase()));
+    const matchExpertise = !selectedExpertise || c.expertise?.includes(selectedExpertise);
+    return matchSearch && matchExpertise;
+  });
 
   return (
     <div className="min-h-screen bg-black pt-20">
-      <div className="container mx-auto px-4 md:px-6 py-8">
-        <Link href="/counselors" className="inline-flex items-center gap-2 text-gray-400 hover:text-yellow-400 transition-colors text-sm mb-6">
-          <ArrowLeft size={16} /> Back to Counselors
-        </Link>
+      {/* Header */}
+      <div className="bg-black py-12 px-4 border-b border-white/5">
+        <div className="container mx-auto px-4 text-center">
+          <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
+            <Sparkles size={12} />
+            Expert Guidance
+          </span>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            Find Your Perfect <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">Career Counselor</span>
+          </h1>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            120+ verified career experts ready to guide you — stream selection, study abroad, CUET, JEE, resume, and more.
+          </p>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 flex flex-col gap-5">
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl border border-white/10 p-6 md:p-8">
-              <div className="flex flex-col md:flex-row items-start gap-6">
-                <div className="relative w-32 h-32 rounded-full overflow-hidden border-3 border-yellow-500/50 flex-shrink-0">
-                  {counselor.image ? (
-                    <Image
-                      src={counselor.image}
-                      alt={counselor.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
-                      <span className="text-black font-bold text-4xl">{initials}</span>
-                    </div>
-                  )}
-                  {counselor.available && (
-                    <span className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-black" />
-                  )}
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <h1 className="text-2xl md:text-3xl font-bold text-white">{counselor.name}</h1>
-                    {counselor.available ? (
-                      <span className="flex items-center gap-1.5 bg-green-500/10 text-green-400 text-xs font-semibold px-3 py-1 rounded-full border border-green-500/30">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" /> Available
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1.5 bg-gray-500/10 text-gray-400 text-xs font-semibold px-3 py-1 rounded-full border border-gray-500/30">
-                        <span className="w-1.5 h-1.5 bg-gray-500 rounded-full" /> Busy
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-yellow-500 text-sm mt-1 font-medium">{counselor.title}</p>
-
-                  <div className="flex items-center gap-4 mt-3 flex-wrap text-sm">
-                    <span className="flex items-center gap-1">
-                      <Star size={14} className="text-yellow-500 fill-yellow-500" />
-                      <span className="font-bold text-white">{counselor.rating}</span>
-                      <span className="text-gray-500">({counselor.reviews} reviews)</span>
-                    </span>
-                    <span className="w-px h-3 bg-white/20" />
-                    <span className="flex items-center gap-1">
-                      <Award size={14} className="text-yellow-500" />
-                      <span className="text-gray-400">{counselor.experience}+ years exp.</span>
-                    </span>
-                    <span className="w-px h-3 bg-white/20" />
-                    <span className="flex items-center gap-1">
-                      <Users size={14} className="text-yellow-500" />
-                      <span className="text-gray-400">{counselor.sessionsCompleted}+ sessions</span>
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 mt-3 text-gray-500 text-sm">
-                    <Languages size={14} className="text-yellow-500" />
-                    <span className="text-gray-400">{counselor.languages?.join(", ") || "English"}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                {counselor.expertise?.map((tag: string) => (
-                  <span key={tag} className="bg-yellow-500/10 text-yellow-400 text-xs font-medium px-3 py-1.5 rounded-full border border-yellow-500/20">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl border border-white/10 p-6 md:p-8">
-              <h2 className="font-bold text-white text-lg mb-3 flex items-center gap-2">
-                <Sparkles size={18} className="text-yellow-500" />
-                About {counselor.name.split(" ")[0]}
-              </h2>
-              <p className="text-gray-400 leading-relaxed">{counselor.bio}</p>
-            </div>
-
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl border border-white/10 p-6 md:p-8">
-              <h2 className="font-bold text-white text-lg mb-3 flex items-center gap-2">
-                <GraduationCap size={18} className="text-yellow-500" />
-                Education & Qualifications
-              </h2>
-              <p className="text-gray-400 leading-relaxed">{counselor.education}</p>
-            </div>
-
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl border border-white/10 p-6 md:p-8">
-              <h2 className="font-bold text-white text-lg mb-3 flex items-center gap-2">
-                <Award size={18} className="text-yellow-500" />
-                Achievements
-              </h2>
-              <div className="space-y-2">
-                {counselor.achievements?.map((achievement: string, idx: number) => (
-                  <div key={idx} className="flex items-center gap-2.5 text-sm text-gray-400">
-                    <CheckCircle size={14} className="text-yellow-500 flex-shrink-0" />
-                    {achievement}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl border border-white/10 p-6 sticky top-24">
-              <h2 className="font-bold text-white text-lg mb-4 flex items-center gap-2">
-                <Sparkles size={18} className="text-yellow-500" />
-                Contact Information
-              </h2>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                    <Mail size={14} className="text-yellow-500" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Email</p>
-                    <a href={`mailto:${counselor.email}`} className="text-white text-sm hover:text-yellow-400 transition-colors">
-                      {counselor.email}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                    <MapPin size={14} className="text-yellow-500" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Location</p>
-                    <p className="text-white text-sm">{counselor.location}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                    <Calendar size={14} className="text-yellow-500" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Experience</p>
-                    <p className="text-white text-sm">{counselor.experience}+ years</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                    <Users size={14} className="text-yellow-500" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs">Students Guided</p>
-                    <p className="text-white text-sm">{counselor.sessionsCompleted}+</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <h3 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
-                  <Clock size={14} className="text-yellow-500" />
-                  How to Book?
-                </h3>
-                <div className="space-y-2 text-sm text-gray-400">
-                  <p>📱 Download our app to book sessions with {counselor.name.split(" ")[0]}</p>
-                  <p>✅ Check real-time availability</p>
-                  <p>💬 Chat directly with counselor</p>
-                  <p>🎥 Video session available</p>
-                </div>
-
-                <div className="mt-4">
-                  <Link
-                    href="/download-app"
-                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold py-3 rounded-xl hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
-                  >
-                    Download App to Book Session
-                  </Link>
-                </div>
-
-                <p className="text-center text-xs text-gray-500 mt-3">
-                  🔒 Secure • Verified Counselor • Money-back guarantee
-                </p>
-              </div>
-            </div>
+      <div className="container mx-auto px-4 md:px-6 py-10">
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto mb-8">
+          <div className="relative">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, expertise, or specialty..."
+              className="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 transition-colors"
+            />
           </div>
         </div>
+
+        {/* Expertise Filters */}
+        <div className="flex flex-wrap gap-2 justify-center mb-10">
+          <button
+            onClick={() => setSelectedExpertise("")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              !selectedExpertise 
+                ? "bg-yellow-500 text-black" 
+                : "bg-black/40 text-gray-400 border border-white/10 hover:border-yellow-500/50"
+            }`}
+          >
+            All
+          </button>
+          {expertiseList.map((exp) => (
+            <button
+              key={exp}
+              onClick={() => setSelectedExpertise(exp)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                selectedExpertise === exp 
+                  ? "bg-yellow-500 text-black" 
+                  : "bg-black/40 text-gray-400 border border-white/10 hover:border-yellow-500/50"
+              }`}
+            >
+              {exp}
+            </button>
+          ))}
+        </div>
+
+        {/* Counselors Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-black/40 rounded-2xl h-96 animate-pulse border border-white/10" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-white text-xl font-semibold mb-2">No counselors found</h3>
+            <p className="text-gray-500">Try adjusting your search or filter</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((counselor, index) => (
+              <motion.div
+                key={counselor._id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                viewport={{ once: true }}
+                className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
+              >
+                <div className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-yellow-500/50 flex-shrink-0">
+                      {counselor.image ? (
+                        <Image
+                          src={counselor.image}
+                          alt={counselor.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
+                          <span className="text-black font-bold text-2xl">
+                            {counselor.name?.charAt(0) || "C"}
+                          </span>
+                        </div>
+                      )}
+                      {counselor.available && (
+                        <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-black" />
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-white text-lg leading-tight group-hover:text-yellow-400 transition-colors">
+                        {counselor.name}
+                      </h3>
+                      <p className="text-yellow-500 text-xs font-medium mt-0.5">{counselor.title}</p>
+                      
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="flex items-center gap-0.5">
+                          <Star size={12} className="text-yellow-500 fill-yellow-500" />
+                          <span className="text-white text-xs font-bold">{counselor.rating}</span>
+                          <span className="text-gray-500 text-xs">({counselor.reviews})</span>
+                        </span>
+                        <span className="w-1 h-1 bg-gray-500 rounded-full" />
+                        <span className="text-gray-400 text-xs">{counselor.experience}+ yrs</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {counselor.expertise?.slice(0, 3).map((exp: string) => (
+                      <span key={exp} className="bg-yellow-500/10 text-yellow-400 text-xs px-2 py-1 rounded-full">
+                        {exp}
+                      </span>
+                    ))}
+                    {counselor.expertise?.length > 3 && (
+                      <span className="text-gray-500 text-xs px-2 py-1">+{counselor.expertise.length - 3}</span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10">
+                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <Users size={12} className="text-yellow-500" />
+                        {counselor.sessionsCompleted}+
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin size={12} className="text-yellow-500" />
+                        {counselor.location?.split(",")[0]}
+                      </span>
+                    </div>
+                    <Link
+                      href={`/counselors/${counselor._id}`}
+                      className="flex items-center gap-1 text-yellow-500 text-xs font-semibold hover:gap-2 transition-all"
+                    >
+                      View Profile <ArrowRight size={12} />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

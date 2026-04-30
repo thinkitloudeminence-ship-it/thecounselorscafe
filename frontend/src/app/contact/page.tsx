@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     "counselors cafe support",
     "career guidance contact India",
   ],
-  alternates: {
-    canonical: "https://counselorscafe.com/contact",
+   alternates: {
+    canonical: "https://counselorscafe.com/contact",  // ✅ ADD THIS
   },
   openGraph: {
     title: "Contact counselors cafe | Career Counselling Enquiries",

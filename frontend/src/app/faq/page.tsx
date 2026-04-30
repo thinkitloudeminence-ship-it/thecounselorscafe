@@ -14,8 +14,8 @@ export const metadata: Metadata = {
     "counselling refund policy",
     "verified counselor FAQ",
   ],
-  alternates: {
-    canonical: "https://counselorscafe.com/faq",
+ alternates: {
+    canonical: "https://counselorscafe.com/faq",  // ✅ ADD THIS
   },
   openGraph: {
     title: "FAQ | counselors cafe — Your Questions Answered",

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "career guidance success stories",
   ],
   alternates: {
-    canonical: "https://counselorscafe.com/testimonials",
+    canonical: "https://counselorscafe.com/testimonials",  // ✅ ADD THIS
   },
   openGraph: {
     title: "Real Student Reviews | counselors cafe",

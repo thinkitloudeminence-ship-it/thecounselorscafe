@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   verification: {
     google: "CC3U2Ynj4CajtpTWcj4KM-nPfF_hP5GhvtRzH5vffUU",
   },
-  alternates: {
+   alternates: {
     canonical: "https://counselorscafe.com",
     languages: {
       'en-IN': 'https://counselorscafe.com',
