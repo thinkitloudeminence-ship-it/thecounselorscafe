@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+  --font-dm-mono: 'DM Mono', monospace;
+  --font-clash: 'DM Sans', system-ui, sans-serif;
+
+  --yellow: #EAB308;
+  --yellow-dark: #CA8A04;
+  --yellow-light: #FEF08A;
+  --black: #0A0A0A;
+  --black-soft: #1A1A1A;
+  --white: #FFFFFF;
+  --white-soft: #F8F8F8;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-dm-sans);
+  background-color: #000000;
+  color: #FFFFFF;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar - Yellow Theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1A1A1A;
+}
+::-webkit-scrollbar-thumb {
+  background: #EAB308;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CA8A04;
+}
+
+/* Selection - Yellow Theme */
+::selection {
+  background: rgba(234, 179, 8, 0.2);
+  color: #EAB308;
+}
+
+@layer components {
+ .btn-primary {
+  @apply bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-300 shadow-yellow-lg hover:shadow-yellow-lg hover:-translate-y-0.5 active:translate-y-0;
+}
+
+  .btn-secondary {
+    @apply bg-transparent border-2 border-yellow-500 text-yellow-400 hover:bg-yellow-500/10 font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:-translate-y-0.5;
+  }
+
+  .btn-ghost {
+    @apply text-yellow-400 hover:text-yellow-300 font-semibold transition-colors duration-200;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24 px-4 md:px-6;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .glass-card {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-glass;
+  }
+
+  .glass-dark {
+    @apply bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent;
+  }
+
+  .section-label {
+    @apply inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest;
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border border-white/10 rounded-xl bg-black/40 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500/30 focus:border-yellow-500 transition-all duration-200;
+  }
+
+  .yellow-glow {
+    box-shadow: 0 0 40px rgba(234, 179, 8, 0.15);
+  }
+
+  /* Custom shadows */
+.shadow-yellow-lg {
+  box-shadow: 0 10px 30px -8px rgba(234, 179, 8, 0.4);
+}
+
+.shadow-yellow-xl {
+  box-shadow: 0 20px 40px -12px rgba(234, 179, 8, 0.5);
+}
+
+.hover\:shadow-yellow-lg:hover {
+  box-shadow: 0 15px 35px -8px rgba(234, 179, 8, 0.6);
+}
+}
+
+/* Noise texture overlay */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Animated gradient background - Yellow Theme */
+.hero-bg {
+  background: radial-gradient(ellipse at 20% 50%, rgba(234, 179, 8, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(202, 138, 4, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(234, 179, 8, 0.08) 0%, transparent 50%),
+              #0A0A0A;
+}
+
+/* Star/dot pattern - Yellow Theme */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(234, 179, 8, 0.15) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Grid pattern - Yellow Theme */
+.grid-pattern {
+  background-image: 
+    linear-gradient(rgba(234, 179, 8, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(234, 179, 8, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Yellow divider */
+.yellow-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #EAB308, transparent);
+}
+
+/* Hero background - Black with Yellow */
+.hero-bg {
+  background: radial-gradient(ellipse at 20% 30%, rgba(234, 179, 8, 0.08), transparent 50%),
+              radial-gradient(ellipse at 80% 70%, rgba(202, 138, 4, 0.05), transparent 60%),
+              linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 100%);
+}
+
+/* Yellow gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #EAB308, #CA8A04, #FEF08A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Yellow gradient background */
+.bg-yellow-gradient {
+  background: linear-gradient(135deg, #EAB308, #CA8A04);
+}
+
+/* Yellow shadows */
+.shadow-yellow-lg {
+  box-shadow: 0 10px 30px -8px rgba(234, 179, 8, 0.4);
+}
+
+.shadow-yellow-lg:hover {
+  box-shadow: 0 15px 35px -8px rgba(234, 179, 8, 0.6);
+}
+
+.shadow-yellow-xl {
+  box-shadow: 0 20px 40px -12px rgba(234, 179, 8, 0.5);
+}
+
+/* 3D Perspective */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animation keyframes */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Animation classes */
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+/* Hardware acceleration */
+.transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Performance optimization */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Reduce motion class */
+.reduce-motion * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* Optimize image loading */
+img {
+  content-visibility: auto;
+  contain: paint;
+}
+
+/* Optimize blur on low-end devices */
+.low-end-device .blur-2xl,
+.low-end-device .blur-xl,
+.low-end-device [class*="blur-"] {
+  filter: blur(10px) !important;
+}
+
+/* Disable WebGL on low-end */
+.no-webgl canvas {
+  display: none !important;
+}
+
+/* Optimize scroll performance */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Reduce repaints */
+.fixed {
+  transform: translateZ(0);
+}

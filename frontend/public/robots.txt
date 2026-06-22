@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /api/*
+Disallow: /admin/*
+Disallow: /_next/*
+
+# Host
+Host: https://counselorscafe.com
+
+# Sitemaps
+Sitemap: https://counselorscafe.com/sitemap.xml
