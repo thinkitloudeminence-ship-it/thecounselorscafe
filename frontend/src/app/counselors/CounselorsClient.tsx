@@ -1,13 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, MapPin, Languages, ArrowRight, Search, Sparkles, Users } from "lucide-react";
+import { Star, MapPin, ArrowRight, Search, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { fetchCounselors } from "@/lib/api";
 
-// Fallback counselor data
-const fallbackCounselors = [
+// 🔥 YEH TUMHARE DEMO COUNSELORS HAIN
+const counselors = [
   {
     _id: "1",
     name: "Dr. Priya Sharma",
@@ -16,7 +15,6 @@ const fallbackCounselors = [
     experience: 8,
     rating: 4.9,
     reviews: 342,
-    languages: ["Hindi", "English"],
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 1200,
@@ -30,7 +28,6 @@ const fallbackCounselors = [
     experience: 6,
     rating: 4.8,
     reviews: 218,
-    languages: ["Hindi", "English"],
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 890,
@@ -44,7 +41,6 @@ const fallbackCounselors = [
     experience: 5,
     rating: 4.7,
     reviews: 187,
-    languages: ["Hindi", "English"],
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 650,
@@ -58,7 +54,6 @@ const fallbackCounselors = [
     experience: 10,
     rating: 4.9,
     reviews: 421,
-    languages: ["Hindi", "English"],
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 1800,
@@ -72,7 +67,6 @@ const fallbackCounselors = [
     experience: 7,
     rating: 4.8,
     reviews: 156,
-    languages: ["Hindi", "English", "Malayalam"],
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
     available: true,
     sessionsCompleted: 780,
@@ -86,7 +80,6 @@ const fallbackCounselors = [
     experience: 9,
     rating: 4.9,
     reviews: 293,
-    languages: ["Hindi", "English"],
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
     available: false,
     sessionsCompleted: 1100,
@@ -108,34 +101,14 @@ const expertiseList = [
 ];
 
 export default function CounselorsClient() {
-  const [counselors, setCounselors] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState("");
-
-  useEffect(() => {
-    const loadCounselors = async () => {
-      setLoading(true);
-      try {
-        setCounselors(fallbackCounselors);
-        const apiCounselors = await fetchCounselors();
-        if (apiCounselors && apiCounselors.length > 0) {
-          setCounselors(apiCounselors);
-        }
-      } catch (error) {
-        console.error("Error loading counselors:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadCounselors();
-  }, []);
 
   const filtered = counselors.filter((c) => {
     const matchSearch = !search || 
       c.name.toLowerCase().includes(search.toLowerCase()) || 
       c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.expertise?.some((e: string) => e.toLowerCase().includes(search.toLowerCase()));
+      c.expertise?.some((e) => e.toLowerCase().includes(search.toLowerCase()));
     const matchExpertise = !selectedExpertise || c.expertise?.includes(selectedExpertise);
     return matchSearch && matchExpertise;
   });
@@ -201,13 +174,7 @@ export default function CounselorsClient() {
         </div>
 
         {/* Counselors Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-black/40 rounded-2xl h-96 animate-pulse border border-white/10" />
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-white text-xl font-semibold mb-2">No counselors found</h3>
@@ -265,7 +232,7 @@ export default function CounselorsClient() {
                   </div>
 
                   <div className="flex flex-wrap gap-1.5 mt-3">
-                    {counselor.expertise?.slice(0, 3).map((exp: string) => (
+                    {counselor.expertise?.slice(0, 3).map((exp) => (
                       <span key={exp} className="bg-yellow-500/10 text-yellow-400 text-xs px-2 py-1 rounded-full">
                         {exp}
                       </span>
@@ -286,6 +253,7 @@ export default function CounselorsClient() {
                         {counselor.location?.split(",")[0]}
                       </span>
                     </div>
+                    {/* 🔥 YEH VIEW PROFILE BUTTON - HAR COUNSELOR KI APNI ID KE SAATH */}
                     <Link
                       href={`/counselors/${counselor._id}`}
                       className="flex items-center gap-1 text-yellow-500 text-xs font-semibold hover:gap-2 transition-all"
