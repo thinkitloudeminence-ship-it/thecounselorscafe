@@ -3,9 +3,10 @@ import { MetadataRoute } from 'next'
 import { fetchAllBlogs } from '@/lib/api'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://counselorscafe.com'
+  // 🔥 www add karo
+  const baseUrl = 'https://www.counselorscafe.com'  // ✅ www ke saath
   
-  // Static routes (always included)
+  // Static routes
   const staticRoutes = [
     {
       url: baseUrl,
@@ -77,10 +78,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   } catch (error) {
     console.error('Error fetching blogs for sitemap:', error)
-    // Fallback: return only static routes
     return staticRoutes
   }
 
-  // Combine static + blog routes
   return [...staticRoutes, ...blogRoutes]
 }
