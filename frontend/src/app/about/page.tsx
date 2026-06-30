@@ -13,12 +13,12 @@ export const metadata: Metadata = {
     "best career counselling platform",
   ],
  alternates: {
-    canonical: "https://counselorscafe.com/about",  // ✅ ADD THIS
+    canonical: "https://www.counselorscafe.com/about",  // ✅ ADD THIS
   },
   openGraph: {
     title: "About counselors cafe | Our Mission to End Career Confusion",
     description: "Founded in 2020, we've helped 8,500+ students find career clarity. Meet our team of 120+ verified expert counselors across India.",
-    url: "https://counselorscafe.com/about",
+    url: "https://www.counselorscafe.com/about",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

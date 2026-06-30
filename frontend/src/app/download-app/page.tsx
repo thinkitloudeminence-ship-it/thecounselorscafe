@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     "online counselling app India",
   ],
     alternates: {
-    canonical: "https://counselorscafe.com/download-app",  // ✅ ADD THIS
+    canonical: "https://www.counselorscafe.com/download-app",  // ✅ ADD THIS
   },
 
   openGraph: {
     title: "Download counselors cafe App | Career Guidance on Your Phone",
     description: "Book expert career counsellors, track your progress, and get personalized guidance — all from your phone. Free to download.",
-    url: "https://counselorscafe.com/download-app",
+    url: "https://www.counselorscafe.com/download-app",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

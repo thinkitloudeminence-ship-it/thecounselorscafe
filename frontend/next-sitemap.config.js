@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://counselorscafe.com',
+  siteUrl: 'https://www.counselorscafe.com',
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [
@@ -8,7 +8,7 @@ module.exports = {
       { userAgent: '*', disallow: ['/api/*', '/admin/*', '/_next/*'] },
     ],
     additionalSitemaps: [
-      'https://counselorscafe.com/sitemap.xml',
+      'https://www.counselorscafe.com/sitemap.xml',
     ],
   },
   exclude: ['/404', '/500'],

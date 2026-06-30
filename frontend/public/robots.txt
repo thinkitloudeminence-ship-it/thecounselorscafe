@@ -9,7 +9,7 @@ Disallow: /admin/*
 Disallow: /_next/*
 
 # Host
-Host: https://counselorscafe.com
+Host: https://www.counselorscafe.com
 
 # Sitemaps
-Sitemap: https://counselorscafe.com/sitemap.xml
+Sitemap: https://www.counselorscafe.com/sitemap.xml

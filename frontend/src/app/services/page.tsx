@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     "college selection guidance",
   ],
   alternates: {
-    canonical: "https://counselorscafe.com/services",  // ✅ YEH LINE ADD KARO
+    canonical: "https://www.counselorscafe.com/services",  // ✅ YEH LINE ADD KARO
   },
   openGraph: {
     title: "18+ Career Counselling Services | counselors cafe",
     description: "Expert career guidance services — stream selection, study abroad, CUET, JEE, MBA, resume prep & more. Personalized 1-on-1 sessions with verified counselors.",
-    url: "https://counselorscafe.com/services",
+    url: "https://www.counselorscafe.com/services",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

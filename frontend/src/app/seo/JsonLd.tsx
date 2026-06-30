@@ -14,8 +14,8 @@ export default function JsonLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "CounselorsCafe",
-    url: "https://counselorscafe.com",
-    logo: "https://counselorscafe.com/logo.png",
+    url: "https://www.counselorscafe.com",
+    logo: "https://www.counselorscafe.com/logo.png",
     sameAs: [
       "https://instagram.com/counselorscafe",
       "https://youtube.com/@counselorscafe",
@@ -35,12 +35,12 @@ export default function JsonLd() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    url: "https://counselorscafe.com",
+    url: "https://www.counselorscafe.com",
     name: "CounselorsCafe",
     description: "Career counselling platform for Indian students",
     potentialAction: {
       "@type": "SearchAction",
-      "target": "https://counselorscafe.com/search?q={search_term_string}",
+      "target": "https://www.counselorscafe.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };
@@ -49,9 +49,9 @@ export default function JsonLd() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "CounselorsCafe",
-    image: "https://counselorscafe.com/logo.png",
-    "@id": "https://counselorscafe.com",
-    url: "https://counselorscafe.com",
+    image: "https://www.counselorscafe.com/logo.png",
+    "@id": "https://www.counselorscafe.com",
+    url: "https://www.counselorscafe.com",
     telephone: "+919876543210",
     priceRange: "₹",
     address: {

@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     "career guidance expert",
   ],
   alternates: {
-    canonical: "https://counselorscafe.com/counselors",
+    canonical: "https://www.counselorscafe.com/counselors",
   },
   openGraph: {
     title: "Find Verified Career Counselors | counselors cafe",
     description: "Browse 120+ verified career counselors. Expert guidance for stream selection, study abroad, CUET, JEE & more. Book now!",
-    url: "https://counselorscafe.com/counselors",
+    url: "https://www.counselorscafe.com/counselors",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

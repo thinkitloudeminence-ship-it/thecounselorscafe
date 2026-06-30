@@ -7,7 +7,7 @@ import PerformanceOptimizer from "@/components/PerformanceOptimizer";
 import JsonLd from "@/app/seo/JsonLd";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://counselorscafe.com'),
+  metadataBase: new URL('https://www.counselorscafe.com'),
   title: {
     default: "counselors cafe | India's #1 Career Counselling Platform",
     template: "%s | counselors cafe",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "thecounselorscafe",
     "counselors cafe",
   ],
-  authors: [{ name: "counselors cafe", url: "https://counselorscafe.com" }],
+  authors: [{ name: "counselors cafe", url: "https://www.counselorscafe.com" }],
   creator: "counselors cafe",
   publisher: "counselors cafe",
   formatDetection: {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://counselorscafe.com",
+    url: "https://www.counselorscafe.com",
     siteName: "counselors cafe",
     title: "counselors cafe | India's #1 Career Counselling Platform",
     description: "Get expert career guidance from verified counselors. Stream selection, study abroad, CUET, JEE, resume prep & more. 8,500+ students guided.",
@@ -83,9 +83,9 @@ export const metadata: Metadata = {
     google: "CC3U2Ynj4CajtpTWcj4KM-nPfF_hP5GhvtRzH5vffUU",
   },
    alternates: {
-    canonical: "https://counselorscafe.com",
+    canonical: "https://www.counselorscafe.com",
     languages: {
-      'en-IN': 'https://counselorscafe.com',
+      'en-IN': 'https://www.counselorscafe.com',
     },
   },
   category: "education",

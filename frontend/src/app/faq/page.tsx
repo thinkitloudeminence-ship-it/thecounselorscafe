@@ -15,12 +15,12 @@ export const metadata: Metadata = {
     "verified counselor FAQ",
   ],
  alternates: {
-    canonical: "https://counselorscafe.com/faq",  // ✅ ADD THIS
+    canonical: "https://www.counselorscafe.com/faq",  // ✅ ADD THIS
   },
   openGraph: {
     title: "FAQ | counselors cafe — Your Questions Answered",
     description: "Everything you need to know about career counselling sessions, pricing, booking, and our counselor verification process.",
-    url: "https://counselorscafe.com/faq",
+    url: "https://www.counselorscafe.com/faq",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

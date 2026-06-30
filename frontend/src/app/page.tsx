@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     "best career counsellor",
   ],
   alternates: {
-    canonical: "https://counselorscafe.com",
+    canonical: "https://www.counselorscafe.com",
   },
   openGraph: {
     title: "counselors cafe | India's #1 Career Counselling Platform",
     description: "Expert 1-on-1 career guidance for Indian students. Stream selection, study abroad, CUET, JEE & more. 8,500+ students helped. Book now!",
-    url: "https://counselorscafe.com",
+    url: "https://www.counselorscafe.com",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     "career guidance contact India",
   ],
    alternates: {
-    canonical: "https://counselorscafe.com/contact",  // ✅ ADD THIS
+    canonical: "https://www.counselorscafe.com/contact",  // ✅ ADD THIS
   },
   openGraph: {
     title: "Contact counselors cafe | Career Counselling Enquiries",
     description: "Get in touch with our team for career counselling queries, partnerships, or support. Response within 24 hours.",
-    url: "https://counselorscafe.com/contact",
+    url: "https://www.counselorscafe.com/contact",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

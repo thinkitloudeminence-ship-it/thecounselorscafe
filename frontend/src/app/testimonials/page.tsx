@@ -14,12 +14,12 @@ export const metadata: Metadata = {
     "career guidance success stories",
   ],
   alternates: {
-    canonical: "https://counselorscafe.com/testimonials",  // ✅ ADD THIS
+    canonical: "https://www.counselorscafe.com/testimonials",  // ✅ ADD THIS
   },
   openGraph: {
     title: "Real Student Reviews | counselors cafe",
     description: "8,500+ students found career clarity. Read verified reviews from students guided by our expert counselors.",
-    url: "https://counselorscafe.com/testimonials",
+    url: "https://www.counselorscafe.com/testimonials",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

@@ -34,12 +34,12 @@ export async function generateMetadata(
       ],
       authors: [{ name: blog.author?.name || "counselors cafe" }],
       alternates: {
-        canonical: `https://counselorscafe.com/blog/${slug}`,
+        canonical: `https://www.counselorscafe.com/blog/${slug}`,
       },
       openGraph: {
         title: `${title} | counselors cafe`,
         description,
-        url: `https://counselorscafe.com/blog/${slug}`,
+        url: `https://www.counselorscafe.com/blog/${slug}`,
         type: "article",
         publishedTime: blog.publishedAt,
         authors: [blog.author?.name],
@@ -61,7 +61,7 @@ export async function generateMetadata(
       title: `${title} | counselors cafe Blog`,
       description: "Expert career guidance articles from verified counselors at counselors cafe.",
       alternates: {
-        canonical: `https://counselorscafe.com/blog/${slug}`,
+        canonical: `https://www.counselorscafe.com/blog/${slug}`,
       },
     };
   }
