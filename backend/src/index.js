@@ -15,6 +15,7 @@ const adminRoutes = require("./routes/admin.routes");
 const contactRoutes = require("./routes/contact.routes");
 const uploadRoutes = require("./routes/upload.routes");
 const counselorRoutes = require("./routes/counselor.routes");
+const adminCounselorRoutes = require("./routes/admin.counselors.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,7 +40,7 @@ app.use(cors({
     "http://localhost:3001",
     "https://www.counselorscafe.com",
     "https://thecounselorscafe-uzdc.vercel.app",
-    /\.vercel\.app$/  // Allow all vercel preview URLs
+    /\.vercel\.app$/
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -57,6 +58,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/admin/counselors", adminCounselorRoutes); // ✅ NEW
 app.use("/api/contact", contactRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/counselors", counselorRoutes);

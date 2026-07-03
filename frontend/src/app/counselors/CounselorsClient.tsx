@@ -1,91 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, MapPin, ArrowRight, Search, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-// 🔥 YEH TUMHARE DEMO COUNSELORS HAIN
-const counselors = [
-  {
-    _id: "1",
-    name: "Dr. Priya Sharma",
-    title: "Career & Stream Selection Expert",
-    expertise: ["Stream Selection", "Career Counselling", "CUET"],
-    experience: 8,
-    rating: 4.9,
-    reviews: 342,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 1200,
-    location: "New Delhi, India",
-  },
-  {
-    _id: "2",
-    name: "Rahul Mehta",
-    title: "Abroad Education Specialist",
-    expertise: ["Study Abroad", "Visa", "University Selection"],
-    experience: 6,
-    rating: 4.8,
-    reviews: 218,
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 890,
-    location: "Mumbai, India",
-  },
-  {
-    _id: "3",
-    name: "Anjali Verma",
-    title: "Resume & Interview Coach",
-    expertise: ["Resume Building", "Interview Prep"],
-    experience: 5,
-    rating: 4.7,
-    reviews: 187,
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 650,
-    location: "Bangalore, India",
-  },
-  {
-    _id: "4",
-    name: "Vikram Nair",
-    title: "Engineering & Tech Career Expert",
-    expertise: ["JEE Guidance", "Tech Careers"],
-    experience: 10,
-    rating: 4.9,
-    reviews: 421,
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 1800,
-    location: "Pune, India",
-  },
-  {
-    _id: "5",
-    name: "Meera Pillai",
-    title: "Arts & Humanities Specialist",
-    expertise: ["Arts Streams", "Law", "Journalism"],
-    experience: 7,
-    rating: 4.8,
-    reviews: 156,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 780,
-    location: "Kochi, India",
-  },
-  {
-    _id: "6",
-    name: "Arjun Kapoor",
-    title: "Commerce & Finance Career Expert",
-    expertise: ["CA Guidance", "Finance Careers", "MBA Prep"],
-    experience: 9,
-    rating: 4.9,
-    reviews: 293,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    available: false,
-    sessionsCompleted: 1100,
-    location: "Mumbai, India",
-  },
-];
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const expertiseList = [
   "Stream Selection",
@@ -101,21 +21,57 @@ const expertiseList = [
 ];
 
 export default function CounselorsClient() {
+  const [counselors, setCounselors] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState("");
 
+  useEffect(() => {
+    const fetchCounselors = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_URL}/counselors`);
+        const data = await res.json();
+        
+        if (data.success) {
+          setCounselors(data.data || []);
+        } else {
+          console.error('Failed to fetch counselors:', data.message);
+          setCounselors([]);
+        }
+      } catch (error) {
+        console.error('Error fetching counselors:', error);
+        setCounselors([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCounselors();
+  }, []);
+
   const filtered = counselors.filter((c) => {
     const matchSearch = !search || 
-      c.name.toLowerCase().includes(search.toLowerCase()) || 
-      c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.expertise?.some((e) => e.toLowerCase().includes(search.toLowerCase()));
+      c.name?.toLowerCase().includes(search.toLowerCase()) || 
+      c.title?.toLowerCase().includes(search.toLowerCase()) ||
+      c.expertise?.some((e: string) => e.toLowerCase().includes(search.toLowerCase()));
     const matchExpertise = !selectedExpertise || c.expertise?.includes(selectedExpertise);
     return matchSearch && matchExpertise;
   });
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black pt-20 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 border-3 border-yellow-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-400 text-sm">Loading counselors...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black pt-20">
-      {/* Header */}
       <div className="bg-black py-12 px-4 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
           <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
@@ -132,7 +88,6 @@ export default function CounselorsClient() {
       </div>
 
       <div className="container mx-auto px-4 md:px-6 py-10">
-        {/* Search Bar */}
         <div className="max-w-2xl mx-auto mb-8">
           <div className="relative">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
@@ -146,7 +101,6 @@ export default function CounselorsClient() {
           </div>
         </div>
 
-        {/* Expertise Filters */}
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           <button
             onClick={() => setSelectedExpertise("")}
@@ -173,7 +127,6 @@ export default function CounselorsClient() {
           ))}
         </div>
 
-        {/* Counselors Grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
@@ -232,7 +185,7 @@ export default function CounselorsClient() {
                   </div>
 
                   <div className="flex flex-wrap gap-1.5 mt-3">
-                    {counselor.expertise?.slice(0, 3).map((exp) => (
+                    {counselor.expertise?.slice(0, 3).map((exp: string) => (
                       <span key={exp} className="bg-yellow-500/10 text-yellow-400 text-xs px-2 py-1 rounded-full">
                         {exp}
                       </span>
@@ -253,7 +206,6 @@ export default function CounselorsClient() {
                         {counselor.location?.split(",")[0]}
                       </span>
                     </div>
-                    {/* 🔥 YEH VIEW PROFILE BUTTON - HAR COUNSELOR KI APNI ID KE SAATH */}
                     <Link
                       href={`/counselors/${counselor._id}`}
                       className="flex items-center gap-1 text-yellow-500 text-xs font-semibold hover:gap-2 transition-all"

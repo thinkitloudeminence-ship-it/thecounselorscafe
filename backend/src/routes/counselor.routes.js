@@ -1,18 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const Counselor = require("../models/Counselor"); // You need to create this model
+const Counselor = require("../models/Counselor");
 
-// Get all counselors
+// GET all counselors
 router.get("/", async (req, res) => {
   try {
     const counselors = await Counselor.find({ isActive: true }).sort({ rating: -1 });
     res.json({ success: true, data: counselors });
   } catch (error) {
+    console.error("Error fetching counselors:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// Get single counselor by ID
+// 🔥 GET single counselor by ID - YEH ADD KARO!
 router.get("/:id", async (req, res) => {
   try {
     const counselor = await Counselor.findById(req.params.id);
@@ -21,6 +22,7 @@ router.get("/:id", async (req, res) => {
     }
     res.json({ success: true, data: counselor });
   } catch (error) {
+    console.error("Error fetching counselor:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });

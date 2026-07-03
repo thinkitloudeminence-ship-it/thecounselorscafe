@@ -12,7 +12,6 @@ const adminSchema = new mongoose.Schema(
       trim: true,
     },
     password: { type: String, required: true, minlength: 6, select: false },
-    // CMS roles only — completely separate from app's "super_admin" role
     role: {
       type: String,
       enum: ["superadmin", "editor"],
@@ -24,24 +23,20 @@ const adminSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    // ✅ KEY FIX: Alag collection name — app ke "admins" collection se conflict nahi hoga
-    collection: "cms_admins",
+    collection: "cms_admins", // ✅ Alag collection
   }
 );
 
-// Hash password before save
 adminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
-// Compare password
 adminSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Remove password from JSON output
 adminSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

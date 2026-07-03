@@ -4,116 +4,39 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Star, Users, Calendar } from "lucide-react";
 
-// 🔥 YEH TUMHARE DEMO COUNSELORS KA DATA - HAR EK KA ALAG DATA
-const COUNSELORS: Record<string, any> = {
-  "1": {
-    name: "Dr. Priya Sharma",
-    title: "Career & Stream Selection Expert",
-    experience: 8,
-    rating: 4.9,
-    reviews: 342,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 1200,
-    email: "priya.sharma@counselorscafe.com",
-    location: "New Delhi, India",
-    bio: "Dr. Priya Sharma has over 8 years of experience in career counselling. She specializes in stream selection, career guidance, and CUET preparation. She has helped over 1200 students find their perfect career path.",
-    expertise: ["Stream Selection", "Career Counselling", "CUET"],
-    languages: ["Hindi", "English"]
-  },
-  "2": {
-    name: "Rahul Mehta",
-    title: "Abroad Education Specialist",
-    experience: 6,
-    rating: 4.8,
-    reviews: 218,
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 890,
-    email: "rahul.mehta@counselorscafe.com",
-    location: "Mumbai, India",
-    bio: "Rahul Mehta is an expert in study abroad guidance, university selection, and visa counseling. He has helped 890+ students get into top universities worldwide.",
-    expertise: ["Study Abroad", "Visa", "University Selection"],
-    languages: ["Hindi", "English"]
-  },
-  "3": {
-    name: "Anjali Verma",
-    title: "Resume & Interview Coach",
-    experience: 5,
-    rating: 4.7,
-    reviews: 187,
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 650,
-    email: "anjali.verma@counselorscafe.com",
-    location: "Bangalore, India",
-    bio: "Anjali Verma is a certified resume writer and interview coach. She has helped 650+ professionals land their dream jobs through expert resume building and interview preparation.",
-    expertise: ["Resume Building", "Interview Prep"],
-    languages: ["Hindi", "English"]
-  },
-  "4": {
-    name: "Vikram Nair",
-    title: "Engineering & Tech Career Expert",
-    experience: 10,
-    rating: 4.9,
-    reviews: 421,
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 1800,
-    email: "vikram.nair@counselorscafe.com",
-    location: "Pune, India",
-    bio: "Vikram Nair is an IIT graduate with 10+ years of experience in JEE coaching and tech career guidance. He has mentored 1800+ students.",
-    expertise: ["JEE Guidance", "Tech Careers"],
-    languages: ["Hindi", "English"]
-  },
-  "5": {
-    name: "Meera Pillai",
-    title: "Arts & Humanities Specialist",
-    experience: 7,
-    rating: 4.8,
-    reviews: 156,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    available: true,
-    sessionsCompleted: 780,
-    email: "meera.pillai@counselorscafe.com",
-    location: "Kochi, India",
-    bio: "Meera Pillai specializes in arts, humanities, law, and journalism careers. She has helped 780+ students choose their ideal career path.",
-    expertise: ["Arts Streams", "Law", "Journalism"],
-    languages: ["Hindi", "English", "Malayalam"]
-  },
-  "6": {
-    name: "Arjun Kapoor",
-    title: "Commerce & Finance Career Expert",
-    experience: 9,
-    rating: 4.9,
-    reviews: 293,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    available: false,
-    sessionsCompleted: 1100,
-    email: "arjun.kapoor@counselorscafe.com",
-    location: "Mumbai, India",
-    bio: "Arjun Kapoor is a CA with 9+ years of experience in finance, commerce, and MBA guidance. He has mentored 1100+ students.",
-    expertise: ["CA Guidance", "Finance Careers", "MBA Prep"],
-    languages: ["Hindi", "English"]
-  }
-};
-
 export default function CounselorDetailClient({ id }: { id: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [counselor, setCounselor] = useState<any>(null);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
   useEffect(() => {
-    // 🔥 ID KE HISAAB SE COUNSELOR DHUNDHO
-    const found = COUNSELORS[id];
-    if (found) {
-      setCounselor(found);
-    } else {
-      // AGAR ID NA MILE TO PEHLA WALA DIKHAO
-      setCounselor(COUNSELORS["1"]);
+  const fetchCounselor = async () => {
+    try {
+      setLoading(true);
+      // ✅ Full URL use karo
+      const res = await fetch(`${API_URL}/counselors/${id}`);
+      const data = await res.json();
+      
+      if (data.success) {
+        setCounselor(data.data);
+      } else {
+        console.error('Counselor not found:', data.message);
+        setCounselor(null);
+      }
+    } catch (error) {
+      console.error('Error fetching counselor:', error);
+      setCounselor(null);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [id]);
+  };
+
+  if (id) {
+    fetchCounselor();
+  }
+}, [id]);
 
   if (loading) {
     return (
@@ -147,7 +70,21 @@ export default function CounselorDetailClient({ id }: { id: string }) {
         <div className="bg-black/40 backdrop-blur-sm rounded-3xl border border-white/10 p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-amber-500 flex-shrink-0">
-              <Image src={counselor.image} alt={counselor.name} width={128} height={128} className="object-cover" />
+              {counselor.image ? (
+                <Image 
+                  src={counselor.image} 
+                  alt={counselor.name} 
+                  width={128} 
+                  height={128} 
+                  className="object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
+                  <span className="text-black font-bold text-4xl">
+                    {counselor.name?.charAt(0) || "C"}
+                  </span>
+                </div>
+              )}
             </div>
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-bold text-white">{counselor.name}</h1>
@@ -156,16 +93,16 @@ export default function CounselorDetailClient({ id }: { id: string }) {
               <div className="flex flex-wrap items-center gap-4 mt-3">
                 <span className="flex items-center gap-1">
                   <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                  <span className="text-white font-bold">{counselor.rating}</span>
-                  <span className="text-gray-500">({counselor.reviews} reviews)</span>
+                  <span className="text-white font-bold">{counselor.rating || 0}</span>
+                  <span className="text-gray-500">({counselor.reviews || 0} reviews)</span>
                 </span>
                 <span className="flex items-center gap-1 text-gray-400">
                   <Users className="w-4 h-4 text-amber-500" />
-                  {counselor.sessionsCompleted}+ sessions
+                  {counselor.sessionsCompleted || 0}+ sessions
                 </span>
                 <span className="flex items-center gap-1 text-gray-400">
                   <Calendar className="w-4 h-4 text-amber-500" />
-                  {counselor.experience}+ years exp.
+                  {counselor.experience || 0}+ years exp.
                 </span>
               </div>
 
@@ -181,12 +118,14 @@ export default function CounselorDetailClient({ id }: { id: string }) {
             </div>
           </div>
 
-          <div className="mt-6">
-            <h2 className="font-bold text-white text-lg mb-2">About {counselor.name.split(" ")[0]}</h2>
-            <p className="text-gray-400 leading-relaxed">{counselor.bio}</p>
-          </div>
+          {counselor.bio && (
+            <div className="mt-6">
+              <h2 className="font-bold text-white text-lg mb-2">About {counselor.name?.split(" ")[0]}</h2>
+              <p className="text-gray-400 leading-relaxed">{counselor.bio}</p>
+            </div>
+          )}
 
-          {counselor.expertise && (
+          {counselor.expertise && counselor.expertise.length > 0 && (
             <div className="mt-6 pt-6 border-t border-white/10">
               <h3 className="text-white font-semibold mb-3">Areas of Expertise</h3>
               <div className="flex flex-wrap gap-2">
@@ -199,7 +138,7 @@ export default function CounselorDetailClient({ id }: { id: string }) {
             </div>
           )}
 
-          {counselor.languages && (
+          {counselor.languages && counselor.languages.length > 0 && (
             <div className="mt-4">
               <h3 className="text-white font-semibold mb-2">Languages</h3>
               <div className="flex flex-wrap gap-2">
@@ -212,14 +151,16 @@ export default function CounselorDetailClient({ id }: { id: string }) {
             </div>
           )}
 
-          <div className="mt-6 pt-6 border-t border-white/10">
-            <h3 className="text-white font-semibold mb-3">Contact Information</h3>
-            <div className="space-y-2">
-              <p className="text-gray-400">📧 {counselor.email}</p>
-              <p className="text-gray-400">📍 {counselor.location}</p>
-              <p className="text-gray-400">⏱ {counselor.experience}+ years experience</p>
+          {(counselor.email || counselor.location) && (
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <h3 className="text-white font-semibold mb-3">Contact Information</h3>
+              <div className="space-y-2">
+                {counselor.email && <p className="text-gray-400">📧 {counselor.email}</p>}
+                {counselor.location && <p className="text-gray-400">📍 {counselor.location}</p>}
+                <p className="text-gray-400">⏱ {counselor.experience || 0}+ years experience</p>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mt-6 pt-6 border-t border-white/10">
             <button

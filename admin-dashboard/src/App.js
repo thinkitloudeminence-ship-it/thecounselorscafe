@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import "./index.css";
 
 // Pages
+import CounselorsManagement from './pages/CounselorsManagement';
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import BlogsListPage from "./pages/BlogsListPage";
@@ -45,6 +46,7 @@ export default function App() {
             path="/"
             element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}
           >
+            <Route path="/counselors" element={<CounselorsManagement />} />
             <Route index element={<DashboardPage />} />
             <Route path="blogs" element={<BlogsListPage />} />
             <Route path="blogs/new" element={<BlogEditorPage />} />

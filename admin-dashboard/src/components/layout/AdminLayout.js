@@ -12,7 +12,9 @@ const NAV = [
   { to: "/blogs", icon: FileText, label: "Blog Posts" },
   { to: "/contacts", icon: MessageSquare, label: "Contacts" },
   { to: "/users", icon: Users, label: "Admin Users" },
+   { to: "/counselors", icon: Users, label: "Counselors" },
   { to: "/settings", icon: Settings, label: "Settings" },
+
 ];
 
 export default function AdminLayout() {
