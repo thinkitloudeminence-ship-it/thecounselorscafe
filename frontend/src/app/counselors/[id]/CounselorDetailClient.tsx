@@ -12,31 +12,31 @@ export default function CounselorDetailClient({ id }: { id: string }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-  const fetchCounselor = async () => {
-    try {
-      setLoading(true);
-      // ✅ Full URL use karo
-      const res = await fetch(`${API_URL}/counselors/${id}`);
-      const data = await res.json();
-      
-      if (data.success) {
-        setCounselor(data.data);
-      } else {
-        console.error('Counselor not found:', data.message);
-        setCounselor(null);
-      }
-    } catch (error) {
-      console.error('Error fetching counselor:', error);
-      setCounselor(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchCounselor = async () => {
+      try {
+        setLoading(true);
+        // ✅ Full URL use karo
+        const res = await fetch(`${API_URL}/counselors/${id}`);
+        const data = await res.json();
 
-  if (id) {
-    fetchCounselor();
-  }
-}, [id]);
+        if (data.success) {
+          setCounselor(data.data);
+        } else {
+          console.error('Counselor not found:', data.message);
+          setCounselor(null);
+        }
+      } catch (error) {
+        console.error('Error fetching counselor:', error);
+        setCounselor(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchCounselor();
+    }
+  }, [id]);
 
   if (loading) {
     return (
@@ -60,7 +60,7 @@ export default function CounselorDetailClient({ id }: { id: string }) {
   return (
     <div className="min-h-screen bg-black pt-20">
       <div className="container mx-auto px-4 py-8">
-        <button 
+        <button
           onClick={() => router.push("/counselors")}
           className="inline-flex items-center gap-2 text-gray-400 hover:text-amber-400 mb-6 transition-colors"
         >
@@ -71,11 +71,11 @@ export default function CounselorDetailClient({ id }: { id: string }) {
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-amber-500 flex-shrink-0">
               {counselor.image ? (
-                <Image 
-                  src={counselor.image} 
-                  alt={counselor.name} 
-                  width={128} 
-                  height={128} 
+                <Image
+                  src={counselor.image}
+                  alt={counselor.name}
+                  width={128}
+                  height={128}
                   className="object-cover"
                 />
               ) : (
@@ -89,7 +89,7 @@ export default function CounselorDetailClient({ id }: { id: string }) {
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-bold text-white">{counselor.name}</h1>
               <p className="text-amber-500 text-sm mt-1">{counselor.title}</p>
-              
+
               <div className="flex flex-wrap items-center gap-4 mt-3">
                 <span className="flex items-center gap-1">
                   <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
@@ -151,12 +151,15 @@ export default function CounselorDetailClient({ id }: { id: string }) {
             </div>
           )}
 
-          {(counselor.email || counselor.location) && (
+          {(counselor.email || counselor.location || counselor.pricePerSession) && (
             <div className="mt-6 pt-6 border-t border-white/10">
               <h3 className="text-white font-semibold mb-3">Contact Information</h3>
               <div className="space-y-2">
                 {counselor.email && <p className="text-gray-400">📧 {counselor.email}</p>}
                 {counselor.location && <p className="text-gray-400">📍 {counselor.location}</p>}
+                {counselor.pricePerSession && (
+                  <p className="text-gray-400">💰 ₹{counselor.pricePerSession} per session</p>
+                )}
                 <p className="text-gray-400">⏱ {counselor.experience || 0}+ years experience</p>
               </div>
             </div>

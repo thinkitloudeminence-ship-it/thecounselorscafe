@@ -349,7 +349,7 @@ export default function HeroSection() {
   // Options: color1, color2, color3, color4, color5, color6, 
   //          color7, color8, color9, color10, color11, color12
   // ============================================================
-  const selectedColor = color4; // 👈 CHANGE THIS TO TEST
+  const selectedColor = color1; // 👈 CHANGE THIS TO TEST
 
   return (
     <>

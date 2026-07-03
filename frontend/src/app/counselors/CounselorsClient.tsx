@@ -32,7 +32,7 @@ export default function CounselorsClient() {
         setLoading(true);
         const res = await fetch(`${API_URL}/counselors`);
         const data = await res.json();
-        
+
         if (data.success) {
           setCounselors(data.data || []);
         } else {
@@ -51,8 +51,8 @@ export default function CounselorsClient() {
   }, []);
 
   const filtered = counselors.filter((c) => {
-    const matchSearch = !search || 
-      c.name?.toLowerCase().includes(search.toLowerCase()) || 
+    const matchSearch = !search ||
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
       c.title?.toLowerCase().includes(search.toLowerCase()) ||
       c.expertise?.some((e: string) => e.toLowerCase().includes(search.toLowerCase()));
     const matchExpertise = !selectedExpertise || c.expertise?.includes(selectedExpertise);
@@ -104,11 +104,10 @@ export default function CounselorsClient() {
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           <button
             onClick={() => setSelectedExpertise("")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              !selectedExpertise 
-                ? "bg-yellow-500 text-black" 
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!selectedExpertise
+                ? "bg-yellow-500 text-black"
                 : "bg-black/40 text-gray-400 border border-white/10 hover:border-yellow-500/50"
-            }`}
+              }`}
           >
             All
           </button>
@@ -116,11 +115,10 @@ export default function CounselorsClient() {
             <button
               key={exp}
               onClick={() => setSelectedExpertise(exp)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                selectedExpertise === exp 
-                  ? "bg-yellow-500 text-black" 
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedExpertise === exp
+                  ? "bg-yellow-500 text-black"
                   : "bg-black/40 text-gray-400 border border-white/10 hover:border-yellow-500/50"
-              }`}
+                }`}
             >
               {exp}
             </button>
@@ -171,7 +169,7 @@ export default function CounselorsClient() {
                         {counselor.name}
                       </h3>
                       <p className="text-yellow-500 text-xs font-medium mt-0.5">{counselor.title}</p>
-                      
+
                       <div className="flex items-center gap-2 mt-2">
                         <span className="flex items-center gap-0.5">
                           <Star size={12} className="text-yellow-500 fill-yellow-500" />
@@ -205,6 +203,11 @@ export default function CounselorsClient() {
                         <MapPin size={12} className="text-yellow-500" />
                         {counselor.location?.split(",")[0]}
                       </span>
+                      {counselor.pricePerSession && (
+                        <span className="flex items-center gap-1 text-yellow-500 font-semibold">
+                          ₹{counselor.pricePerSession}
+                        </span>
+                      )}
                     </div>
                     <Link
                       href={`/counselors/${counselor._id}`}
