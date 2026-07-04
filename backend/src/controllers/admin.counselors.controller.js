@@ -2,7 +2,6 @@ const Counselor = require('../models/Counselor');
 const { sendSuccess, sendError, sendPaginated, getPagination } = require('../utils/response');
 
 // ─── Get All Counselors ──────────────────────────────────────────────────────
-
 const getCounselors = async (req, res, next) => {
   try {
     const { page = 1, limit = 20, search, isActive } = req.query;
@@ -34,11 +33,28 @@ const getCounselors = async (req, res, next) => {
   }
 };
 
-// ─── Get Single Counselor ────────────────────────────────────────────────────
-
+// ─── Get Single Counselor by ID or Slug ─────────────────────────────────────
 const getCounselorById = async (req, res, next) => {
   try {
-    const counselor = await Counselor.findById(req.params.id);
+    const { id } = req.params;
+    let counselor;
+    
+    // Check if it's a valid MongoDB ObjectId (24 hex chars)
+    const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+    
+    if (isValidObjectId) {
+      counselor = await Counselor.findById(id);
+    } else {
+      counselor = await Counselor.findOne({ slug: id });
+    }
+    
+    // Fallback: search by name
+    if (!counselor) {
+      counselor = await Counselor.findOne({ 
+        name: { $regex: new RegExp(id.replace(/-/g, ' '), 'i') } 
+      });
+    }
+    
     if (!counselor) {
       return sendError(res, 'Counselor not found', 404);
     }
@@ -49,17 +65,30 @@ const getCounselorById = async (req, res, next) => {
 };
 
 // ─── Create Counselor ────────────────────────────────────────────────────────
-
 const createCounselor = async (req, res, next) => {
   try {
     const { 
       name, title, expertise, experience, rating, reviews, image,
       available, sessionsCompleted, location, email, phone, bio,
-      languages, pricePerSession, isActive, isFeatured, order
+      languages, pricePerSession, pricePerMinute, pricePerChat,
+      isActive, isFeatured, order
     } = req.body;
 
     if (!name || !title) {
       return sendError(res, 'Name and title are required', 400);
+    }
+
+    // Generate slug from name
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    // Check if slug already exists
+    const existing = await Counselor.findOne({ slug });
+    let finalSlug = slug;
+    if (existing) {
+      finalSlug = `${slug}-${Date.now().toString().slice(-4)}`;
     }
 
     const counselor = await Counselor.create({
@@ -78,9 +107,12 @@ const createCounselor = async (req, res, next) => {
       bio: bio || '',
       languages: languages || ['English'],
       pricePerSession: pricePerSession || 499,
+      pricePerMinute: pricePerMinute || 0,
+      pricePerChat: pricePerChat || 0,
       isActive: isActive !== undefined ? isActive : true,
       isFeatured: isFeatured || false,
       order: order || 0,
+      slug: finalSlug,
     });
 
     return sendSuccess(res, 'Counselor created successfully', counselor, 201);
@@ -90,14 +122,13 @@ const createCounselor = async (req, res, next) => {
 };
 
 // ─── Update Counselor ────────────────────────────────────────────────────────
-
 const updateCounselor = async (req, res, next) => {
   try {
     const allowedFields = [
       'name', 'title', 'expertise', 'experience', 'rating', 'reviews',
       'image', 'available', 'sessionsCompleted', 'location', 'email',
-      'phone', 'bio', 'languages', 'pricePerSession', 'isActive',
-      'isFeatured', 'order'
+      'phone', 'bio', 'languages', 'pricePerSession', 'pricePerMinute',
+      'pricePerChat', 'isActive', 'isFeatured', 'order'
     ];
     
     const updates = {};
@@ -106,6 +137,17 @@ const updateCounselor = async (req, res, next) => {
         updates[field] = req.body[field];
       }
     });
+
+    // Update slug if name changed
+    if (updates.name) {
+      const slug = updates.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+      
+      const existing = await Counselor.findOne({ slug, _id: { $ne: req.params.id } });
+      updates.slug = existing ? `${slug}-${Date.now().toString().slice(-4)}` : slug;
+    }
 
     const counselor = await Counselor.findByIdAndUpdate(
       req.params.id,
@@ -124,7 +166,6 @@ const updateCounselor = async (req, res, next) => {
 };
 
 // ─── Delete Counselor ────────────────────────────────────────────────────────
-
 const deleteCounselor = async (req, res, next) => {
   try {
     const counselor = await Counselor.findByIdAndDelete(req.params.id);
@@ -138,7 +179,6 @@ const deleteCounselor = async (req, res, next) => {
 };
 
 // ─── Toggle Counselor Active Status ─────────────────────────────────────────
-
 const toggleCounselorStatus = async (req, res, next) => {
   try {
     const counselor = await Counselor.findById(req.params.id);
@@ -156,7 +196,6 @@ const toggleCounselorStatus = async (req, res, next) => {
 };
 
 // ─── Toggle Featured ─────────────────────────────────────────────────────────
-
 const toggleFeatured = async (req, res, next) => {
   try {
     const counselor = await Counselor.findById(req.params.id);

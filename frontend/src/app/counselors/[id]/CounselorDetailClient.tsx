@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Star, Users, Calendar } from "lucide-react";
+import { Star, Users, Calendar, Phone, MessageCircle, Clock } from "lucide-react";
 
 export default function CounselorDetailClient({ id }: { id: string }) {
   const router = useRouter();
@@ -15,7 +15,6 @@ export default function CounselorDetailClient({ id }: { id: string }) {
     const fetchCounselor = async () => {
       try {
         setLoading(true);
-        // ✅ Full URL use karo
         const res = await fetch(`${API_URL}/counselors/${id}`);
         const data = await res.json();
 
@@ -151,15 +150,45 @@ export default function CounselorDetailClient({ id }: { id: string }) {
             </div>
           )}
 
-          {(counselor.email || counselor.location || counselor.pricePerSession) && (
+          {/* ✅ PRICING CARDS - NEW */}
+          {(counselor.pricePerSession || counselor.pricePerMinute || counselor.pricePerChat) && (
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <h3 className="text-white font-semibold mb-3">Pricing</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {counselor.pricePerSession && (
+                  <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 text-center hover:bg-yellow-500/20 transition-all">
+                    <p className="text-gray-400 text-xs flex items-center justify-center gap-1">
+                      <Calendar size={14} className="text-yellow-500" /> Session
+                    </p>
+                    <p className="text-yellow-400 text-xl font-bold">₹{counselor.pricePerSession}</p>
+                  </div>
+                )}
+                {counselor.pricePerMinute && (
+                  <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 text-center hover:bg-yellow-500/20 transition-all">
+                    <p className="text-gray-400 text-xs flex items-center justify-center gap-1">
+                      <Clock size={14} className="text-yellow-500" /> Per Minute
+                    </p>
+                    <p className="text-yellow-400 text-xl font-bold">₹{counselor.pricePerMinute}</p>
+                  </div>
+                )}
+                {counselor.pricePerChat && (
+                  <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 text-center hover:bg-yellow-500/20 transition-all">
+                    <p className="text-gray-400 text-xs flex items-center justify-center gap-1">
+                      <MessageCircle size={14} className="text-yellow-500" /> Per Chat
+                    </p>
+                    <p className="text-yellow-400 text-xl font-bold">₹{counselor.pricePerChat}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {(counselor.email || counselor.location) && (
             <div className="mt-6 pt-6 border-t border-white/10">
               <h3 className="text-white font-semibold mb-3">Contact Information</h3>
               <div className="space-y-2">
                 {counselor.email && <p className="text-gray-400">📧 {counselor.email}</p>}
                 {counselor.location && <p className="text-gray-400">📍 {counselor.location}</p>}
-                {counselor.pricePerSession && (
-                  <p className="text-gray-400">💰 ₹{counselor.pricePerSession} per session</p>
-                )}
                 <p className="text-gray-400">⏱ {counselor.experience || 0}+ years experience</p>
               </div>
             </div>

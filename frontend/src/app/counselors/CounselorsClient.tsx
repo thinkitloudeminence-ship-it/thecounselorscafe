@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Star, MapPin, ArrowRight, Search, Sparkles, Users } from "lucide-react";
+import { Star, MapPin, ArrowRight, Search, Sparkles, Users, Clock, MessageCircle, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -193,6 +193,27 @@ export default function CounselorsClient() {
                     )}
                   </div>
 
+                  {/* ✅ PRICE BADGES - FIXED */}
+                  {(counselor.pricePerSession || counselor.pricePerMinute || counselor.pricePerChat) && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {counselor.pricePerSession && (
+                        <span className="text-yellow-400 text-[10px] font-semibold bg-yellow-500/10 px-2 py-0.5 rounded flex items-center gap-0.5">
+                          <Calendar size={10} /> ₹{counselor.pricePerSession}/session
+                        </span>
+                      )}
+                      {counselor.pricePerMinute && (
+                        <span className="text-yellow-400 text-[10px] font-semibold bg-yellow-500/10 px-2 py-0.5 rounded flex items-center gap-0.5">
+                          <Clock size={10} /> ₹{counselor.pricePerMinute}/min
+                        </span>
+                      )}
+                      {counselor.pricePerChat && (
+                        <span className="text-yellow-400 text-[10px] font-semibold bg-yellow-500/10 px-2 py-0.5 rounded flex items-center gap-0.5">
+                          <MessageCircle size={10} /> ₹{counselor.pricePerChat}/chat
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10">
                     <div className="flex items-center gap-3 text-xs text-gray-500">
                       <span className="flex items-center gap-1">
@@ -203,14 +224,10 @@ export default function CounselorsClient() {
                         <MapPin size={12} className="text-yellow-500" />
                         {counselor.location?.split(",")[0]}
                       </span>
-                      {counselor.pricePerSession && (
-                        <span className="flex items-center gap-1 text-yellow-500 font-semibold">
-                          ₹{counselor.pricePerSession}
-                        </span>
-                      )}
                     </div>
+                    {/* ✅ SEO FRIENDLY URL - Using slug or id */}
                     <Link
-                      href={`/counselors/${counselor._id}`}
+                      href={`/counselors/${counselor.slug || counselor._id}`}
                       className="flex items-center gap-1 text-yellow-500 text-xs font-semibold hover:gap-2 transition-all"
                     >
                       View Profile <ArrowRight size={12} />

@@ -16,9 +16,23 @@ const counselorSchema = new mongoose.Schema({
   bio: { type: String, default: '' },
   languages: { type: [String], default: ['English'] },
   pricePerSession: { type: Number, default: 499 },
+  pricePerMinute: { type: Number, default: 0 },      // ✅ NEW
+  pricePerChat: { type: Number, default: 0 },        // ✅ NEW
   isActive: { type: Boolean, default: true },
   isFeatured: { type: Boolean, default: false },
   order: { type: Number, default: 0 },
+  slug: { type: String, unique: true, sparse: true }, // ✅ NEW for SEO URLs
 }, { timestamps: true });
+
+// ✅ Auto-generate slug from name
+counselorSchema.pre('save', function(next) {
+  if (this.isModified('name') && this.name) {
+    this.slug = this.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+  next();
+});
 
 module.exports = mongoose.model('Counselor', counselorSchema);

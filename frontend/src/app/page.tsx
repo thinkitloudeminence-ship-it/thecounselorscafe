@@ -4,7 +4,7 @@ import StatsSection from "@/components/sections/StatsSection";
 import HowItWorks from "@/components/sections/HowItWorks";
 import FeaturedCounselors from "@/components/sections/FeaturedCounselors";
 import ServicesOverview from "@/components/sections/ServicesOverview";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
+//import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import CTABanner from "@/components/sections/CTABanner";
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default function HomePage() {
       <ServicesOverview />
       <HowItWorks />
       <FeaturedCounselors />
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
       <CTABanner />
     </>
   );

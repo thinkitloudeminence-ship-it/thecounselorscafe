@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  getAdminCounselors, 
-  createAdminCounselor, 
-  updateAdminCounselor, 
+import {
+  getAdminCounselors,
+  createAdminCounselor,
+  updateAdminCounselor,
   deleteAdminCounselor,
   toggleCounselorStatus,
   toggleCounselorFeatured
@@ -32,6 +32,8 @@ export default function CounselorsManagement() {
     bio: '',
     languages: ['English'],
     pricePerSession: '',
+    pricePerMinute: '',    // ✅ NEW
+    pricePerChat: '',      // ✅ NEW
     isActive: true,
     isFeatured: false,
   });
@@ -63,6 +65,8 @@ export default function CounselorsManagement() {
         reviews: parseInt(form.reviews) || 0,
         sessionsCompleted: parseInt(form.sessionsCompleted) || 0,
         pricePerSession: parseInt(form.pricePerSession) || 499,
+        pricePerMinute: parseInt(form.pricePerMinute) || 0,   // ✅ NEW
+        pricePerChat: parseInt(form.pricePerChat) || 0,       // ✅ NEW
         expertise: form.expertise.filter(e => e.trim() !== ''),
       };
 
@@ -130,6 +134,8 @@ export default function CounselorsManagement() {
       bio: '',
       languages: ['English'],
       pricePerSession: '',
+      pricePerMinute: '',   // ✅ NEW
+      pricePerChat: '',     // ✅ NEW
       isActive: true,
       isFeatured: false,
     });
@@ -154,6 +160,8 @@ export default function CounselorsManagement() {
       bio: counselor.bio || '',
       languages: counselor.languages || ['English'],
       pricePerSession: counselor.pricePerSession?.toString() || '',
+      pricePerMinute: counselor.pricePerMinute?.toString() || '',   // ✅ NEW
+      pricePerChat: counselor.pricePerChat?.toString() || '',       // ✅ NEW
       isActive: counselor.isActive !== undefined ? counselor.isActive : true,
       isFeatured: counselor.isFeatured || false,
     });
@@ -330,6 +338,28 @@ export default function CounselorsManagement() {
                     onChange={(e) => setForm({ ...form, pricePerSession: e.target.value })}
                     style={styles.input}
                     min="0"
+                  />
+                </div>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Price per Minute (₹)</label>
+                  <input
+                    type="number"
+                    value={form.pricePerMinute}
+                    onChange={(e) => setForm({ ...form, pricePerMinute: e.target.value })}
+                    style={styles.input}
+                    min="0"
+                    placeholder="e.g., 50"
+                  />
+                </div>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Price per Chat (₹)</label>
+                  <input
+                    type="number"
+                    value={form.pricePerChat}
+                    onChange={(e) => setForm({ ...form, pricePerChat: e.target.value })}
+                    style={styles.input}
+                    min="0"
+                    placeholder="e.g., 99"
                   />
                 </div>
                 <div style={styles.formGroup}>
