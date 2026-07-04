@@ -184,13 +184,13 @@ export default function HowItWorks() {
             whileTap={{ scale: 0.95 }}
             className="inline-block"
           >
-            <a
+            {/* <a
               href="/counselors"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold text-sm hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
             >
               Start Your Journey Now
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </a>
+            </a> */}
           </motion.div>
           
           {/* <motion.p

@@ -15,12 +15,12 @@ const services = [
     desc: "Science, Commerce, or Arts? Make a data-backed decision after Class 10 that aligns with your future goals.",
     href: "/services#stream",
   },
-  {
-    icon: Plane,
-    title: "Study Abroad",
-    desc: "USA, UK, Canada, Australia — end-to-end guidance from university shortlisting to visa filing and scholarship applications.",
-    href: "/services#abroad",
-  },
+  // {
+  //   icon: Plane,
+  //   title: "Study Abroad",
+  //   desc: "USA, UK, Canada, Australia — end-to-end guidance from university shortlisting to visa filing and scholarship applications.",
+  //   href: "/services#abroad",
+  // },
   {
     icon: FileText,
     title: "Resume & Interview Prep",
@@ -125,7 +125,7 @@ export default function ServicesOverview() {
           ))}
         </div>
 
-        <div className="bg-gradient-to-r from-gray-900/40 to-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-yellow-500/40 transition-all duration-500">
+        {/* <div className="bg-gradient-to-r from-gray-900/40 to-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-yellow-500/40 transition-all duration-500">
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center">
@@ -159,7 +159,7 @@ export default function ServicesOverview() {
               <ArrowRight size={16} />
             </Link>
           </div>
-        </div>
+        </div> */}
 
         <div className="absolute -top-20 left-10 w-32 h-32 bg-gradient-to-r from-yellow-500/20 to-transparent rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 right-10 w-40 h-40 bg-gradient-to-l from-yellow-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />

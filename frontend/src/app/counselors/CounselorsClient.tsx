@@ -7,18 +7,18 @@ import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-const expertiseList = [
-  "Stream Selection",
-  "Career Counselling",
-  "Study Abroad",
-  "CUET Guidance",
-  "JEE Guidance",
-  "MBA Prep",
-  "Resume Building",
-  "Interview Prep",
-  "CA Guidance",
-  "Tech Careers",
-];
+// const expertiseList = [
+//   "Stream Selection",
+//   "Career Counselling",
+//   "Study Abroad",
+//   "CUET Guidance",
+//   "JEE Guidance",
+//   "MBA Prep",
+//   "Resume Building",
+//   "Interview Prep",
+//   "CA Guidance",
+//   "Tech Careers",
+// ];
 
 export default function CounselorsClient() {
   const [counselors, setCounselors] = useState<any[]>([]);
@@ -74,22 +74,22 @@ export default function CounselorsClient() {
     <div className="min-h-screen bg-black pt-20">
       <div className="bg-black py-12 px-4 border-b border-white/5">
         <div className="container mx-auto px-4 text-center">
-          <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
+          {/* <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
             <Sparkles size={12} />
             Expert Guidance
-          </span>
+          </span> */}
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
             Find Your Perfect <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">Career Counselor</span>
           </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          {/* <p className="text-gray-400 max-w-2xl mx-auto">
             120+ verified career experts ready to guide you — stream selection, study abroad, CUET, JEE, resume, and more.
-          </p>
+          </p> */}
         </div>
       </div>
 
       <div className="container mx-auto px-4 md:px-6 py-10">
         <div className="max-w-2xl mx-auto mb-8">
-          <div className="relative">
+          {/* <div className="relative">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               type="text"
@@ -98,10 +98,10 @@ export default function CounselorsClient() {
               placeholder="Search by name, expertise, or specialty..."
               className="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 transition-colors"
             />
-          </div>
+          </div> */}
         </div>
 
-        <div className="flex flex-wrap gap-2 justify-center mb-10">
+        {/* <div className="flex flex-wrap gap-2 justify-center mb-10">
           <button
             onClick={() => setSelectedExpertise("")}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!selectedExpertise
@@ -123,7 +123,7 @@ export default function CounselorsClient() {
               {exp}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {filtered.length === 0 ? (
           <div className="text-center py-20">

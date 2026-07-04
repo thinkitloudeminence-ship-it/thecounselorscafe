@@ -108,10 +108,10 @@ export default function BlogPage() {
           <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-yellow-600/10 rounded-full blur-[100px]" />
         </div>
         <div className="container mx-auto px-4 relative text-center">
-          <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
+          {/* <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
             <Sparkles size={12} />
             Knowledge Hub
-          </span>
+          </span> */}
           <h1 className="text-3xl md:text-5xl font-bold text-white">Career Guidance <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">Blog</span></h1>
           <p className="text-gray-400 mt-3 max-w-xl mx-auto">Expert articles on stream selection, career paths, study abroad, exams, and more — written by verified counselors.</p>
         </div>
@@ -122,25 +122,25 @@ export default function BlogPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
             <div className="flex items-center justify-center gap-3">
-              <BookOpen size={24} className="text-yellow-500" />
-              <div>
+              {/* <BookOpen size={24} className="text-yellow-500" /> */}
+              {/* <div>
                 <p className="text-white font-bold text-lg">3+ Expert Articles</p>
                 <p className="text-gray-500 text-xs">Career Guidance & Tips</p>
-              </div>
+              </div> */}
             </div>
             <div className="flex items-center justify-center gap-3">
-              <TrendingUp size={24} className="text-yellow-500" />
+              {/* <TrendingUp size={24} className="text-yellow-500" />
               <div>
                 <p className="text-white font-bold text-lg">Weekly Updates</p>
                 <p className="text-gray-500 text-xs">Fresh Content Every Week</p>
-              </div>
+              </div> */}
             </div>
             <div className="flex items-center justify-center gap-3">
-              <Award size={24} className="text-yellow-500" />
+              {/* <Award size={24} className="text-yellow-500" />
               <div>
                 <p className="text-white font-bold text-lg">Verified Counselors</p>
                 <p className="text-gray-500 text-xs">Expert-Written Articles</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function BlogPage() {
 
       <div className="container mx-auto px-4 md:px-6 py-10">
         {/* Search */}
-        <div className="relative max-w-xl mx-auto mb-8">
+        {/* <div className="relative max-w-xl mx-auto mb-8">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
             value={search}
@@ -156,7 +156,7 @@ export default function BlogPage() {
             placeholder="Search articles..."
             className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 transition-colors"
           />
-        </div>
+        </div> */}
 
         {/* Category filter */}
         <div className="flex flex-wrap gap-2 justify-center mb-10">
@@ -177,12 +177,12 @@ export default function BlogPage() {
         </div>
 
         {/* Info Banner for Users */}
-        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 mb-8 text-center">
+        {/* <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 mb-8 text-center">
           <p className="text-gray-300 text-sm">
             📚 <strong>3 career guidance articles</strong> available — covering stream selection, after 12th career options, 
             and understanding career counseling. Updated regularly by India's top career experts.
           </p>
-        </div>
+        </div> */}
 
         {/* Grid */}
         {loading ? (
@@ -269,7 +269,7 @@ export default function BlogPage() {
         )}
 
         {/* CTA Section */}
-        <div className="mt-16 text-center">
+        {/* <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-yellow-500/10 to-yellow-600/5 rounded-2xl p-8 border border-yellow-500/20">
             <Heart size={32} className="text-yellow-500 mx-auto mb-4" />
             <h3 className="text-white text-xl font-bold mb-2">Need Personalized Career Guidance?</h3>
@@ -283,7 +283,7 @@ export default function BlogPage() {
               Talk to a Counselor <ArrowRight size={16} />
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

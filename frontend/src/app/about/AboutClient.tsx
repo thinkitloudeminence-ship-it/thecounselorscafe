@@ -1,5 +1,5 @@
 "use client";
-import { CheckCircle, Heart, Lightbulb, Target, Users, Sparkles, Award, Calendar, Star, Rocket, Globe, Quote, MessageCircle, Users2 } from "lucide-react";
+import { Heart, Lightbulb, Target, Users, Sparkles, Award, Calendar, Star, Rocket, Globe, Quote, MessageCircle, Users2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,10 +11,7 @@ const values = [
 ];
 
 const team = [
-  { name: "Kavita Sharma", role: "Founder & CEO", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop" },
-  { name: "Nikhil Verma", role: "Head of Counselling", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop" },
-  { name: "Pooja Nair", role: "Technology Lead", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop" },
-  { name: "Sameer Khan", role: "Growth & Marketing", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" },
+  { name: "Savin Jain", role: "Founder & CEO", image: "https://cdn.phototourl.com/free/2026-07-04-9ac63293-dbc6-4f96-927d-29a2d2dec396.jpg" },
 ];
 
 export default function AboutPage() {
@@ -54,7 +51,7 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-400 leading-relaxed">
                 <p>
-                  In 2020, our founder Kavita Sharma — herself a career counselor with 10+ years of experience — realized that career guidance in India was either too expensive, too generic, or simply inaccessible.
+                  In 2020, our founder Savin Jain — a Career Counselor with 10+ years of experience — realized that career guidance in India was either too expensive, too generic, or simply inaccessible.
                 </p>
                 <p>
                   Students in Tier-2 and Tier-3 cities had no access to quality counselors. Parents gave advice based on outdated information. Schools had one overworked counselor for 2,000 students.
@@ -79,17 +76,17 @@ export default function AboutPage() {
               </div>
             </div>
             
-            {/* Counselor Image with Animation */}
+            {/* Image Card - Fixed with object-contain */}
             <div className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 rounded-3xl p-6 border border-yellow-500/20 group">
-              <div className="relative overflow-hidden rounded-2xl mb-6">
+              <div className="relative overflow-hidden rounded-2xl mb-6 bg-black/40" style={{ height: '300px' }}>
                 <Image
-                  src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=400&fit=crop"
+                  src="https://cdn.phototourl.com/free/2026-07-04-0abc2ae5-d367-4d29-8e93-351fac4df44f.jpg"
                   alt="Career Counselor with Student"
-                  width={500}
-                  height={300}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  className="object-contain group-hover:scale-105 transition-transform duration-700"
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 
                 {/* Floating Animation Badge */}
                 <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 flex items-center gap-2">
@@ -110,7 +107,7 @@ export default function AboutPage() {
               
               <div className="flex items-center justify-between pt-4 border-t border-white/10">
                 <div>
-                  <p className="text-white font-semibold">Kavita Sharma</p>
+                  <p className="text-white font-semibold">Savin Jain</p>
                   <p className="text-yellow-500 text-sm">Founder & Career Counselor</p>
                 </div>
                 <div className="flex gap-1">
@@ -123,7 +120,7 @@ export default function AboutPage() {
               {/* Animated Stats */}
               <div className="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-white/10">
                 <div className="text-center">
-                  <p className="text-yellow-500 text-xl font-bold">8+</p>
+                  <p className="text-yellow-500 text-xl font-bold">10+</p>
                   <p className="text-gray-500 text-xs">Years Experience</p>
                 </div>
                 <div className="text-center">
@@ -196,34 +193,23 @@ export default function AboutPage() {
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-white">Meet the <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">people behind</span> the platform</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+          <div className="flex justify-center">
             {team.map((m) => (
-              <div key={m.name} className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 text-center group">
-                <div className="relative w-20 h-20 mx-auto mb-3">
+              <div key={m.name} className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 text-center group max-w-[200px]">
+                <div className="relative w-32 h-32 mx-auto mb-3">
                   <Image
                     src={m.image}
                     alt={m.name}
                     fill
-                    className="rounded-2xl object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="rounded-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-transparent" />
+                  <div className="absolute inset-0 rounded-full ring-2 ring-yellow-500/30 group-hover:ring-yellow-500 transition-all" />
                 </div>
                 <p className="font-bold text-white text-sm mt-2">{m.name}</p>
                 <p className="text-yellow-500 text-xs mt-1">{m.role}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-16 md:py-20 bg-black border-t border-white/5">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white">Ready to start your <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">journey?</span></h2>
-          <p className="text-gray-400 mt-4 mb-8 max-w-md mx-auto">Join 50,000+ students who've found career clarity with TheCounselorsCafe.</p>
-          <Link href="/counselors" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300">
-            Talk to a Counselor →
-          </Link>
         </div>
       </section>
     </div>

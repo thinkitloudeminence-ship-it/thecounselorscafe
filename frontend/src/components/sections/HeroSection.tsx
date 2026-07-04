@@ -64,7 +64,7 @@ export default function HeroSection() {
   const rotatingHeadings = [
     "Career Counselling",
     "Study Abroad Guidance",
-    "Mental Health Support",
+    // "Mental Health Support",
     "Relationship Counselling"
   ];
 
@@ -76,16 +76,16 @@ export default function HeroSection() {
   }, []);
 
   // ─── Default categories ────────────────────────────────────────────
-  const categories = [
-    "Career after 10th",
-    "Career after 12th",
-    "Study Abroad",
-    "Relationship Issues",
-    "Stress / Anxiety",
-    "Career Switch",
-    "Exam Stress",
-    "Life Coaching",
-  ];
+  // const categories = [
+  //   "Career after 10th",
+  //   "Career after 12th",
+  //   "Study Abroad",
+  //   "Relationship Issues",
+  //   "Stress / Anxiety",
+  //   "Career Switch",
+  //   "Exam Stress",
+  //   "Life Coaching",
+  // ];
 
   // ─── Color Config ──────────────────────────────────────────────────
   const selectedColor = {
@@ -213,7 +213,7 @@ export default function HeroSection() {
           </div>
 
           {/* Search Bar */}
-          <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto">
+          {/* <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto">
             <div className="flex flex-col sm:flex-row gap-2 bg-gray-900/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-1 border border-gray-700">
               <div className="flex-1 flex items-center gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-3 md:py-4">
                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 flex-shrink-0" />
@@ -230,11 +230,11 @@ export default function HeroSection() {
                 Search
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Categories */}
           <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 max-w-7xl mx-auto">
-            <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 sm:gap-2 md:gap-3">
+            {/* <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 sm:gap-2 md:gap-3">
               {categories.map((item, i) => (
                 <motion.div
                   key={i}
@@ -247,7 +247,7 @@ export default function HeroSection() {
                   {item}
                 </motion.div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* ─── COUNSELORS SLIDER (NO REPEAT) ────────────────────── */}
