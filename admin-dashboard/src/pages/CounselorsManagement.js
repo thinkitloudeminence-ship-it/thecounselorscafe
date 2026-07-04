@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import {
-  getAdminCounselors,
-  createAdminCounselor,
-  updateAdminCounselor,
+import React, { useState, useEffect, useCallback } from 'react';
+import { 
+  getAdminCounselors, 
+  createAdminCounselor, 
+  updateAdminCounselor, 
   deleteAdminCounselor,
   toggleCounselorStatus,
   toggleCounselorFeatured
 } from '../lib/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, Eye, EyeOff, Star, StarOff, Search } from 'lucide-react';
+import { Plus, Edit, Trash2, Star, StarOff, Search } from 'lucide-react';
 
 export default function CounselorsManagement() {
   const [counselors, setCounselors] = useState([]);
@@ -32,14 +32,14 @@ export default function CounselorsManagement() {
     bio: '',
     languages: ['English'],
     pricePerSession: '',
-    pricePerMinute: '',    // ✅ NEW
-    pricePerChat: '',      // ✅ NEW
+    pricePerMinute: '',
+    pricePerChat: '',
     isActive: true,
     isFeatured: false,
   });
   const [expertiseInput, setExpertiseInput] = useState('');
 
-  const loadCounselors = async () => {
+  const loadCounselors = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getAdminCounselors({ search });
@@ -49,11 +49,14 @@ export default function CounselorsManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search]);
 
   useEffect(() => {
-    loadCounselors();
-  }, [search]);
+    const timer = setTimeout(() => {
+      loadCounselors();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [loadCounselors]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,8 +68,8 @@ export default function CounselorsManagement() {
         reviews: parseInt(form.reviews) || 0,
         sessionsCompleted: parseInt(form.sessionsCompleted) || 0,
         pricePerSession: parseInt(form.pricePerSession) || 499,
-        pricePerMinute: parseInt(form.pricePerMinute) || 0,   // ✅ NEW
-        pricePerChat: parseInt(form.pricePerChat) || 0,       // ✅ NEW
+        pricePerMinute: parseInt(form.pricePerMinute) || 0,
+        pricePerChat: parseInt(form.pricePerChat) || 0,
         expertise: form.expertise.filter(e => e.trim() !== ''),
       };
 
@@ -134,8 +137,8 @@ export default function CounselorsManagement() {
       bio: '',
       languages: ['English'],
       pricePerSession: '',
-      pricePerMinute: '',   // ✅ NEW
-      pricePerChat: '',     // ✅ NEW
+      pricePerMinute: '',
+      pricePerChat: '',
       isActive: true,
       isFeatured: false,
     });
@@ -160,8 +163,8 @@ export default function CounselorsManagement() {
       bio: counselor.bio || '',
       languages: counselor.languages || ['English'],
       pricePerSession: counselor.pricePerSession?.toString() || '',
-      pricePerMinute: counselor.pricePerMinute?.toString() || '',   // ✅ NEW
-      pricePerChat: counselor.pricePerChat?.toString() || '',       // ✅ NEW
+      pricePerMinute: counselor.pricePerMinute?.toString() || '',
+      pricePerChat: counselor.pricePerChat?.toString() || '',
       isActive: counselor.isActive !== undefined ? counselor.isActive : true,
       isFeatured: counselor.isFeatured || false,
     });
