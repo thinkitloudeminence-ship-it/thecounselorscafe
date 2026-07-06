@@ -108,12 +108,12 @@ body {
   }
 
   .yellow-glow {
-    box-shadow: 0 0 40px rgba(234, 179, 8, 0.15);
+    box-shadow: 0 0 40px rgb(254, 253, 255);
   }
 
   /* Custom shadows */
 .shadow-yellow-lg {
-  box-shadow: 0 10px 30px -8px rgba(234, 179, 8, 0.4);
+  box-shadow: 0 10px 30px -8px rgb(126, 41, 41);
 }
 
 .shadow-yellow-xl {
