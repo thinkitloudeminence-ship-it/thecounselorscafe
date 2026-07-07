@@ -5,15 +5,15 @@ export const metadata: Metadata = {
   title: "About Us | counselors cafe — Our Story & Mission",
   description: "Learn about counselors cafe — India's most trusted career counselling platform. Founded in 2020 to end career confusion for Indian students. Meet our team of verified expert counselors.",
   keywords: [
-    "about cd ",
+    "about counselors cafe",
     "career counselling platform India",
     "career guidance mission",
     "verified career counselors India",
     "counselors cafe story",
     "best career counselling platform",
   ],
- alternates: {
-    canonical: "https://www.counselorscafe.com/about",  // ✅ ADD THIS
+  alternates: {
+    canonical: "https://www.counselorscafe.com/about",
   },
   openGraph: {
     title: "About counselors cafe | Our Mission to End Career Confusion",

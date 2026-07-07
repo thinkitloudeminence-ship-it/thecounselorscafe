@@ -49,21 +49,21 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-black pt-20">
+    <div className="min-h-screen bg-white pt-20">
       {/* Hero */}
-      <div className="py-16 px-4 text-center border-b border-white/5">
+      <div className="py-16 px-4 text-center border-b border-gray-200">
         <div className="container mx-auto max-w-3xl">
-          <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+          <span className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
             <Sparkles size={12} />
             Expert Guidance
           </span>
-          <h1 className="text-3xl md:text-5xl font-bold text-white">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900">
             Your Career,{" "}
-            <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
               Our Expertise
             </span>
           </h1>
-          <p className="text-gray-400 mt-4 text-sm md:text-base">
+          <p className="text-gray-500 mt-4 text-sm md:text-base">
             One-on-one sessions with verified experts. Personalized guidance for your unique career journey.
           </p>
         </div>
@@ -75,20 +75,20 @@ export default function ServicesPage() {
           {services.map((service) => (
             <div
               key={service.id}
-              className="group bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 p-6"
+              className="group bg-white rounded-2xl border border-gray-200 hover:border-amber-400 hover:-translate-y-1 transition-all duration-300 p-6 shadow-lg hover:shadow-xl"
             >
               {/* Icon */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-4 shadow-lg shadow-yellow-500/20">
-                <service.icon size={24} className="text-black" />
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/20">
+                <service.icon size={24} className="text-white" />
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">
                 {service.title}
               </h3>
 
               {/* Description */}
-              <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              <p className="text-gray-500 text-sm leading-relaxed mb-4">
                 {service.desc}
               </p>
 
@@ -96,7 +96,7 @@ export default function ServicesPage() {
               <div className="space-y-1.5 mb-5">
                 {service.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2 text-xs text-gray-500">
-                    <span className="text-yellow-500">✦</span>
+                    <span className="text-amber-500">✦</span>
                     <span>{feature}</span>
                   </div>
                 ))}
@@ -105,7 +105,7 @@ export default function ServicesPage() {
               {/* Button */}
               <Link
                 href="/counselors"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold text-sm hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
               >
                 Book a Session <ArrowRight size={14} />
               </Link>
@@ -113,24 +113,6 @@ export default function ServicesPage() {
           ))}
         </div>
       </div>
-
-      {/* CTA */}
-      {/* <div className="container mx-auto px-4 pb-16">
-        <div className="bg-gradient-to-r from-yellow-500/10 to-yellow-600/5 rounded-3xl p-8 text-center border border-yellow-500/20 max-w-3xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
-            Need help choosing?
-          </h2>
-          <p className="text-gray-400 text-sm mb-5">
-            Talk to our experts and get personalized recommendations
-          </p>
-          <Link
-            href="/counselors"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300 text-sm"
-          >
-            Find a Counselor <ArrowRight size={16} />
-          </Link>
-        </div>
-      </div> */}
     </div>
   );
 }

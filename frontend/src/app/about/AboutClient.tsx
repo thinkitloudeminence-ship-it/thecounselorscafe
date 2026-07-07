@@ -16,40 +16,40 @@ const team = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-black pt-20">
+    <div className="min-h-screen bg-white pt-20">
       {/* Hero */}
-      <div className="bg-black py-20 px-4 relative overflow-hidden border-b border-white/5">
+      <div className="bg-white py-20 px-4 relative overflow-hidden border-b border-gray-200">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-yellow-500/15 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-yellow-600/10 rounded-full blur-[100px]" />
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-amber-600/5 rounded-full blur-[100px]" />
         </div>
         <div className="container mx-auto px-4 relative text-center max-w-3xl mx-auto">
-          <span className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-6">
+          <span className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest mb-6">
             <Sparkles size={12} />
             Our Story
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-            We're on a mission to <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">end career confusion</span> in India
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+            We're on a mission to <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">end career confusion</span> in India
           </h1>
-          <p className="text-gray-400 mt-6 text-lg leading-relaxed">
+          <p className="text-gray-500 mt-6 text-lg leading-relaxed">
             TheCounselorsCafe was born from a simple observation: millions of Indian students make life-defining career decisions with zero guidance. We're here to change that.
           </p>
         </div>
       </div>
 
       {/* Story */}
-      <section className="py-16 md:py-20 bg-black border-t border-white/5">
+      <section className="py-16 md:py-20 bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
             <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-semibold mb-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold mb-4">
                 <Sparkles size={12} />
                 Our Story
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                From a <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">broken system</span> to a better one
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                From a <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">broken system</span> to a better one
               </h2>
-              <div className="space-y-4 text-gray-400 leading-relaxed">
+              <div className="space-y-4 text-gray-500 leading-relaxed">
                 <p>
                   In 2020, our founder Savin Jain — a Career Counselor with 10+ years of experience — realized that career guidance in India was either too expensive, too generic, or simply inaccessible.
                 </p>
@@ -67,18 +67,18 @@ export default function AboutPage() {
                   { icon: Award, val: "200+", label: "Expert Counselors" },
                   { icon: Star, val: "4.9★", label: "Average Rating" }
                 ].map((stat) => (
-                  <div key={stat.label} className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-4 text-center group hover:bg-yellow-500/20 transition-all duration-300">
-                    <stat.icon size={24} className="text-yellow-500 mx-auto mb-2 group-hover:scale-110 transition-transform" />
-                    <p className="text-2xl font-bold text-yellow-500">{stat.val}</p>
-                    <p className="text-gray-400 text-sm mt-0.5">{stat.label}</p>
+                  <div key={stat.label} className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center group hover:bg-amber-100 transition-all duration-300">
+                    <stat.icon size={24} className="text-amber-500 mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                    <p className="text-2xl font-bold text-amber-600">{stat.val}</p>
+                    <p className="text-gray-500 text-sm mt-0.5">{stat.label}</p>
                   </div>
                 ))}
               </div>
             </div>
             
-            {/* Image Card - Fixed with object-contain */}
-            <div className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 rounded-3xl p-6 border border-yellow-500/20 group">
-              <div className="relative overflow-hidden rounded-2xl mb-6 bg-black/40" style={{ height: '300px' }}>
+            {/* Image Card */}
+            <div className="bg-amber-50 rounded-3xl p-6 border border-amber-200 group">
+              <div className="relative overflow-hidden rounded-2xl mb-6 bg-gray-100" style={{ height: '300px' }}>
                 <Image
                   src="https://cdn.phototourl.com/free/2026-07-04-0abc2ae5-d367-4d29-8e93-351fac4df44f.jpg"
                   alt="Career Counselor with Student"
@@ -88,43 +88,41 @@ export default function AboutPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 
-                {/* Floating Animation Badge */}
                 <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 flex items-center gap-2">
-                  <MessageCircle size={14} className="text-yellow-500" />
+                  <MessageCircle size={14} className="text-amber-500" />
                   <span className="text-white text-xs font-medium">1-on-1 Session</span>
                 </div>
                 
-                <div className="absolute top-4 right-4 bg-yellow-500/90 rounded-full px-3 py-1.5 flex items-center gap-1">
-                  <Users2 size={12} className="text-black" />
-                  <span className="text-black text-xs font-bold">50K+ Students</span>
+                <div className="absolute top-4 right-4 bg-amber-500 rounded-full px-3 py-1.5 flex items-center gap-1">
+                  <Users2 size={12} className="text-white" />
+                  <span className="text-white text-xs font-bold">50K+ Students</span>
                 </div>
               </div>
               
-              <Quote size={32} className="text-yellow-500 mb-4" />
-              <p className="text-white text-lg font-medium leading-relaxed mb-5">
+              <Quote size={32} className="text-amber-500 mb-4" />
+              <p className="text-gray-800 text-lg font-medium leading-relaxed mb-5">
                 "Every career journey starts with a conversation. We're here to make sure that conversation leads to clarity, not confusion."
               </p>
               
-              <div className="flex items-center justify-between pt-4 border-t border-white/10">
+              <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                 <div>
-                  <p className="text-white font-semibold">Savin Jain</p>
-                  <p className="text-yellow-500 text-sm">Founder & Career Counselor</p>
+                  <p className="text-gray-900 font-semibold">Savin Jain</p>
+                  <p className="text-amber-500 text-sm">Founder & Career Counselor</p>
                 </div>
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={14} className="text-yellow-500 fill-yellow-500" />
+                    <Star key={i} size={14} className="text-amber-500 fill-amber-500" />
                   ))}
                 </div>
               </div>
               
-              {/* Animated Stats */}
-              <div className="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-white/10">
+              <div className="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-gray-200">
                 <div className="text-center">
-                  <p className="text-yellow-500 text-xl font-bold">10+</p>
+                  <p className="text-amber-500 text-xl font-bold">10+</p>
                   <p className="text-gray-500 text-xs">Years Experience</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-yellow-500 text-xl font-bold">5000+</p>
+                  <p className="text-amber-500 text-xl font-bold">5000+</p>
                   <p className="text-gray-500 text-xs">Students Guided</p>
                 </div>
               </div>
@@ -134,24 +132,24 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-16 md:py-20 bg-black border-t border-white/5">
+      <section className="py-16 md:py-20 bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-yellow-500/40 transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Rocket size={28} className="text-yellow-500" />
+            <div className="bg-white rounded-3xl p-8 border border-gray-200 hover:border-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl group">
+              <div className="w-14 h-14 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Rocket size={28} className="text-amber-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Our Mission</h3>
-              <p className="text-gray-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Our Mission</h3>
+              <p className="text-gray-500 leading-relaxed">
                 To make quality career counselling accessible, affordable, and actionable for every Indian student — connecting them with verified experts who provide personalized, life-changing guidance.
               </p>
             </div>
-            <div className="bg-black/40 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-yellow-500/40 transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Globe size={28} className="text-yellow-500" />
+            <div className="bg-white rounded-3xl p-8 border border-gray-200 hover:border-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl group">
+              <div className="w-14 h-14 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Globe size={28} className="text-amber-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Our Vision</h3>
-              <p className="text-gray-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Our Vision</h3>
+              <p className="text-gray-500 leading-relaxed">
                 A future where no Indian student has to make a career decision alone — where expert guidance is as accessible as a phone call, and every young person can pursue a career they love.
               </p>
             </div>
@@ -160,23 +158,23 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-16 md:py-20 bg-black border-t border-white/5">
+      <section className="py-16 md:py-20 bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold mb-4">
               <Sparkles size={12} />
               What We Stand For
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Our core <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">values</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Our core <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">values</span></h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {values.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-yellow-500/40 transition-all duration-300 group">
-                <div className="w-12 h-12 bg-yellow-500/10 border border-yellow-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Icon size={22} className="text-yellow-500" />
+              <div key={title} className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl group">
+                <div className="w-12 h-12 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Icon size={22} className="text-amber-500" />
                 </div>
-                <h3 className="font-bold text-white mb-2">{title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
+                <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -184,18 +182,18 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="py-16 md:py-20 bg-black border-t border-white/5">
+      <section className="py-16 md:py-20 bg-white border-t border-gray-200">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold mb-4">
               <Sparkles size={12} />
               The Team
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Meet the <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">people behind</span> the platform</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Meet the <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">people behind</span> the platform</h2>
           </div>
           <div className="flex justify-center">
             {team.map((m) => (
-              <div key={m.name} className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-yellow-500/40 hover:-translate-y-1 transition-all duration-300 text-center group max-w-[200px]">
+              <div key={m.name} className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-amber-400 hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl text-center group max-w-[200px]">
                 <div className="relative w-32 h-32 mx-auto mb-3">
                   <Image
                     src={m.image}
@@ -203,10 +201,10 @@ export default function AboutPage() {
                     fill
                     className="rounded-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 rounded-full ring-2 ring-yellow-500/30 group-hover:ring-yellow-500 transition-all" />
+                  <div className="absolute inset-0 rounded-full ring-2 ring-amber-500/30 group-hover:ring-amber-500 transition-all" />
                 </div>
-                <p className="font-bold text-white text-sm mt-2">{m.name}</p>
-                <p className="text-yellow-500 text-xs mt-1">{m.role}</p>
+                <p className="font-bold text-gray-900 text-sm mt-2">{m.name}</p>
+                <p className="text-amber-500 text-xs mt-1">{m.role}</p>
               </div>
             ))}
           </div>

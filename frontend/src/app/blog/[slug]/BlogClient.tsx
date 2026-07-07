@@ -19,23 +19,23 @@ const getImageUrl = (url: string | undefined) => {
 function NotFound({ slug }: { slug: string }) {
   const title = slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
   return (
-    <div className="min-h-screen pt-20 bg-black">
+    <div className="min-h-screen pt-20 bg-white">
       <div className="max-w-3xl mx-auto px-4 md:px-6 py-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm mb-8">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm mb-8">
           <ArrowLeft size={16} /> Back to Blog
         </Link>
-        <span className="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
+        <span className="inline-block bg-amber-50 text-amber-600 border border-amber-200 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
           Career Guidance
         </span>
-        <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">{title}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">{title}</h1>
         <div className="prose prose-invert max-w-none">
-          <p className="text-gray-400 leading-relaxed text-lg">
+          <p className="text-gray-500 leading-relaxed text-lg">
             Article coming soon. Connect the backend CMS to see full content here.
           </p>
-          <div className="mt-8 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
-            <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance?</h3>
-            <p className="text-gray-400 text-sm mb-4">One session with an expert can change everything.</p>
-            <Link href="/counselors" className="inline-flex items-center gap-2 bg-yellow-500 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-colors">
+          <div className="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-2xl">
+            <h3 className="font-bold text-gray-900 text-lg mb-2">Need personalized guidance?</h3>
+            <p className="text-gray-500 text-sm mb-4">One session with an expert can change everything.</p>
+            <Link href="/counselors" className="inline-flex items-center gap-2 bg-amber-500 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-amber-600 transition-colors">
               Talk to a Counselor →
             </Link>
           </div>
@@ -76,8 +76,8 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black pt-20 flex items-center justify-center">
-        <div className="text-gray-500 animate-pulse">Loading…</div>
+      <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
+        <div className="text-gray-400 animate-pulse">Loading…</div>
       </div>
     );
   }
@@ -85,17 +85,17 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
   if (!blog) return <NotFound slug={slug} />;
 
   return (
-    <div className="min-h-screen bg-black pt-20">
+    <div className="min-h-screen bg-white pt-20">
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-yellow-500 transition-colors text-sm mb-6 inline-block">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm mb-6 inline-block">
           <ArrowLeft size={16} /> Back to Blog
         </Link>
 
         {/* Category and Title */}
-        <span className="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
+        <span className="inline-block bg-amber-50 text-amber-600 border border-amber-200 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
           {blog.category}
         </span>
-        <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-6">
           {blog.title}
         </h1>
 
@@ -113,23 +113,23 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         )}
 
         {/* Author and Meta Info */}
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 mb-6 pb-6 border-b border-white/10">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 mb-6 pb-6 border-b border-gray-200">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center text-black font-bold text-xs">
+            <div className="w-7 h-7 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold text-xs">
               {blog.author?.name?.[0]?.toUpperCase() || "A"}
             </div>
-            <span className="text-gray-300 font-medium">{blog.author?.name}</span>
+            <span className="text-gray-700 font-medium">{blog.author?.name}</span>
           </div>
           <span className="flex items-center gap-1.5">
-            <Clock size={13} className="text-yellow-500" />
+            <Clock size={13} className="text-amber-500" />
             {blog.readTime} min read
           </span>
           <span className="flex items-center gap-1.5">
-            <Eye size={13} className="text-yellow-500" />
+            <Eye size={13} className="text-amber-500" />
             {blog.views} views
           </span>
           <span className="flex items-center gap-1.5">
-            <Calendar size={13} className="text-yellow-500" />
+            <Calendar size={13} className="text-amber-500" />
             {new Date(blog.publishedAt || blog.createdAt).toLocaleDateString("en-IN", {
               day: "numeric",
               month: "long",
@@ -140,7 +140,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
 
         {/* Excerpt */}
         {blog.excerpt && (
-          <p className="text-gray-300 text-lg leading-relaxed mb-8 font-medium">
+          <p className="text-gray-600 text-lg leading-relaxed mb-8 font-medium">
             {blog.excerpt}
           </p>
         )}
@@ -149,8 +149,8 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         {blog.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             {blog.tags.map((tag: string) => (
-              <span key={tag} className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                <Tag size={10} className="text-yellow-500" />
+              <span key={tag} className="inline-flex items-center gap-1.5 text-xs text-gray-500 bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-full">
+                <Tag size={10} className="text-amber-500" />
                 {tag}
               </span>
             ))}
@@ -164,19 +164,19 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         />
 
         {/* Like and Share Buttons */}
-        <div className="flex items-center gap-4 mt-10 pt-8 border-t border-white/10">
+        <div className="flex items-center gap-4 mt-10 pt-8 border-t border-gray-200">
           <button
             onClick={handleLike}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all text-sm font-semibold ${
-              liked ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-white/5 border-white/10 text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30"
+              liked ? "bg-red-50 border-red-300 text-red-500" : "bg-white border-gray-200 text-gray-500 hover:text-amber-500 hover:border-amber-300"
             }`}
           >
-            <Heart size={15} className={liked ? "fill-red-400" : ""} />
+            <Heart size={15} className={liked ? "fill-red-500" : ""} />
             {(blog.likes || 0) + (liked ? 1 : 0)} Likes
           </button>
           <button
             onClick={() => navigator.clipboard?.writeText(window.location.href)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30 transition-all text-sm font-semibold"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-amber-500 hover:border-amber-300 transition-all text-sm font-semibold"
           >
             <Share2 size={15} /> Share
           </button>
@@ -184,22 +184,22 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
 
         {/* Author Bio */}
         {blog.author?.bio && (
-          <div className="mt-10 p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-4">
-            <div className="w-14 h-14 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-bold text-xl flex-shrink-0">
+          <div className="mt-10 p-6 bg-gray-50 border border-gray-200 rounded-2xl flex gap-4">
+            <div className="w-14 h-14 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
               {blog.author.name?.[0]?.toUpperCase()}
             </div>
             <div>
-              <div className="font-bold text-white mb-1">{blog.author.name}</div>
-              <div className="text-gray-400 text-sm leading-relaxed">{blog.author.bio}</div>
+              <div className="font-bold text-gray-900 mb-1">{blog.author.name}</div>
+              <div className="text-gray-500 text-sm leading-relaxed">{blog.author.bio}</div>
             </div>
           </div>
         )}
 
         {/* CTA Section */}
-        <div className="mt-10 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl">
-          <h3 className="font-bold text-white text-lg mb-2">Need personalized guidance? ☕</h3>
-          <p className="text-gray-400 text-sm mb-4">One session with an expert counsellor can be life-changing.</p>
-          <Link href="/counselors" className="inline-flex items-center gap-2 bg-yellow-500 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-colors text-sm">
+        <div className="mt-10 p-6 bg-amber-50 border border-amber-200 rounded-2xl">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Need personalized guidance? ☕</h3>
+          <p className="text-gray-500 text-sm mb-4">One session with an expert counsellor can be life-changing.</p>
+          <Link href="/counselors" className="inline-flex items-center gap-2 bg-amber-500 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-amber-600 transition-colors text-sm">
             Talk to a Counselor →
           </Link>
         </div>
@@ -207,17 +207,17 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         {/* Related Articles */}
         {related.length > 0 && (
           <div className="mt-12">
-            <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Related Articles</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {related.map((r: any) => (
-                <Link key={r._id} href={`/blog/${r.slug}`} className="bg-white/5 border border-white/10 hover:border-yellow-500/30 rounded-xl overflow-hidden group transition-all">
+                <Link key={r._id} href={`/blog/${r.slug}`} className="bg-white border border-gray-200 hover:border-amber-400 rounded-xl overflow-hidden group transition-all shadow-sm hover:shadow-md">
                   {r.image?.url && (
                     <div className="relative h-36 overflow-hidden">
                       <Image src={getImageUrl(r.image.url) || r.image.url} alt={r.title} fill className="object-cover group-hover:scale-105 transition-transform" />
                     </div>
                   )}
                   <div className="p-4">
-                    <div className="font-semibold text-white text-sm leading-snug group-hover:text-yellow-400 transition-colors line-clamp-2">
+                    <div className="font-semibold text-gray-900 text-sm leading-snug group-hover:text-amber-600 transition-colors line-clamp-2">
                       {r.title}
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
       <style jsx global>{`
         .blog-content-wrapper {
           line-height: 1.85;
-          color: #ccc;
+          color: #4a4a4a;
         }
         
         .blog-content-wrapper > * {
@@ -243,30 +243,30 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           font-size: 2.2em;
           font-weight: 800;
           margin: 1.2em 0 0.5em;
-          color: #fff;
+          color: #1a1a1a;
         }
         
         .blog-content-wrapper h2 {
           font-size: 1.8em;
           font-weight: 700;
           margin: 1.2em 0 0.5em;
-          color: #f0f0f0;
+          color: #222;
           padding-bottom: 0.4em;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          border-bottom: 1px solid rgba(0,0,0,0.1);
         }
         
         .blog-content-wrapper h3 {
           font-size: 1.4em;
           font-weight: 600;
           margin: 1em 0 0.4em;
-          color: #e0e0e0;
+          color: #333;
         }
         
         .blog-content-wrapper h4 {
           font-size: 1.2em;
           font-weight: 600;
           margin: 0.8em 0 0.4em;
-          color: #d0d0d0;
+          color: #444;
         }
         
         .blog-content-wrapper p {
@@ -309,14 +309,14 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
           margin: 1.5em 0;
           background: rgba(245, 197, 24, 0.05);
           border-radius: 0 8px 8px 0;
-          color: #aaa;
+          color: #555;
           font-style: italic;
         }
         
         /* CODE */
         .blog-content-wrapper code {
-          background: #1e1e2e;
-          color: #f5c518;
+          background: #f0f0f0;
+          color: #d97706;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 0.9em;
@@ -324,7 +324,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         }
         
         .blog-content-wrapper pre {
-          background: #1e1e2e;
+          background: #f5f5f5;
           border-radius: 10px;
           padding: 1.2em;
           margin: 1.2em 0;
@@ -338,12 +338,12 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         
         /* LINKS */
         .blog-content-wrapper a {
-          color: #f5c518;
+          color: #d97706;
           text-decoration: underline;
         }
         
         .blog-content-wrapper a:hover {
-          color: #ffdd44;
+          color: #b45309;
         }
         
         /* IMAGES */
@@ -363,27 +363,27 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
         
         .blog-content-wrapper th,
         .blog-content-wrapper td {
-          border: 1px solid #2a2a2a;
+          border: 1px solid #e5e5e5;
           padding: 8px;
         }
         
         .blog-content-wrapper th {
-          background: #1a1a1a;
-          color: #f0f0f0;
+          background: #f5f5f5;
+          color: #222;
         }
         
         /* HR */
         .blog-content-wrapper hr {
           border: none;
           height: 1px;
-          background: linear-gradient(to right, transparent, #333, transparent);
+          background: linear-gradient(to right, transparent, #ddd, transparent);
           margin: 2em 0;
         }
         
         /* STRONG/BOLD */
         .blog-content-wrapper strong,
         .blog-content-wrapper b {
-          color: #fff;
+          color: #1a1a1a;
           font-weight: 700;
         }
         

@@ -13,10 +13,9 @@ export const metadata: Metadata = {
     "student career app India",
     "online counselling app India",
   ],
-    alternates: {
-    canonical: "https://www.counselorscafe.com/download-app",  // ✅ ADD THIS
+  alternates: {
+    canonical: "https://www.counselorscafe.com/download-app",
   },
-
   openGraph: {
     title: "Download counselors cafe App | Career Guidance on Your Phone",
     description: "Book expert career counsellors, track your progress, and get personalized guidance — all from your phone. Free to download.",

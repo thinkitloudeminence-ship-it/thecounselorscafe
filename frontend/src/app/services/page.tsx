@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "college selection guidance",
   ],
   alternates: {
-    canonical: "https://www.counselorscafe.com/services",  // ✅ YEH LINE ADD KARO
+    canonical: "https://www.counselorscafe.com/services",
   },
   openGraph: {
     title: "18+ Career Counselling Services | counselors cafe",
