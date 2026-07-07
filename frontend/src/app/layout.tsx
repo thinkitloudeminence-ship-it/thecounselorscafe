@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   verification: {
     google: "CC3U2Ynj4CajtpTWcj4KM-nPfF_hP5GhvtRzH5vffUU",
   },
-   alternates: {
+  alternates: {
     canonical: "https://www.counselorscafe.com",
     languages: {
       'en-IN': 'https://www.counselorscafe.com',
@@ -113,7 +113,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -135,7 +134,7 @@ gtag('config', 'G-E79YGEBVTK');`
           }}
         />
       </head>
-      <body className="font-body antialiased" suppressHydrationWarning>
+      <body className="font-body antialiased bg-white text-gray-900" suppressHydrationWarning>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -146,7 +145,7 @@ gtag('config', 'G-E79YGEBVTK');`
           />
         </noscript>
         <JsonLd />
-        <PerformanceOptimizer />
+        {/* <PerformanceOptimizer /> */}
         <Navbar />
         <main>{children}</main>
         <Footer />
@@ -154,10 +153,11 @@ gtag('config', 'G-E79YGEBVTK');`
           position="top-right"
           toastOptions={{
             style: {
-              background: "#1A1A1A",
-              color: "#fff",
+              background: "#FFFFFF",
+              color: "#1A1A1A",
               borderRadius: "12px",
               border: "1px solid rgba(234,179,8,0.3)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
             },
             success: { iconTheme: { primary: "#EAB308", secondary: "#fff" } },
           }}

@@ -16,6 +16,16 @@
   --black-soft: #1A1A1A;
   --white: #FFFFFF;
   --white-soft: #F8F8F8;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
 }
 
 * {
@@ -32,8 +42,8 @@ html {
 
 body {
   font-family: var(--font-dm-sans);
-  background-color: #000000;
-  color: #FFFFFF;
+  background-color: #FFFFFF;
+  color: #1659e9;
   overflow-x: hidden;
 }
 
@@ -42,7 +52,7 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1A1A1A;
+  background: #F3F4F6;
 }
 ::-webkit-scrollbar-thumb {
   background: #EAB308;
@@ -55,20 +65,20 @@ body {
 /* Selection - Yellow Theme */
 ::selection {
   background: rgba(234, 179, 8, 0.2);
-  color: #EAB308;
+  color: #CA8A04;
 }
 
 @layer components {
- .btn-primary {
-  @apply bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-300 shadow-yellow-lg hover:shadow-yellow-lg hover:-translate-y-0.5 active:translate-y-0;
-}
+  .btn-primary {
+    @apply bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0;
+  }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-yellow-500 text-yellow-400 hover:bg-yellow-500/10 font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:-translate-y-0.5;
+    @apply bg-transparent border-2 border-amber-500 text-amber-600 hover:bg-amber-50 font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:-translate-y-0.5;
   }
 
   .btn-ghost {
-    @apply text-yellow-400 hover:text-yellow-300 font-semibold transition-colors duration-200;
+    @apply text-amber-600 hover:text-amber-700 font-semibold transition-colors duration-200;
   }
 
   .section-padding {
@@ -80,72 +90,72 @@ body {
   }
 
   .glass-card {
-    @apply bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-glass;
+    @apply bg-white/80 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-lg;
   }
 
   .glass-dark {
-    @apply bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl;
+    @apply bg-white/90 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-xl;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent;
   }
 
   .section-label {
-    @apply inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest;
+    @apply inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest;
   }
 
   .section-heading {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover;
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 border border-white/10 rounded-xl bg-black/40 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500/30 focus:border-yellow-500 transition-all duration-200;
+    @apply w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all duration-200;
   }
 
   .yellow-glow {
-    box-shadow: 0 0 40px rgb(254, 253, 255);
+    box-shadow: 0 0 40px rgba(234, 179, 8, 0.15);
   }
 
   /* Custom shadows */
-.shadow-yellow-lg {
-  box-shadow: 0 10px 30px -8px rgb(126, 41, 41);
+  .shadow-yellow-lg {
+    box-shadow: 0 10px 30px -8px rgba(234, 179, 8, 0.3);
+  }
+
+  .shadow-yellow-xl {
+    box-shadow: 0 20px 40px -12px rgba(234, 179, 8, 0.4);
+  }
+
+  .hover\:shadow-yellow-lg:hover {
+    box-shadow: 0 15px 35px -8px rgba(234, 179, 8, 0.5);
+  }
 }
 
-.shadow-yellow-xl {
-  box-shadow: 0 20px 40px -12px rgba(234, 179, 8, 0.5);
-}
-
-.hover\:shadow-yellow-lg:hover {
-  box-shadow: 0 15px 35px -8px rgba(234, 179, 8, 0.6);
-}
-}
-
-/* Noise texture overlay */
+/* Noise texture overlay - Light version */
 .noise::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
-/* Animated gradient background - Yellow Theme */
+/* Animated gradient background - White with Yellow */
 .hero-bg {
-  background: radial-gradient(ellipse at 20% 50%, rgba(234, 179, 8, 0.15) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 20%, rgba(202, 138, 4, 0.1) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(234, 179, 8, 0.08) 0%, transparent 50%),
-              #0A0A0A;
+  background: radial-gradient(ellipse at 20% 50%, rgba(234, 179, 8, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(202, 138, 4, 0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(234, 179, 8, 0.04) 0%, transparent 50%),
+              #FFFFFF;
 }
 
-/* Star/dot pattern - Yellow Theme */
+/* Dot pattern - Yellow Theme */
 .dot-pattern {
-  background-image: radial-gradient(circle, rgba(234, 179, 8, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(234, 179, 8, 0.1) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
@@ -163,11 +173,11 @@ body {
   background: linear-gradient(90deg, transparent, #EAB308, transparent);
 }
 
-/* Hero background - Black with Yellow */
+/* Hero background - White with Yellow */
 .hero-bg {
-  background: radial-gradient(ellipse at 20% 30%, rgba(234, 179, 8, 0.08), transparent 50%),
-              radial-gradient(ellipse at 80% 70%, rgba(202, 138, 4, 0.05), transparent 60%),
-              linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 100%);
+  background: radial-gradient(ellipse at 20% 30%, rgba(234, 179, 8, 0.06), transparent 50%),
+              radial-gradient(ellipse at 80% 70%, rgba(202, 138, 4, 0.04), transparent 60%),
+              linear-gradient(135deg, #FAFAFA 0%, #FFFFFF 100%);
 }
 
 /* Yellow gradient text */
@@ -185,15 +195,15 @@ body {
 
 /* Yellow shadows */
 .shadow-yellow-lg {
-  box-shadow: 0 10px 30px -8px rgba(234, 179, 8, 0.4);
+  box-shadow: 0 10px 30px -8px rgba(234, 179, 8, 0.3);
 }
 
 .shadow-yellow-lg:hover {
-  box-shadow: 0 15px 35px -8px rgba(234, 179, 8, 0.6);
+  box-shadow: 0 15px 35px -8px rgba(234, 179, 8, 0.5);
 }
 
 .shadow-yellow-xl {
-  box-shadow: 0 20px 40px -12px rgba(234, 179, 8, 0.5);
+  box-shadow: 0 20px 40px -12px rgba(234, 179, 8, 0.4);
 }
 
 /* 3D Perspective */
@@ -295,4 +305,40 @@ img {
 /* Reduce repaints */
 .fixed {
   transform: translateZ(0);
+}
+
+/* Mobile Responsive Utilities */
+@layer utilities {
+  /* Container padding for all screen sizes */
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Text sizes responsive */
+  .text-responsive-heading {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  .text-responsive-subheading {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+
+  .text-responsive-body {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+
+  /* Responsive grid gaps */
+  .gap-responsive {
+    @apply gap-3 sm:gap-4 md:gap-6 lg:gap-8;
+  }
+
+  /* Responsive padding sections */
+  .section-padding-responsive {
+    @apply py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24;
+  }
+
+  /* Card padding responsive */
+  .card-padding-responsive {
+    @apply p-3 sm:p-4 md:p-5 lg:p-6;
+  }
 }

@@ -20,6 +20,7 @@ export default function HeroSection() {
     loop: true,
     dragFree: false,
     slidesToScroll: 1,
+    containScroll: 'trimSnaps',
     breakpoints: {
       '(min-width: 640px)': { slidesToScroll: 2 },
       '(min-width: 768px)': { slidesToScroll: 2 },
@@ -239,7 +240,7 @@ export default function HeroSection() {
             </div>
 
             {/* ─── COUNSELORS SLIDER ────────────────────────────────────── */}
-            <div className="mt-12 relative">
+            <div className="mt-12 relative w-full max-w-full overflow-hidden">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                   Top Rated Counselors
@@ -265,12 +266,21 @@ export default function HeroSection() {
                   <p className="text-gray-500 text-sm">No counselors available</p>
                 </div>
               ) : (
-                <div className="overflow-hidden" ref={emblaRef}>
+                // FIX: embla's own container needs an explicit width cap so its
+                // internal slide track (which can be 1000px+) never pushes the
+                // page wider than the viewport. `w-full max-w-full` pins this
+                // wrapper to the parent's width regardless of how wide the
+                // flex track inside embla wants to be.
+                <div className="overflow-hidden w-full max-w-full" ref={emblaRef}>
                   <div className="flex gap-5">
                     {counselors.map((c, i) => (
                       <motion.div
                         key={c._id || i}
-                        className="flex-[0_0_50%] sm:flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] min-w-0"
+                        // FIX: mobile now gets a slightly-less-than-full slide
+                        // (85%) instead of a rigid 50%, and every breakpoint
+                        // keeps min-w-0 (critical for flex children not to
+                        // overflow) plus max-w-full as a hard ceiling.
+                        className="flex-[0_0_85%] sm:flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] min-w-0 max-w-full"
                       >
                         <div className="bg-white rounded-2xl p-5 text-center border border-gray-200 hover:border-amber-400 hover:shadow-xl transition-all duration-300 h-full">
                           <Link href={`/counselors/${c._id}`}>

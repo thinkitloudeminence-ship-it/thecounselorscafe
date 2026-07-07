@@ -87,7 +87,7 @@ export default function BlogDetailClient({ slug }: { slug: string }) {
   return (
     <div className="min-h-screen bg-white pt-20">
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm mb-6 inline-block">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm mb-6">
           <ArrowLeft size={16} /> Back to Blog
         </Link>
 
