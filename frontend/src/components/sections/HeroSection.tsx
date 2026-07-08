@@ -32,12 +32,39 @@ export default function HeroSection() {
   const heroRef = useRef(null);
 
   // Auto-slide effect
+  // FIX: the vertical jitter happened because Embla's autoplay
+  // (transform: translateX on the slide track) kept firing while the user
+  // was also scrolling the page. Two competing transforms/repaints at the
+  // same time is what mobile browsers render as a shake. Pausing autoplay
+  // while the page is actively being scrolled — and only resuming ~350ms
+  // after scrolling stops — removes that overlap entirely.
   useEffect(() => {
     if (!emblaApi) return;
+
+    let isPageScrolling = false;
+    let scrollStopTimer: ReturnType<typeof setTimeout>;
+
     const autoplay = setInterval(() => {
-      emblaApi.scrollNext();
+      if (!isPageScrolling) {
+        emblaApi.scrollNext();
+      }
     }, 3000);
-    return () => clearInterval(autoplay);
+
+    const handlePageScroll = () => {
+      isPageScrolling = true;
+      clearTimeout(scrollStopTimer);
+      scrollStopTimer = setTimeout(() => {
+        isPageScrolling = false;
+      }, 350);
+    };
+
+    window.addEventListener("scroll", handlePageScroll, { passive: true });
+
+    return () => {
+      clearInterval(autoplay);
+      clearTimeout(scrollStopTimer);
+      window.removeEventListener("scroll", handlePageScroll);
+    };
   }, [emblaApi]);
 
   useEffect(() => {
@@ -271,15 +298,23 @@ export default function HeroSection() {
                 // page wider than the viewport. `w-full max-w-full` pins this
                 // wrapper to the parent's width regardless of how wide the
                 // flex track inside embla wants to be.
-                <div className="overflow-hidden w-full max-w-full" ref={emblaRef}>
+                <div
+                  className="overflow-hidden w-full max-w-full"
+                  style={{ willChange: "transform" }}
+                  ref={emblaRef}
+                >
                   <div className="flex gap-5">
                     {counselors.map((c, i) => (
-                      <motion.div
+                      // FIX: was a motion.div. Embla already animates this
+                      // whole track with its own transform: translateX() on
+                      // every autoplay tick. Framer Motion promoting each
+                      // slide to its own GPU compositing layer on top of that
+                      // was fighting Embla's transform and causing the visible
+                      // vertical jitter/shake during autoplay. A plain div
+                      // has no competing transform, so the slide just rides
+                      // Embla's track smoothly with zero jitter.
+                      <div
                         key={c._id || i}
-                        // FIX: mobile now gets a slightly-less-than-full slide
-                        // (85%) instead of a rigid 50%, and every breakpoint
-                        // keeps min-w-0 (critical for flex children not to
-                        // overflow) plus max-w-full as a hard ceiling.
                         className="flex-[0_0_85%] sm:flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] min-w-0 max-w-full"
                       >
                         <div className="bg-white rounded-2xl p-5 text-center border border-gray-200 hover:border-amber-400 hover:shadow-xl transition-all duration-300 h-full">
@@ -364,7 +399,7 @@ export default function HeroSection() {
                             </div>
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                 </div>
