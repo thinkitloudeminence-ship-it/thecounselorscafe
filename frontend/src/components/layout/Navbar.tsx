@@ -37,9 +37,6 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        // FIX: w-full + max-w-full on the nav itself is a hard ceiling so it
-        // can never render wider than the viewport, independent of anything
-        // happening elsewhere on the page.
         className={`fixed top-0 left-0 right-0 z-50 w-full max-w-full transition-all duration-500 ${
           scrolled
             ? "bg-black/95 backdrop-blur-xl border-b border-yellow-500/30 shadow-2xl shadow-yellow-500/10"
@@ -48,17 +45,16 @@ export default function Navbar() {
       >
         <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20">
-            {/* Logo — sized up and given a guaranteed minimum so it never
-                looks cramped on small screens */}
+            {/* Logo - EVEN BIGGER */}
             <Link href="/" className="flex items-center justify-center flex-shrink-0">
-              <div className="relative w-16 h-16 sm:w-[72px] sm:h-[72px] md:w-20 md:h-20">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32">
                 <Image
                   src={LogoImage}
                   alt="CounselorsCafe"
                   fill
                   className="object-contain"
                   priority
-                  sizes="(max-width: 640px) 64px, (max-width: 768px) 72px, 80px"
+                  sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 128px"
                 />
               </div>
             </Link>
