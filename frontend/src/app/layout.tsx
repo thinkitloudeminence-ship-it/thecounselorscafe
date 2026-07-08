@@ -113,7 +113,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -123,7 +122,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-NJSNB7CS');`
           }}
         />
-        {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-E79YGEBVTK" />
         <script
           dangerouslySetInnerHTML={{
@@ -134,8 +132,7 @@ gtag('config', 'G-E79YGEBVTK');`
           }}
         />
       </head>
-      <body className="font-body antialiased bg-white text-gray-900" suppressHydrationWarning>
-        {/* Google Tag Manager (noscript) */}
+      <body className="font-body antialiased bg-white text-gray-900 flex flex-col min-h-screen" suppressHydrationWarning>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-NJSNB7CS"
@@ -145,9 +142,8 @@ gtag('config', 'G-E79YGEBVTK');`
           />
         </noscript>
         <JsonLd />
-        {/* <PerformanceOptimizer /> */}
         <Navbar />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <Toaster
           position="top-right"
