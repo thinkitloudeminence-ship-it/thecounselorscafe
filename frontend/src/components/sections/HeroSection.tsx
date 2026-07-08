@@ -2,10 +2,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Star, Award, Users, ChevronRight, MessageCircle, Phone, Video, CheckCircle, Sparkles, Clock, ChevronLeft, Shield, Lock, Zap } from "lucide-react";
+import { Star, Award, Users, ChevronRight, MessageCircle, Phone, Video, CheckCircle, Sparkles, Clock, ChevronLeft, Shield, Lock, Zap, Download, Mail } from "lucide-react";
 import AppModal from "@/components/ui/AppModal";
 import Link from "next/link";
 import useEmblaCarousel from 'embla-carousel-react';
+import EnquiryModal from "../ui/EnquiryModal";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -15,6 +16,9 @@ export default function HeroSection() {
   const [loading, setLoading] = useState(true);
   const [showContactModal, setShowContactModal] = useState(false);
   const [selectedCounselor, setSelectedCounselor] = useState<any>(null);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [showEnquiryModalFromCard, setShowEnquiryModalFromCard] = useState(false);
+  const [selectedCounselorForEnquiry, setSelectedCounselorForEnquiry] = useState<any>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     loop: true,
@@ -32,12 +36,6 @@ export default function HeroSection() {
   const heroRef = useRef(null);
 
   // Auto-slide effect
-  // FIX: the vertical jitter happened because Embla's autoplay
-  // (transform: translateX on the slide track) kept firing while the user
-  // was also scrolling the page. Two competing transforms/repaints at the
-  // same time is what mobile browsers render as a shake. Pausing autoplay
-  // while the page is actively being scrolled — and only resuming ~350ms
-  // after scrolling stops — removes that overlap entirely.
   useEffect(() => {
     if (!emblaApi) return;
 
@@ -73,7 +71,7 @@ export default function HeroSection() {
         setLoading(true);
         const res = await fetch(`${API_URL}/counselors`);
         const data = await res.json();
-        
+
         if (data.success) {
           const sorted = data.data
             .filter((c: any) => c.isActive !== false)
@@ -96,6 +94,11 @@ export default function HeroSection() {
     setShowContactModal(true);
   };
 
+  const handleEnquiryClick = (counselor: any) => {
+    setSelectedCounselorForEnquiry(counselor);
+    setShowEnquiryModalFromCard(true);
+  };
+
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
@@ -116,11 +119,11 @@ export default function HeroSection() {
         {/* Background Glow */}
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-amber-500/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-amber-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/4" />
-        
+
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              
+
               {/* Left Content */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -129,7 +132,6 @@ export default function HeroSection() {
               >
                 {/* Trusted Badge with 24x7 */}
                 <div className="flex flex-wrap items-center gap-2 mb-5">
-                  
                   <div className="inline-flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1.5">
                     <Clock size={12} className="text-green-600" />
                     <span className="text-green-700 text-xs font-medium">24×7 Available</span>
@@ -141,7 +143,7 @@ export default function HeroSection() {
                   <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
                     Can Change Your
                   </span> <br />
-                  Career Direction.
+                  Life.
                 </h1>
 
                 {/* Trust & Security Badges */}
@@ -198,10 +200,10 @@ export default function HeroSection() {
                     href="/counselors"
                     className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 sm:px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 text-sm inline-flex items-center gap-2"
                   >
-                     Find Your Expert <ChevronRight size={16} />
+                    Find Your Expert <ChevronRight size={16} />
                   </Link>
-                  <button 
-                    onClick={() => setAppModal(true)}
+                  <button
+                    onClick={() => setShowEnquiryModal(true)}
                     className="border-2 border-gray-300 text-gray-700 px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-gray-50 hover:border-amber-400 transition-all duration-300 text-sm inline-flex items-center gap-2"
                   >
                     Talk Now <ChevronRight size={16} />
@@ -244,7 +246,7 @@ export default function HeroSection() {
                     priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent" />
-                  
+
                   <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-3 border border-amber-200 shadow-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -293,11 +295,6 @@ export default function HeroSection() {
                   <p className="text-gray-500 text-sm">No counselors available</p>
                 </div>
               ) : (
-                // FIX: embla's own container needs an explicit width cap so its
-                // internal slide track (which can be 1000px+) never pushes the
-                // page wider than the viewport. `w-full max-w-full` pins this
-                // wrapper to the parent's width regardless of how wide the
-                // flex track inside embla wants to be.
                 <div
                   className="overflow-hidden w-full max-w-full"
                   style={{ willChange: "transform" }}
@@ -305,14 +302,6 @@ export default function HeroSection() {
                 >
                   <div className="flex gap-5">
                     {counselors.map((c, i) => (
-                      // FIX: was a motion.div. Embla already animates this
-                      // whole track with its own transform: translateX() on
-                      // every autoplay tick. Framer Motion promoting each
-                      // slide to its own GPU compositing layer on top of that
-                      // was fighting Embla's transform and causing the visible
-                      // vertical jitter/shake during autoplay. A plain div
-                      // has no competing transform, so the slide just rides
-                      // Embla's track smoothly with zero jitter.
                       <div
                         key={c._id || i}
                         className="flex-[0_0_85%] sm:flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] min-w-0 max-w-full"
@@ -357,46 +346,55 @@ export default function HeroSection() {
                             </div>
                           </Link>
 
+                          {/* ✅ Chat & Call Buttons - Flex Row */}
                           <div className="mt-4 pt-3 border-t border-gray-200">
-                            <div className="flex flex-col gap-3">
+                            <div className="flex gap-3">
+                              {/* Chat Button */}
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
                                   handleContactClick(c, 'chat');
                                 }}
-                                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-between px-4 shadow-md hover:shadow-lg"
+                                className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex flex-col items-center justify-center shadow-md hover:shadow-lg"
                               >
-                                <div className="flex items-center gap-2.5">
-                                  <MessageCircle size={18} />
+                                <div className="flex items-center gap-2">
+                                  <MessageCircle size={16} />
                                   <span className="text-sm font-medium">Chat</span>
                                 </div>
-                                <div className="flex flex-col items-end">
-                                  <span className="text-sm font-bold bg-white/25 px-3 py-0.5 rounded-full">
-                                    ₹{c.pricePerChat || 49}
-                                  </span>
-                                  <span className="text-[10px] text-white/80 font-medium">per chat</span>
-                                </div>
+                                <span className="text-[10px] text-white/80 font-medium">
+                                  ₹{c.pricePerChat || 49}/chat
+                                </span>
                               </button>
 
+                              {/* Call Button */}
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
                                   handleContactClick(c, 'call');
                                 }}
-                                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-between px-4 shadow-md hover:shadow-lg"
+                                className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex flex-col items-center justify-center shadow-md hover:shadow-lg"
                               >
-                                <div className="flex items-center gap-2.5">
-                                  <Phone size={18} />
+                                <div className="flex items-center gap-2">
+                                  <Phone size={16} />
                                   <span className="text-sm font-medium">Call</span>
                                 </div>
-                                <div className="flex flex-col items-end">
-                                  <span className="text-sm font-bold bg-white/25 px-3 py-0.5 rounded-full">
-                                    ₹{c.pricePerMinute || 99}
-                                  </span>
-                                  <span className="text-[10px] text-white/80 font-medium">per minute</span>
-                                </div>
+                                <span className="text-[10px] text-white/80 font-medium">
+                                  ₹{c.pricePerMinute || 99}/min
+                                </span>
                               </button>
                             </div>
+
+                            {/* ✅ Enquiry Button - Below Chat/Call */}
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleEnquiryClick(c);
+                              }}
+                              className="w-full mt-3 bg-white border-2 border-amber-500 hover:bg-amber-50 text-amber-600 font-semibold py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm"
+                            >
+                              <Mail size={16} />
+                              Enquire Now
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -411,15 +409,15 @@ export default function HeroSection() {
               <div className="grid grid-cols-3 gap-4 bg-gray-50 rounded-2xl p-6 border border-gray-200">
                 <div className="text-center">
                   <p className="text-amber-500 text-2xl sm:text-3xl font-bold">10K+</p>
-                  <p className="text-gray-500 text-xs sm:text-sm">STUDENTS GUIDED</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Live GUIDED</p>
                 </div>
                 <div className="text-center border-l border-r border-gray-200">
                   <p className="text-amber-500 text-2xl sm:text-3xl font-bold">500+</p>
                   <p className="text-gray-500 text-xs sm:text-sm">EXPERT COUNSELORS</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-amber-500 text-2xl sm:text-3xl font-bold">4.9★</p>
-                  <p className="text-gray-500 text-xs sm:text-sm">AVG RATING</p>
+                  <p className="text-amber-500 text-2xl sm:text-3xl font-bold">4.9/5★</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Client RATING</p>
                 </div>
               </div>
             </div>
@@ -456,13 +454,29 @@ export default function HeroSection() {
                   ₹{selectedCounselor.pricePerMinute || 99}/min • {selectedCounselor.experience || 0}+ years exp
                 </p>
               </div>
-              <button
-                onClick={() => setShowContactModal(false)}
-                className="mt-6 w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25"
-              >
-                <MessageCircle size={18} />
-                Open in App
-              </button>
+              
+              {/* ✅ Download App + Enquiry Button - Flex Row */}
+              <div className="flex gap-3 mt-4">
+                <button
+                  onClick={() => setShowContactModal(false)}
+                  className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25"
+                >
+                  <Download size={18} />
+                  Open in App
+                </button>
+                <button
+                  onClick={() => {
+                    setShowContactModal(false);
+                    setSelectedCounselorForEnquiry(selectedCounselor);
+                    setShowEnquiryModalFromCard(true);
+                  }}
+                  className="flex-1 bg-white border-2 border-amber-500 hover:bg-amber-50 text-amber-600 font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                >
+                  <Mail size={18} />
+                  Enquire
+                </button>
+              </div>
+              
               <p className="text-gray-500 text-xs mt-3">
                 Available on iOS & Android
               </p>
@@ -478,6 +492,25 @@ export default function HeroSection() {
       )}
 
       <AppModal isOpen={appModal} onClose={() => setAppModal(false)} />
+      
+      {/* Enquiry Modal - Hero Talk Now */}
+      <EnquiryModal
+        isOpen={showEnquiryModal}
+        onClose={() => setShowEnquiryModal(false)}
+        defaultSubject="Talk Now - Career Guidance"
+        defaultMessage="I would like to talk to an expert about career guidance."
+      />
+
+      {/* Enquiry Modal - From Counselor Card */}
+      <EnquiryModal
+        isOpen={showEnquiryModalFromCard}
+        onClose={() => {
+          setShowEnquiryModalFromCard(false);
+          setSelectedCounselorForEnquiry(null);
+        }}
+        defaultSubject={`Connect with ${selectedCounselorForEnquiry?.name || 'Counselor'}`}
+        defaultMessage={`I would like to connect with ${selectedCounselorForEnquiry?.name || 'a counselor'} for career guidance.`}
+      />
     </>
   );
 }

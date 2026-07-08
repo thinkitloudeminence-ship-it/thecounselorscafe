@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Sparkles, Star, Users, Award, Clock, ChevronLeft, ChevronRight } from "lucide-react";
+import EnquiryModal from "@/components/ui/EnquiryModal";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -25,7 +26,13 @@ interface Counselor {
   slug?: string;
 }
 
-function CounselorCardComponent({ counselor }: { counselor: Counselor }) {
+function CounselorCardComponent({
+  counselor,
+  onConnect,
+}: {
+  counselor: Counselor;
+  onConnect: (counselor: Counselor) => void;
+}) {
   return (
     <Link href={`/counselors/${counselor.slug || counselor._id}`} className="group relative block h-full">
       <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl blur opacity-0 group-hover:opacity-30 transition duration-500" />
@@ -137,6 +144,20 @@ function CounselorCardComponent({ counselor }: { counselor: Counselor }) {
           </div>
         </div>
 
+        {/* MERGED: Connect button — opens the enquiry modal instead of
+            navigating, so it needs to stop the parent <Link>'s navigation
+            with preventDefault + stopPropagation before calling onConnect. */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onConnect(counselor);
+          }}
+          className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 mb-2"
+        >
+          Connect with {counselor.name?.split(" ")[0]}
+        </button>
+
         <div className="w-full py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300 text-center">
           View Profile
         </div>
@@ -150,6 +171,16 @@ export default function FeaturedCounselors() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
+
+  // MERGED: enquiry modal state (moved inside the component — it can't live
+  // at module top-level, hooks only work inside a component/hook body)
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedCounselor, setSelectedCounselor] = useState<Counselor | null>(null);
+
+  const handleConnect = (counselor: Counselor) => {
+    setSelectedCounselor(counselor);
+    setShowEnquiryModal(true);
+  };
 
   useEffect(() => {
     const fetchCounselors = async () => {
@@ -313,7 +344,7 @@ export default function FeaturedCounselors() {
                 className="flex-shrink-0" 
                 style={{ width: `calc(${100 / visibleCount}% - 16px)` }}
               >
-                <CounselorCardComponent counselor={counselor} />
+                <CounselorCardComponent counselor={counselor} onConnect={handleConnect} />
               </div>
             ))}
           </div>
@@ -333,6 +364,17 @@ export default function FeaturedCounselors() {
           </div>
         )}
       </div>
+
+      {/* MERGED: enquiry modal, wired to the Connect button on each card */}
+      <EnquiryModal
+        isOpen={showEnquiryModal}
+        onClose={() => {
+          setShowEnquiryModal(false);
+          setSelectedCounselor(null);
+        }}
+        defaultSubject={`Connect with ${selectedCounselor?.name || 'Counselor'}`}
+        defaultMessage={`I would like to connect with ${selectedCounselor?.name || 'a counselor'} for career guidance.`}
+      />
     </section>
   );
 }

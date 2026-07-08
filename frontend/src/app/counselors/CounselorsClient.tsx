@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Star, MapPin, ArrowRight, Search, Sparkles, Users, Clock, MessageCircle, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import EnquiryModal from "../../components/ui/EnquiryModal"; // adjust the import path to match your project structure
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -12,6 +13,10 @@ export default function CounselorsClient() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState("");
+
+  // Enquiry modal state
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedCounselor, setSelectedCounselor] = useState<any>(null);
 
   useEffect(() => {
     const fetchCounselors = async () => {
@@ -187,12 +192,34 @@ export default function CounselorsClient() {
                       View Profile <ArrowRight size={12} />
                     </Link>
                   </div>
+
+                  {/* Connect Now button */}
+                  <button
+                    onClick={() => {
+                      setSelectedCounselor(counselor);
+                      setShowEnquiryModal(true);
+                    }}
+                    className="w-full mt-2 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
+                  >
+                    Connect Now
+                  </button>
                 </div>
               </motion.div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        isOpen={showEnquiryModal}
+        onClose={() => {
+          setShowEnquiryModal(false);
+          setSelectedCounselor(null);
+        }}
+        defaultSubject={`Connect with ${selectedCounselor?.name || 'Counselor'}`}
+        defaultMessage={`I would like to connect with ${selectedCounselor?.name || 'a counselor'} for career guidance.`}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getContacts, updateContactStatus } from "../lib/api";
 import toast from "react-hot-toast";
-import { Mail, Phone, Clock, ChevronDown, ChevronUp, Search, Filter, Eye, CheckCircle, XCircle, Reply, Trash2 } from "lucide-react";
+import { Mail, Phone, Clock, ChevronDown, ChevronUp, Search, Filter, Eye, CheckCircle, XCircle, Reply, Trash2, AlertTriangle } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 
 const STATUS_TABS = [
@@ -157,11 +157,11 @@ export default function ContactsPage() {
           <table style={s.table}>
             <thead>
               <tr style={s.theadRow}>
-                <th style={{ ...s.th, width: "30%" }}>Name / Subject</th>
-                <th style={{ ...s.th, width: "25%" }}>Contact</th>
-                <th style={{ ...s.th, width: "15%" }}>Status</th>
+                <th style={{ ...s.th, width: "28%" }}>Name / Subject</th>
+                <th style={{ ...s.th, width: "23%" }}>Contact</th>
+                <th style={{ ...s.th, width: "14%" }}>Status</th>
                 <th style={{ ...s.th, width: "15%" }}>Received</th>
-                <th style={{ ...s.th, width: "15%", textAlign: "center" }}>Action</th>
+                <th style={{ ...s.th, width: "20%", textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -172,7 +172,23 @@ export default function ContactsPage() {
                   onClick={() => openDetail(contact)}
                 >
                   <td style={s.td}>
-                    <div style={s.tdName}>{contact.name}</div>
+                    <div style={s.tdName}>
+                      {contact.name}
+                      {/* ✅ DUPLICATE WARNING - Added here */}
+                      {contact.duplicate && (
+                        <span style={{ 
+                          color: "#ef4444", 
+                          fontSize: 10, 
+                          marginLeft: 8,
+                          background: "rgba(239,68,68,0.1)",
+                          padding: "1px 6px",
+                          borderRadius: 4,
+                          fontWeight: 600,
+                        }}>
+                          <AlertTriangle size={10} style={{ display: "inline", marginRight: 2 }} /> Duplicate
+                        </span>
+                      )}
+                    </div>
                     <div style={s.tdSubject}>{contact.subject}</div>
                   </td>
                   <td style={s.td}>
@@ -222,7 +238,23 @@ export default function ContactsPage() {
               <div style={s.modalTitle}>
                 <span style={s.modalAvatar}>{selectedContact.name[0].toUpperCase()}</span>
                 <div>
-                  <div style={s.modalName}>{selectedContact.name}</div>
+                  <div style={s.modalName}>
+                    {selectedContact.name}
+                    {/* ✅ DUPLICATE WARNING - Also in modal */}
+                    {selectedContact.duplicate && (
+                      <span style={{ 
+                        color: "#ef4444", 
+                        fontSize: 11, 
+                        marginLeft: 8,
+                        background: "rgba(239,68,68,0.1)",
+                        padding: "1px 8px",
+                        borderRadius: 4,
+                        fontWeight: 600,
+                      }}>
+                        <AlertTriangle size={12} style={{ display: "inline", marginRight: 2 }} /> Duplicate
+                      </span>
+                    )}
+                  </div>
                   <div style={s.modalStatus}>
                     <span style={{
                       ...s.modalStatusDot,
@@ -364,7 +396,15 @@ const s = {
   },
   tbodyRowNew: { background: "rgba(245,197,24,0.03)" },
   td: { padding: "12px 16px", fontSize: 13, verticalAlign: "middle" },
-  tdName: { fontWeight: 600, color: "#f0f0f0", marginBottom: 2 },
+  tdName: { 
+    fontWeight: 600, 
+    color: "#f0f0f0", 
+    marginBottom: 2,
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 4,
+  },
   tdSubject: { fontSize: 12, color: "#555", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200 },
   tdEmail: { fontSize: 12, color: "#888" },
   tdPhone: { fontSize: 11, color: "#555" },
@@ -439,7 +479,15 @@ const s = {
     alignItems: "center",
     justifyContent: "center",
   },
-  modalName: { fontWeight: 700, fontSize: 15, color: "#f0f0f0" },
+  modalName: { 
+    fontWeight: 700, 
+    fontSize: 15, 
+    color: "#f0f0f0",
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 4,
+  },
   modalStatus: { display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "#555" },
   modalStatusDot: { width: 6, height: 6, borderRadius: "50%", display: "inline-block" },
   modalClose: {

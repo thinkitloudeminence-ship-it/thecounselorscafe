@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Star, Users, Calendar, Phone, MessageCircle, Clock } from "lucide-react";
+import EnquiryModal from "@/components/ui/EnquiryModal";
 
 export default function CounselorDetailClient({ id }: { id: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [counselor, setCounselor] = useState<any>(null);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -195,15 +197,24 @@ export default function CounselorDetailClient({ id }: { id: string }) {
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <button
-              onClick={() => router.push("/download-app")}
+              onClick={() => setShowEnquiryModal(true)}
               className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
             >
-              Download App to Book Session
+              <MessageCircle size={18} />
+              Connect with {counselor.name?.split(" ")[0]}
             </button>
             <p className="text-center text-xs text-gray-400 mt-3">🔒 Secure • Verified Counselor</p>
           </div>
         </div>
       </div>
+
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        isOpen={showEnquiryModal}
+        onClose={() => setShowEnquiryModal(false)}
+        defaultSubject={`Connect with ${counselor.name}`}
+        defaultMessage={`I would like to connect with ${counselor.name} for career guidance.`}
+      />
     </div>
   );
 }
