@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getContacts, updateContactStatus } from "../lib/api";
 import toast from "react-hot-toast";
-import { Mail, Phone, Clock, ChevronDown, ChevronUp, Search, Filter, Eye, CheckCircle, XCircle, Reply, Trash2, AlertTriangle } from "lucide-react";
+import { Mail, Phone, Clock, Search, Eye, Reply, AlertTriangle } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 
 const STATUS_TABS = [
@@ -81,14 +81,12 @@ export default function ContactsPage() {
     setNoteInput("");
   };
 
-  // Filter contacts by search
   const filteredContacts = contacts.filter((c) =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Update tab counts
   const newCount = contacts.filter((c) => c.status === "new").length;
   const tabsWithCounts = STATUS_TABS.map((tab) => ({
     ...tab,
@@ -97,7 +95,6 @@ export default function ContactsPage() {
 
   return (
     <div style={s.container}>
-      {/* Header */}
       <div style={s.header}>
         <div>
           <h1 style={s.h1}>📬 Contact Messages</h1>
@@ -107,7 +104,6 @@ export default function ContactsPage() {
         </div>
       </div>
 
-      {/* Search + Filter Bar */}
       <div style={s.filterBar}>
         <div style={s.searchWrapper}>
           <Search size={16} color="#555" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
@@ -121,7 +117,6 @@ export default function ContactsPage() {
         </div>
       </div>
 
-      {/* Status Tabs */}
       <div style={s.tabsWrapper}>
         <div style={s.tabs}>
           {tabsWithCounts.map((t) => (
@@ -141,7 +136,6 @@ export default function ContactsPage() {
         </div>
       </div>
 
-      {/* Table */}
       <div style={s.tableWrapper}>
         {loading ? (
           <div style={s.loading}>Loading messages…</div>
@@ -174,7 +168,6 @@ export default function ContactsPage() {
                   <td style={s.td}>
                     <div style={s.tdName}>
                       {contact.name}
-                      {/* ✅ DUPLICATE WARNING - Added here */}
                       {contact.duplicate && (
                         <span style={{ 
                           color: "#ef4444", 
@@ -229,18 +222,15 @@ export default function ContactsPage() {
         )}
       </div>
 
-      {/* Detail Modal */}
       {showDetailModal && selectedContact && (
         <div style={s.modalOverlay} onClick={closeDetail}>
           <div style={s.modal} onClick={(e) => e.stopPropagation()}>
-            {/* Modal Header */}
             <div style={s.modalHeader}>
               <div style={s.modalTitle}>
                 <span style={s.modalAvatar}>{selectedContact.name[0].toUpperCase()}</span>
                 <div>
                   <div style={s.modalName}>
                     {selectedContact.name}
-                    {/* ✅ DUPLICATE WARNING - Also in modal */}
                     {selectedContact.duplicate && (
                       <span style={{ 
                         color: "#ef4444", 
@@ -267,9 +257,7 @@ export default function ContactsPage() {
               <button style={s.modalClose} onClick={closeDetail}>✕</button>
             </div>
 
-            {/* Modal Body */}
             <div style={s.modalBody}>
-              {/* Contact Info */}
               <div style={s.modalInfoGrid}>
                 <div style={s.modalInfoItem}><Mail size={14} /> {selectedContact.email}</div>
                 {selectedContact.phone && (
@@ -278,13 +266,9 @@ export default function ContactsPage() {
                 <div style={s.modalInfoItem}><Clock size={14} /> {format(new Date(selectedContact.createdAt), "dd MMM yyyy, hh:mm a")}</div>
               </div>
 
-              {/* Subject */}
               <div style={s.modalSubject}>📌 {selectedContact.subject}</div>
-
-              {/* Message */}
               <div style={s.modalMessage}>{selectedContact.message}</div>
 
-              {/* Admin Note */}
               <div style={s.noteSection}>
                 <label style={s.noteLabel}>📝 Admin Note (private)</label>
                 <textarea
@@ -299,7 +283,6 @@ export default function ContactsPage() {
                 </button>
               </div>
 
-              {/* Actions */}
               <div style={s.modalActions}>
                 <a
                   href={`mailto:${selectedContact.email}?subject=Re: ${selectedContact.subject}`}
@@ -392,7 +375,6 @@ const s = {
     borderBottom: "1px solid #1a1a1a",
     cursor: "pointer",
     transition: "background 0.15s",
-    ":hover": { background: "#1a1a1a" },
   },
   tbodyRowNew: { background: "rgba(245,197,24,0.03)" },
   td: { padding: "12px 16px", fontSize: 13, verticalAlign: "middle" },
@@ -437,7 +419,6 @@ const s = {
   loading: { textAlign: "center", padding: 60, color: "#555" },
   empty: { textAlign: "center", padding: "60px 0" },
 
-  // Modal
   modalOverlay: {
     position: "fixed",
     inset: 0,

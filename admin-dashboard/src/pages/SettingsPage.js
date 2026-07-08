@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { changePassword } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
-import { 
-  Lock, User, Globe, Bell, Moon, Sun, Shield, 
-  Palette, Eye, EyeOff, CheckCircle, AlertCircle,
-  LogOut, Smartphone, Mail, Save
-} from "lucide-react";
+import { Lock, User, Bell, Palette, Eye, EyeOff, Shield, AlertCircle, LogOut, Smartphone, Save, CheckCircle } from "lucide-react";
 
 export default function SettingsPage() {
   const { admin, logout } = useAuth();
@@ -20,7 +16,6 @@ export default function SettingsPage() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Settings state
   const [settings, setSettings] = useState({
     emailNotifications: true,
     pushNotifications: true,
@@ -63,7 +58,6 @@ export default function SettingsPage() {
     <div style={s.container}>
       <h1 style={s.h1}>⚙️ Settings</h1>
 
-      {/* Profile Section */}
       <div style={s.card}>
         <div style={s.cardHeader}>
           <User size={18} color="#f5c518" />
@@ -87,7 +81,6 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Change Password */}
       <div style={s.card}>
         <div style={s.cardHeader}>
           <Lock size={18} color="#f5c518" />
@@ -95,7 +88,6 @@ export default function SettingsPage() {
         </div>
         
         <form onSubmit={handlePasswordChange}>
-          {/* Current Password */}
           <div style={s.field}>
             <label style={s.label}>Current Password</label>
             <div style={s.inputWrapper}>
@@ -117,7 +109,6 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* New Password */}
           <div style={s.field}>
             <label style={s.label}>New Password</label>
             <div style={s.inputWrapper}>
@@ -140,7 +131,6 @@ export default function SettingsPage() {
             <div style={s.hint}>Password must be at least 6 characters</div>
           </div>
 
-          {/* Confirm Password */}
           <div style={s.field}>
             <label style={s.label}>Confirm New Password</label>
             <div style={s.inputWrapper}>
@@ -178,7 +168,6 @@ export default function SettingsPage() {
         </form>
       </div>
 
-      {/* Preferences */}
       <div style={s.card}>
         <div style={s.cardHeader}>
           <Palette size={18} color="#f5c518" />
@@ -252,7 +241,6 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Danger Zone */}
       <div style={s.dangerCard}>
         <div style={s.cardHeader}>
           <AlertCircle size={18} color="#ef4444" />
@@ -268,7 +256,6 @@ export default function SettingsPage() {
         </button>
       </div>
 
-      {/* Version Info */}
       <div style={s.versionInfo}>
         <span>Counselors Cafe Admin v1.0.0</span>
         <span style={s.versionDot}>•</span>
@@ -283,17 +270,8 @@ export default function SettingsPage() {
 
 const s = {
   container: { maxWidth: 680 },
-  
   h1: { fontSize: 24, fontWeight: 800, color: "#f0f0f0", marginBottom: 24 },
-  
-  card: { 
-    background: "#111", 
-    border: "1px solid #1e1e1e", 
-    borderRadius: 14, 
-    padding: 22, 
-    marginBottom: 16 
-  },
-  
+  card: { background: "#111", border: "1px solid #1e1e1e", borderRadius: 14, padding: 22, marginBottom: 16 },
   dangerCard: {
     background: "rgba(239,68,68,0.05)",
     border: "1px solid rgba(239,68,68,0.2)",
@@ -301,27 +279,9 @@ const s = {
     padding: 22,
     marginBottom: 16,
   },
-  
-  cardHeader: { 
-    display: "flex", 
-    alignItems: "center", 
-    gap: 10, 
-    marginBottom: 18 
-  },
-  
-  cardTitle: { 
-    fontSize: 15, 
-    fontWeight: 700, 
-    color: "#f0f0f0" 
-  },
-  
-  // Profile
-  profileRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: 16,
-  },
-  
+  cardHeader: { display: "flex", alignItems: "center", gap: 10, marginBottom: 18 },
+  cardTitle: { fontSize: 15, fontWeight: 700, color: "#f0f0f0" },
+  profileRow: { display: "flex", alignItems: "center", gap: 16 },
   profileAvatar: {
     width: 56,
     height: 56,
@@ -335,195 +295,33 @@ const s = {
     justifyContent: "center",
     flexShrink: 0,
   },
-  
   profileInfo: { flex: 1 },
   profileName: { fontSize: 16, fontWeight: 700, color: "#f0f0f0" },
   profileEmail: { fontSize: 13, color: "#555", marginTop: 2 },
-  
-  roleBadge: { 
-    fontSize: 11, 
-    fontWeight: 600, 
-    borderRadius: 6, 
-    padding: "2px 10px",
-    display: "inline-block",
-    marginTop: 4,
-  },
-  superBadge: { 
-    color: "#f5c518", 
-    background: "rgba(245,197,24,0.1)" 
-  },
-  editorBadge: { 
-    color: "#3b82f6", 
-    background: "rgba(59,130,246,0.1)" 
-  },
-  
-  // Password
+  roleBadge: { fontSize: 11, fontWeight: 600, borderRadius: 6, padding: "2px 10px", display: "inline-block", marginTop: 4 },
+  superBadge: { color: "#f5c518", background: "rgba(245,197,24,0.1)" },
+  editorBadge: { color: "#3b82f6", background: "rgba(59,130,246,0.1)" },
   field: { marginBottom: 16 },
-  label: { 
-    display: "block", 
-    fontSize: 12, 
-    fontWeight: 600, 
-    color: "#888", 
-    marginBottom: 6 
-  },
-  
-  inputWrapper: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-  },
-  
-  input: { 
-    width: "100%", 
-    padding: "10px 44px 10px 14px", 
-    background: "#1a1a1a", 
-    border: "1px solid #2a2a2a", 
-    borderRadius: 10, 
-    color: "#f0f0f0", 
-    fontSize: 13,
-    outline: "none",
-    transition: "border-color 0.2s",
-    ":focus": { borderColor: "#f5c518" },
-  },
-  
-  eyeBtn: {
-    position: "absolute",
-    right: 12,
-    background: "none",
-    border: "none",
-    color: "#555",
-    cursor: "pointer",
-    padding: 4,
-  },
-  
-  hint: {
-    fontSize: 11,
-    color: "#555",
-    marginTop: 4,
-  },
-  
-  saveBtn: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 8,
-    padding: "10px 24px",
-    background: "#f5c518",
-    border: "none",
-    borderRadius: 10,
-    color: "#0a0a0a",
-    fontWeight: 700,
-    fontSize: 14,
-    cursor: "pointer",
-    transition: "opacity 0.15s",
-    ":disabled": { opacity: 0.5, cursor: "not-allowed" },
-  },
-  
-  spinner: {
-    width: 16,
-    height: 16,
-    border: "2px solid rgba(10,10,10,0.2)",
-    borderTop: "2px solid #0a0a0a",
-    borderRadius: "50%",
-    animation: "spin 0.8s linear infinite",
-  },
-  
-  // Settings Toggle
-  settingItem: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "12px 0",
-    borderBottom: "1px solid #1a1a1a",
-  },
-  
-  settingLeft: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-  },
-  
-  settingLabel: {
-    fontWeight: 600,
-    fontSize: 14,
-    color: "#f0f0f0",
-  },
-  
-  settingDesc: {
-    fontSize: 12,
-    color: "#555",
-    marginTop: 2,
-  },
-  
-  toggleBtn: {
-    width: 48,
-    height: 28,
-    borderRadius: 14,
-    border: "none",
-    cursor: "pointer",
-    transition: "background 0.3s",
-    position: "relative",
-    flexShrink: 0,
-  },
-  
+  label: { display: "block", fontSize: 12, fontWeight: 600, color: "#888", marginBottom: 6 },
+  inputWrapper: { position: "relative", display: "flex", alignItems: "center" },
+  input: { width: "100%", padding: "10px 44px 10px 14px", background: "#1a1a1a", border: "1px solid #2a2a2a", borderRadius: 10, color: "#f0f0f0", fontSize: 13, outline: "none", transition: "border-color 0.2s" },
+  eyeBtn: { position: "absolute", right: 12, background: "none", border: "none", color: "#555", cursor: "pointer", padding: 4 },
+  hint: { fontSize: 11, color: "#555", marginTop: 4 },
+  saveBtn: { display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 24px", background: "#f5c518", border: "none", borderRadius: 10, color: "#0a0a0a", fontWeight: 700, fontSize: 14, cursor: "pointer", transition: "opacity 0.15s" },
+  spinner: { width: 16, height: 16, border: "2px solid rgba(10,10,10,0.2)", borderTop: "2px solid #0a0a0a", borderRadius: "50%", animation: "spin 0.8s linear infinite" },
+  settingItem: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid #1a1a1a" },
+  settingLeft: { display: "flex", alignItems: "center", gap: 12 },
+  settingLabel: { fontWeight: 600, fontSize: 14, color: "#f0f0f0" },
+  settingDesc: { fontSize: 12, color: "#555", marginTop: 2 },
+  toggleBtn: { width: 48, height: 28, borderRadius: 14, border: "none", cursor: "pointer", transition: "background 0.3s", position: "relative", flexShrink: 0 },
   toggleOn: { background: "#f5c518" },
   toggleOff: { background: "#2a2a2a" },
-  
-  toggleDot: {
-    position: "absolute",
-    top: 3,
-    width: 22,
-    height: 22,
-    borderRadius: "50%",
-    background: "#fff",
-    transition: "transform 0.3s",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-  },
-  
+  toggleDot: { position: "absolute", top: 3, width: 22, height: 22, borderRadius: "50%", background: "#fff", transition: "transform 0.3s", boxShadow: "0 1px 4px rgba(0,0,0,0.2)" },
   toggleDotOn: { transform: "translateX(20px)" },
   toggleDotOff: { transform: "translateX(3px)" },
-  
-  // Danger Zone
-  dangerText: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    color: "#888",
-    fontSize: 13,
-    marginBottom: 14,
-  },
-  
-  dangerBtn: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 8,
-    padding: "8px 18px",
-    background: "rgba(239,68,68,0.1)",
-    border: "1px solid rgba(239,68,68,0.3)",
-    borderRadius: 8,
-    color: "#ef4444",
-    fontWeight: 600,
-    fontSize: 13,
-    cursor: "pointer",
-    transition: "background 0.15s",
-  },
-  
-  // Version
-  versionInfo: {
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    justifyContent: "center",
-    padding: "16px 0",
-    fontSize: 12,
-    color: "#555",
-  },
-  
+  dangerText: { display: "flex", alignItems: "center", gap: 10, color: "#888", fontSize: 13, marginBottom: 14 },
+  dangerBtn: { display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 18px", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 8, color: "#ef4444", fontWeight: 600, fontSize: 13, cursor: "pointer", transition: "background 0.15s" },
+  versionInfo: { display: "flex", alignItems: "center", gap: 8, justifyContent: "center", padding: "16px 0", fontSize: 12, color: "#555" },
   versionDot: { color: "#2a2a2a" },
-  
-  versionStatus: {
-    display: "flex",
-    alignItems: "center",
-    gap: 4,
-    color: "#22c55e",
-  },
+  versionStatus: { display: "flex", alignItems: "center", gap: 4, color: "#22c55e" },
 };
