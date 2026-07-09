@@ -28,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${baseUrl}/services`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'daily',
       priority: 0.9,
     },
     {
@@ -54,7 +54,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     blogRoutes = blogs.map((blog: any) => ({
       url: `${baseUrl}/blog/${blog.slug}`,
       lastModified: new Date(blog.updatedAt || blog.createdAt || Date.now()),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'daily' as const,
       priority: 0.7,
     }))
   } catch (error) {
@@ -71,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     counselorRoutes = activeCounselors.map((counselor: any) => ({
       url: `${baseUrl}/counselors/${counselor.slug || counselor._id}`,
       lastModified: new Date(counselor.updatedAt || counselor.createdAt || Date.now()),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'daily' as const,
       priority: 0.8,
     }))
   } catch (error) {

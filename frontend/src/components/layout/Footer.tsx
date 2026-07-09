@@ -39,7 +39,7 @@ export default function Footer() {
               <div className="relative w-40 h-16 md:w-48 md:h-20 mx-auto lg:mx-0">
                 <Image
                   src={LogoImage}
-                  alt="CounselorsCafe"
+                  alt="CounselorsCafe" 
                   fill
                   className="object-contain"
                   priority
