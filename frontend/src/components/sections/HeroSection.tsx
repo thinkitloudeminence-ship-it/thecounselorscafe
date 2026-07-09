@@ -115,7 +115,17 @@ export default function HeroSection() {
 
   return (
     <>
-      <section ref={heroRef} className="min-h-screen bg-white pt-20 overflow-hidden">
+      {/* FIX: added `relative` here. Without it, the two absolutely-positioned
+          "Background Glow" divs below (absolute bottom-0 / absolute top-0)
+          had no positioned ancestor to anchor to inside this section, so they
+          fell back to being positioned against `body` instead — which meant
+          the bottom glow's translate-y-1/2 pushed it thousands of pixels down
+          the page, well past the footer, creating a large phantom scrollable
+          area below the footer. Making the section `relative` (it already
+          has overflow-hidden) anchors both glow divs to the section itself,
+          so anything that spills past the section edge gets clipped instead
+          of extending the whole page's height. */}
+      <section ref={heroRef} className="relative min-h-screen bg-white pt-20 overflow-hidden">
         {/* Background Glow */}
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-amber-500/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-amber-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/4" />
