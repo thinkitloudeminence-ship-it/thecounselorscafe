@@ -215,9 +215,7 @@ export default function Footer() {
               Refund
             </Link>
           </div>
-          {/* <p className="flex items-center gap-1 text-gray-500">
-            Made with <span className="text-red-500 animate-pulse">♥</span> for Indian students
-          </p> */}
+          
         </div>
       </div>
     </footer>
