@@ -22,7 +22,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-black border-t border-white/5 text-gray-300 w-full flex-shrink-0">
+    <footer className="bg-black border-t border-white/5 text-gray-300 w-full flex-shrink-0 relative z-10">
       <div className="container mx-auto px-4 md:px-6 py-8 md:py-12">
         
         {/* Row 1: Logo + Quick Links + Map */}
@@ -31,12 +31,16 @@ export default function Footer() {
           {/* Column 1: Logo + Description */}
           <div className="text-center lg:text-left lg:col-span-1">
             <Link href="/" className="inline-block mb-3">
-              <div className="relative w-28 h-28 md:w-32 md:h-32 mx-auto lg:mx-0">
+              {/* FIX: was a 128x128 square box with a wide (~2.5:1) logo
+                  forced into it via object-contain — that mismatch made
+                  Next Image letterbox the image, leaving big blank strips
+                  above/below inside the box. Sizing the box to the logo's
+                  actual aspect ratio removes the letterbox gap entirely. */}
+              <div className="relative w-40 h-16 md:w-48 md:h-20 mx-auto lg:mx-0">
                 <Image
                   src={LogoImage}
                   alt="CounselorsCafe"
-                  width={128}
-                  height={128}
+                  fill
                   className="object-contain"
                   priority
                 />
@@ -129,7 +133,7 @@ export default function Footer() {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.87654321!2d75.857!3d22.719!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd0b95b36ab7%3A0x0!2zMjbCsDQzJzA4LjQiTiA3NcKwNTEnMjUuMiJF!5e0!3m2!1sen!2sin!4v1699781234567"
                   width="100%"
                   height="100%"
-                  style={{ border: 0 }}
+                  style={{ border: 0, pointerEvents: "none" }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -151,16 +155,23 @@ export default function Footer() {
         {/* Row 2: Social Links + Stats */}
         <div className="py-4 border-b border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <span className="text-gray-500 text-[10px] font-medium">Follow us:</span>
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 text-[10px] font-medium mr-1">Follow us:</span>
+              {/* FIX: each icon-only link was only a 16px tap target with
+                  nothing establishing its own stacking context — on mobile
+                  that's both too small to reliably tap and, combined with
+                  the min-h-screen scroll-jump bug, easy to miss entirely.
+                  Wrapping in a padded, relatively-positioned circle gives a
+                  real ~40px touch target and guarantees it sits above
+                  anything else. */}
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-yellow-400 transition-colors duration-300"
                   aria-label={social.label}
+                  className="relative z-10 flex items-center justify-center w-9 h-9 rounded-full text-gray-500 hover:text-yellow-400 hover:bg-white/5 transition-colors duration-300 cursor-pointer"
                 >
                   <social.icon size={16} />
                 </a>

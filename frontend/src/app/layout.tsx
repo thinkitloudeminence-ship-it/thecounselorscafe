@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
-import PerformanceOptimizer from "@/components/PerformanceOptimizer";
+import PerformanceOptimizer from "../components/PerformanceOptimizer";
 import JsonLd from "@/app/seo/JsonLd";
 
 export const metadata: Metadata = {
@@ -132,7 +132,8 @@ gtag('config', 'G-E79YGEBVTK');`
           }}
         />
       </head>
-      <body className="font-body antialiased bg-white text-gray-900 flex flex-col min-h-screen" suppressHydrationWarning>
+      {/* FIX: min-h-screen (100vh) → min-h-dvh. See globals.css comment for why. */}
+      <body className="font-body antialiased bg-white text-gray-900 flex flex-col min-h-dvh" suppressHydrationWarning>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-NJSNB7CS"

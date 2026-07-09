@@ -312,6 +312,25 @@ img {
   transform: translateZ(0);
 }
 
+/* FIX: min-h-screen (100vh) on mobile counts the address bar's height while
+   it's visible, but the address bar collapses as you scroll — making the
+   real viewport taller than the CSS 100vh value. That mismatch leaves a
+   "phantom" empty scroll area below the footer, and the scroll jump that
+   happens right as you tap near the bottom is what made the footer's social
+   icons feel unclickable. 100dvh tracks the browser's *actual* visible
+   height at all times, so there's no phantom space and no jump.
+   min-h-dvh falls back to min-h-screen's 100vh automatically in browsers
+   that don't support dvh yet. */
+.min-h-dvh {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.h-dvh {
+  height: 100vh;
+  height: 100dvh;
+}
+
 /* Mobile Responsive Utilities */
 @layer utilities {
   /* Container padding for all screen sizes */
