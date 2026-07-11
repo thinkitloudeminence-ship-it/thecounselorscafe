@@ -12,7 +12,7 @@ const services = [
     desc: "Find your perfect career path with expert guidance and psychometric assessments.",
     features: ["Psychometric tests", "Strengths mapping", "Career roadmap"],
   },
-  {
+  { 
     id: "stream",
     icon: BookOpen,
     title: "Stream Selection",
@@ -134,3 +134,6 @@ export default function ServicesPage() {
     </div>
   );
 }
+
+
+

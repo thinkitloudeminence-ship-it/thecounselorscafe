@@ -101,7 +101,7 @@ export default function Footer() {
                 <Phone size={14} className="text-yellow-500 group-hover:text-yellow-400 flex-shrink-0" />
                 <span>+91 98266 67279</span>
               </a>
-              <a 
+              <a     
                 href={mapLocation}
                 target="_blank"
                 rel="noopener noreferrer"
