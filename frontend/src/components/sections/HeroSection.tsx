@@ -1031,7 +1031,7 @@ export default function HeroSection() {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center mx-auto mb-3">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900">
+              <h3 className="text-xl font-bold text-gray-900">     
                 Connect with {selectedCounselor.name}
               </h3>
               <p className="text-gray-600 text-sm mt-2">

@@ -1,51 +1,86 @@
 "use client";
 import { useState } from "react";
-import { ArrowRight, Sparkles, Compass, BookOpen, Plane, FileText, Target, Briefcase, GraduationCap } from "lucide-react";
+import { ArrowRight, Sparkles, GraduationCap, Heart, Brain, Baby, BriefcaseBusiness, Scale, Activity, Leaf, Compass, FileText, Palette } from "lucide-react";
 import Link from "next/link";
 import EnquiryModal from "@/components/ui/EnquiryModal";
 
 const services = [
   {
     id: "career",
-    icon: Compass,
-    title: "Career Counselling",
-    desc: "Find your perfect career path with expert guidance and psychometric assessments.",
-    features: ["Psychometric tests", "Strengths mapping", "Career roadmap"],
-  },
-  { 
-    id: "stream",
-    icon: BookOpen,
-    title: "Stream Selection",
-    desc: "Choose the right stream after Class 10 with data-backed analysis.",
-    features: ["Aptitude profiling", "Stream comparison", "Future scope"],
-  },
-  {
-    id: "abroad",
-    icon: Plane,
-    title: "Study Abroad",
-    desc: "Complete guidance for studying abroad - from university selection to visa.",
-    features: ["University shortlisting", "SOP assistance", "Visa guidance"],
-  },
-  {
-    id: "college",
     icon: GraduationCap,
-    title: "College Selection",
-    desc: "Find the perfect college matching your profile and career goals.",
-    features: ["College shortlisting", "Cut-off analysis", "Placement review"],
+    title: "Career & Education",
+    desc: "Expert guidance for stream selection, career planning, study abroad, exam prep, and academic success.",
+    features: ["Stream Selection", "Career Planning", "Study Abroad", "Exam Prep"],
   },
   {
-    id: "exam",
-    icon: Target,
-    title: "Exam Guidance",
-    desc: "Strategic preparation for competitive exams like JEE, NEET, CUET, UPSC.",
-    features: ["Exam strategy", "Time management", "Mock analysis"],
+    id: "relationships",
+    icon: Heart,
+    title: "Relationships & Family",
+    desc: "Build stronger relationships with family, partners, and friends through expert counselling and guidance.",
+    features: ["Couple Counselling", "Family Therapy", "Conflict Resolution", "Communication Skills"],
   },
   {
-    id: "resume",
+    id: "mental-wellness",
+    icon: Brain,
+    title: "Mental Wellness",
+    desc: "Support for anxiety, depression, stress management, and overall mental well-being with professional care.",
+    features: ["Anxiety Management", "Depression Support", "Stress Relief", "Mindfulness"],
+  },
+  {
+    id: "parenting",
+    icon: Baby,
+    title: "Parenting",
+    desc: "Navigate every stage of parenting — from infancy to adolescence — with trusted expert advice.",
+    features: ["Newborn Care", "Toddler Development", "Teenage Guidance", "Positive Parenting"],
+  },
+  {
+    id: "business-finance",
+    icon: BriefcaseBusiness,
+    title: "Business & Finance",
+    desc: "Start, grow, or scale your business with expert mentorship, strategy, financial planning, and investment advice.",
+    features: ["Business Strategy", "Financial Planning", "Investment Advice", "Tax Optimization"],
+  },
+  {
+    id: "legal",
+    icon: Scale,
+    title: "Legal",
+    desc: "Get clarity on legal matters — from property and family law to contracts and dispute resolution.",
+    features: ["Property Law", "Family Law", "Contract Review", "Dispute Resolution"],
+  },
+  {
+    id: "health-wellness",
+    icon: Activity,
+    title: "Health & Wellness",
+    desc: "Holistic wellness, fitness, nutrition, and lifestyle coaching for a better, healthier you.",
+    features: ["Fitness Coaching", "Nutrition Advice", "Lifestyle Changes", "Holistic Health"],
+  },
+  {
+    id: "life-coaching",
+    icon: Leaf,
+    title: "Life Coaching",
+    desc: "Personal development, goal setting, confidence building, and mindset transformation for a fulfilling life.",
+    features: ["Goal Setting", "Confidence Building", "Mindset Shift", "Personal Growth"],
+  },
+  {
+    id: "study-abroad",
+    icon: Compass,
+    title: "Study Abroad",
+    desc: "Complete guidance for studying abroad — from university selection to visa filing and scholarships.",
+    features: ["University Selection", "Visa Assistance", "Scholarship Guidance", "SOP Writing"],
+  },
+  {
+    id: "resume-interview",
     icon: FileText,
     title: "Resume & Interview",
-    desc: "ATS-friendly resume, LinkedIn makeover, and mock interview sessions.",
-    features: ["Resume writing", "Mock interviews", "Salary negotiation"],
+    desc: "ATS-optimized resumes, LinkedIn makeover, and mock interview sessions to help you land your dream job.",
+    features: ["Resume Writing", "LinkedIn Optimization", "Mock Interviews", "Salary Negotiation"],
+  },
+  {
+    id: "image-personality",
+    icon: Palette,
+    title: "Image & Personality",
+    desc: "Professional grooming, personal branding, style makeover, and corporate etiquette for a confident presence.",
+    features: ["Personal Branding", "Style Makeover", "Corporate Etiquette", "Confidence Building"],
   },
 ];
 
@@ -56,7 +91,6 @@ export default function ServicesPage() {
     setSelectedService(serviceId);
   };
 
-  // Find the human-readable title for the currently selected service
   const selectedServiceTitle =
     services.find((s) => s.id === selectedService)?.title || "";
 
@@ -76,7 +110,7 @@ export default function ServicesPage() {
             </span>
           </h1>
           <p className="text-gray-500 mt-4 text-sm md:text-base">
-            One-on-one sessions with verified experts. Personalized guidance for your unique career journey.
+            One-on-one sessions with verified experts. Personalized guidance for your unique journey.
           </p>
         </div>
       </div>
@@ -107,7 +141,7 @@ export default function ServicesPage() {
 
               {/* Features */}
               <div className="space-y-1.5 mb-5">
-                {service.features.map((feature) => (
+                {service.features.slice(0, 4).map((feature) => (
                   <div key={feature} className="flex items-center gap-2 text-xs text-gray-500">
                     <span className="text-amber-500">✦</span>
                     <span>{feature}</span>

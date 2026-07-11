@@ -5,9 +5,10 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { 
   ArrowRight, Sparkles, 
-  GraduationCap, Heart, Baby, BriefcaseBusiness, 
-  Landmark, Scale, Activity,
-  Users, Globe, Rocket, Target, Brain, TrendingUp
+  GraduationCap, Heart, Brain, Baby, 
+  BriefcaseBusiness, Scale, Activity,
+  Leaf, Compass, FileText, Palette,
+  Users, Globe, Rocket, Target, TrendingUp
 } from "lucide-react";
 
 const services = [
@@ -26,39 +27,67 @@ const services = [
     color: "from-rose-500 to-pink-500",
   },
   {
+    icon: Brain,
+    title: "Mental Wellness",
+    desc: "Support for anxiety, depression, stress management, and overall mental well-being with professional care.",
+    href: "/services#mental-wellness",
+    color: "from-purple-500 to-violet-500",
+  },
+  {
     icon: Baby,
-    title: "Parenting & Child Development",
+    title: "Parenting",
     desc: "Navigate every stage of parenting — from infancy to adolescence — with trusted expert advice.",
     href: "/services#parenting",
     color: "from-emerald-500 to-green-500",
   },
   {
     icon: BriefcaseBusiness,
-    title: "Business & Entrepreneurship",
-    desc: "Start, grow, or scale your business with expert mentorship, strategy, and operational guidance.",
-    href: "/services#business",
+    title: "Business & Finance",
+    desc: "Start, grow, or scale your business with expert mentorship, strategy, financial planning, and investment advice.",
+    href: "/services#business-finance",
     color: "from-violet-500 to-purple-500",
   },
   {
-    icon: Landmark,
-    title: "Finance & Taxation",
-    desc: "Smart financial planning, investment strategies, tax optimization, and wealth management advice.",
-    href: "/services#finance",
-    color: "from-teal-500 to-emerald-500",
-  },
-  {
     icon: Scale,
-    title: "Legal Guidance",
+    title: "Legal",
     desc: "Get clarity on legal matters — from property and family law to contracts and dispute resolution.",
     href: "/services#legal",
     color: "from-blue-600 to-indigo-500",
   },
   {
     icon: Activity,
-    title: "Health & Lifestyle",
-    desc: "Holistic wellness, mental health, fitness, nutrition, and lifestyle coaching for a better you.",
-    href: "/services#health",
+    title: "Health & Wellness",
+    desc: "Holistic wellness, fitness, nutrition, and lifestyle coaching for a better, healthier you.",
+    href: "/services#health-wellness",
     color: "from-orange-500 to-red-500",
+  },
+  {
+    icon: Leaf,
+    title: "Life Coaching",
+    desc: "Personal development, goal setting, confidence building, and mindset transformation for a fulfilling life.",
+    href: "/services#life-coaching",
+    color: "from-teal-500 to-cyan-500",
+  },
+  {
+    icon: Compass,
+    title: "Study Abroad",
+    desc: "Complete guidance for studying abroad — from university selection to visa filing and scholarships.",
+    href: "/services#study-abroad",
+    color: "from-blue-500 to-cyan-500",
+  },
+  {
+    icon: FileText,
+    title: "Resume & Interview",
+    desc: "ATS-optimized resumes, LinkedIn makeover, and mock interview sessions to help you land your dream job.",
+    href: "/services#resume-interview",
+    color: "from-amber-500 to-orange-500",
+  },
+  {
+    icon: Palette,
+    title: "Image & Personality",
+    desc: "Professional grooming, personal branding, style makeover, and corporate etiquette for a confident presence.",
+    href: "/services#image-personality",
+    color: "from-pink-500 to-rose-500",
   },
 ];
 
@@ -68,7 +97,7 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.05,
       delayChildren: 0.2,
     },
   },
@@ -91,6 +120,20 @@ const itemVariants = {
 export default function ServicesOverview() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+
+  const categories = [
+    "Career & Education",
+    "Relationships & Family",
+    "Mental Wellness",
+    "Parenting",
+    "Business & Finance",
+    "Legal",
+    "Health & Wellness",
+    "Life Coaching",
+    "Study Abroad",
+    "Resume & Interview",
+    "Image & Personality",
+  ];
 
   return (
     <section ref={sectionRef} className="py-16 md:py-24 bg-white relative overflow-hidden">
@@ -134,7 +177,7 @@ export default function ServicesOverview() {
           </p>
         </motion.div>
 
-        {/* Services Grid - Centered */}
+        {/* Services Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -196,29 +239,24 @@ export default function ServicesOverview() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-3 md:gap-4 pt-4 border-t border-gray-200"
+          className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pt-4 border-t border-gray-200"
         >
-          <span className="text-gray-400 text-sm font-medium mr-2">Categories:</span>
-          {[
-            "Career & Education",
-            "Relationships & Family",
-            "Parenting & Child Development",
-            "Business & Entrepreneurship",
-            "Finance & Taxation",
-            "Legal Guidance",
-            "Health & Lifestyle",
-          ].map((category, idx) => (
+          <span className="text-gray-400 text-xs font-medium mr-1">Categories:</span>
+          {categories.map((category, idx) => (
             <motion.span
               key={category}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.5 + idx * 0.05 }}
+              transition={{ delay: 0.3 + idx * 0.03 }}
               whileHover={{ scale: 1.05, backgroundColor: "#FEF3C7" }}
-              className="px-4 py-2 rounded-full bg-gray-50 border border-gray-200 text-gray-600 text-sm font-medium hover:border-yellow-400 transition-all duration-300 cursor-default"
+              className="px-3 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-gray-600 text-xs font-medium hover:border-yellow-400 transition-all duration-300 cursor-default"
             >
               {category}
             </motion.span>
           ))}
+          <span className="px-3 py-1.5 rounded-full bg-gray-100 border border-gray-300 text-gray-500 text-xs font-medium cursor-default">
+            More…
+          </span>
         </motion.div>
       </div>
     </section>

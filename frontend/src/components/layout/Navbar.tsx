@@ -9,9 +9,9 @@ import LogoImage from "@/components/ui/thecounselorscafelogo.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/counselors", label: "Counselors" },
-  { href: "/services", label: "Services" },
-  { href: "/blog", label: "Blog" },
+  { href: "/counselors", label: "Find Experts" },
+  { href: "/services", label: "Categories" },
+  { href: "/blog", label: "Resources" },
   { href: "/about", label: "About" },
   { href: "/download-app", label: "Get App" },
 ];
@@ -37,10 +37,11 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 w-full max-w-full transition-all duration-500 ${scrolled
+        className={`fixed top-0 left-0 right-0 z-50 w-full max-w-full transition-all duration-500 ${
+          scrolled
             ? "bg-black/95 backdrop-blur-xl border-b border-yellow-500/30 shadow-2xl shadow-yellow-500/10"
             : "bg-black/90 backdrop-blur-sm border-b border-yellow-500/10"
-          }`}
+        }`}
       >
         <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20">
