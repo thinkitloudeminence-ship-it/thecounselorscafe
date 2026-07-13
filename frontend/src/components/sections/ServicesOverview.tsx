@@ -1,93 +1,126 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { 
-  ArrowRight, Sparkles, 
-  GraduationCap, Heart, Brain, Baby, 
+import {
+  ArrowRight, Sparkles,
+  GraduationCap, Heart, Brain, Baby,
   BriefcaseBusiness, Scale, Activity,
-  Leaf, Compass, FileText, Palette,
-  Users, Globe, Rocket, Target, TrendingUp
+  Shield
 } from "lucide-react";
 
-const services = [
+// 7 Main Categories
+const categories = [
   {
+    id: "education-career",
     icon: GraduationCap,
-    title: "Career & Education",
-    desc: "Expert guidance for stream selection, career planning, study abroad, exam prep, and academic success.",
-    href: "/services#career",
+    title: "Education & Career",
     color: "from-amber-500 to-yellow-600",
+    desc: "Expert guidance for career planning, study abroad, exam prep, and academic success.",
+    features: [
+      "Career Counseling",
+      "Stream Selection (7th onwards)",
+      "College Admissions",
+      "Study Abroad Guidance",
+      "Scholarship Guidance",
+      "Resume Review",
+      "Interview Preparation",
+    ],
   },
   {
+    id: "relationships-family",
     icon: Heart,
     title: "Relationships & Family",
-    desc: "Build stronger relationships with family, partners, and friends through expert counselling and guidance.",
-    href: "/services#relationships",
     color: "from-rose-500 to-pink-500",
+    desc: "Build stronger relationships with family, partners, and friends through expert counselling.",
+    features: [
+      "Relationship Counseling",
+      "Marriage Counseling",
+      "Premarital Guidance",
+      "Parenting Support",
+      "Teen Counseling",
+      "Family Conflict Resolution",
+      "Divorce & Separation Support",
+    ],
   },
   {
+    id: "mental-wellbeing",
     icon: Brain,
-    title: "Mental Wellness",
-    desc: "Support for anxiety, depression, stress management, and overall mental well-being with professional care.",
-    href: "/services#mental-wellness",
+    title: "Mental & Emotional Well-being",
     color: "from-purple-500 to-violet-500",
+    desc: "Support for stress, anxiety, depression, and overall mental well-being with professional care.",
+    features: [
+      "Stress Management",
+      "Anxiety Support",
+      "Burnout Recovery",
+      "Confidence Building",
+      "Emotional Wellness",
+      "Life Coaching",
+      "Mindfulness",
+    ],
   },
   {
+    id: "parenting",
     icon: Baby,
     title: "Parenting",
-    desc: "Navigate every stage of parenting — from infancy to adolescence — with trusted expert advice.",
-    href: "/services#parenting",
     color: "from-emerald-500 to-green-500",
+    desc: "Navigate every stage of parenting from infancy to adolescence with trusted expert advice.",
+    features: [
+      "Learning Difficulties",
+      "Child Behaviour",
+      "Parenting Coaching",
+      "School Readiness",
+      "Special Education Guidance",
+    ],
   },
   {
-    icon: BriefcaseBusiness,
-    title: "Business & Finance",
-    desc: "Start, grow, or scale your business with expert mentorship, strategy, financial planning, and investment advice.",
-    href: "/services#business-finance",
-    color: "from-violet-500 to-purple-500",
-  },
-  {
+    id: "legal-documentation",
     icon: Scale,
-    title: "Legal",
-    desc: "Get clarity on legal matters — from property and family law to contracts and dispute resolution.",
-    href: "/services#legal",
+    title: "Legal & Documentation",
     color: "from-blue-600 to-indigo-500",
+    desc: "Get clarity on legal matters from property and family law to contracts and dispute resolution.",
+    features: [
+      "Property Matters",
+      "Consumer Rights",
+      "Employment Law",
+      "Family Law",
+      "Legal Documentation",
+      "Government Schemes",
+      "RTI & Public Services",
+    ],
   },
   {
-    icon: Activity,
-    title: "Health & Wellness",
-    desc: "Holistic wellness, fitness, nutrition, and lifestyle coaching for a better, healthier you.",
-    href: "/services#health-wellness",
-    color: "from-orange-500 to-red-500",
-  },
-  {
-    icon: Leaf,
-    title: "Life Coaching",
-    desc: "Personal development, goal setting, confidence building, and mindset transformation for a fulfilling life.",
-    href: "/services#life-coaching",
+    id: "child-safety",
+    icon: Shield,
+    title: "Child Safety & Family Support",
     color: "from-teal-500 to-cyan-500",
+    desc: "Support for child safety, bullying, trauma, and family well-being.",
+    features: [
+      "Child Abuse Support",
+      "Bullying",
+      "Emotional Trauma",
+      "Parenting Guidance",
+      "Child Behaviour Issues",
+      "School Stress",
+    ],
   },
   {
-    icon: Compass,
-    title: "Study Abroad",
-    desc: "Complete guidance for studying abroad — from university selection to visa filing and scholarships.",
-    href: "/services#study-abroad",
-    color: "from-blue-500 to-cyan-500",
-  },
-  {
-    icon: FileText,
-    title: "Resume & Interview",
-    desc: "ATS-optimized resumes, LinkedIn makeover, and mock interview sessions to help you land your dream job.",
-    href: "/services#resume-interview",
-    color: "from-amber-500 to-orange-500",
-  },
-  {
-    icon: Palette,
-    title: "Image & Personality",
-    desc: "Professional grooming, personal branding, style makeover, and corporate etiquette for a confident presence.",
-    href: "/services#image-personality",
-    color: "from-pink-500 to-rose-500",
+    id: "health-lifestyle",
+    icon: Activity,
+    title: "Health & Lifestyle",
+    color: "from-orange-500 to-red-500",
+    desc: "Holistic wellness, fitness, nutrition, and lifestyle coaching for a better, healthier you.",
+    features: [
+      "Nutrition",
+      "Diet Planning",
+      "Fitness Coaching",
+      "Women's Health Education",
+      "Men's Health Education",
+      "Senior Care Guidance",
+      "Sleep Improvement",
+    ],
   },
 ];
 
@@ -121,20 +154,6 @@ export default function ServicesOverview() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
-  const categories = [
-    "Career & Education",
-    "Relationships & Family",
-    "Mental Wellness",
-    "Parenting",
-    "Business & Finance",
-    "Legal",
-    "Health & Wellness",
-    "Life Coaching",
-    "Study Abroad",
-    "Resume & Interview",
-    "Image & Personality",
-  ];
-
   return (
     <section ref={sectionRef} className="py-16 md:py-24 bg-white relative overflow-hidden">
       {/* Background Decorations */}
@@ -142,7 +161,7 @@ export default function ServicesOverview() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-yellow-500/5 via-yellow-400/5 to-yellow-500/5 rounded-full blur-[120px]" />
         <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-yellow-500/20 to-transparent" />
         <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-yellow-500/20 to-transparent" />
-        
+
         {/* Floating Dots */}
         <div className="absolute top-10 right-20 w-2 h-2 bg-yellow-500/30 rounded-full animate-pulse" />
         <div className="absolute bottom-20 left-10 w-3 h-3 bg-yellow-500/20 rounded-full animate-pulse animation-delay-1000" />
@@ -155,7 +174,7 @@ export default function ServicesOverview() {
           initial={{ opacity: 0, y: -30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-50 border border-yellow-200 mb-4">
             <Sparkles size={14} className="text-yellow-500" />
@@ -177,86 +196,83 @@ export default function ServicesOverview() {
           </p>
         </motion.div>
 
-        {/* Services Grid */}
+        {/* Categories Grid - Simple Cards */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
         >
-          {services.map((s) => (
+          {categories.map((cat) => (
             <motion.div
-              key={s.title}
+              key={cat.id}
               variants={itemVariants}
-              whileHover={{ y: -8, transition: { type: "spring", stiffness: 300 } }}
-              className="perspective-1000"
+              whileHover={{ y: -6, transition: { type: "spring", stiffness: 300 } }}
+              className="group"
             >
-              <Link href={s.href} className="block relative group h-full">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
-
-                <div className="relative bg-white border border-gray-200 rounded-2xl p-6 hover:border-yellow-500/50 transition-all duration-500 h-full overflow-hidden shadow-lg hover:shadow-xl flex flex-col items-center text-center">
-                  
-                  {/* Icon - Centered */}
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-5 shadow-lg relative overflow-hidden flex-shrink-0`}>
-                    <s.icon size={32} className="text-white relative z-10" strokeWidth={1.5} />
-                    <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-
-                  {/* Title - Centered */}
-                  <h3 className="text-gray-900 font-bold text-xl mb-3 transition-all duration-300 group-hover:text-yellow-500">
-                    {s.title}
-                    <div className="h-0.5 bg-gradient-to-r from-yellow-500 to-transparent mt-1 w-0 group-hover:w-full transition-all duration-300 mx-auto" />
-                  </h3>
-
-                  {/* Description - Centered */}
-                  <p className="text-gray-500 text-sm leading-relaxed mb-4 flex-1">
-                    {s.desc}
-                  </p>
-
-                  {/* Discover more - Centered */}
-                  <span className="inline-flex items-center gap-2 text-yellow-500 text-sm font-semibold group-hover:text-yellow-600 transition-all duration-300">
-                    <span>Discover more</span>
-                    <motion.span
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <ArrowRight size={14} />
-                    </motion.span>
-                  </span>
-
-                  {/* Decorative corner */}
-                  <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
-                    <div className="absolute top-0 right-0 w-8 h-8 bg-yellow-500/10 -translate-y-1/2 translate-x-1/2 rotate-45" />
-                  </div>
+              <div className="bg-white border border-gray-200 rounded-2xl p-5 hover:border-amber-400 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                {/* Icon */}
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center mb-4 shadow-lg shadow-amber-500/20 flex-shrink-0`}>
+                  <cat.icon size={24} className="text-white" strokeWidth={1.5} />
                 </div>
-              </Link>
+
+                {/* Title */}
+                <h3 className="text-gray-900 font-bold text-lg mb-2 group-hover:text-amber-500 transition-colors">
+                  {cat.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-500 text-sm leading-relaxed mb-4 flex-1">
+                  {cat.desc}
+                </p>
+
+                {/* Features */}
+                <div className="space-y-1.5 mb-5">
+                  {cat.features.slice(0, 4).map((feature) => (
+                    <div key={feature} className="flex items-center gap-2 text-xs text-gray-500">
+                      <span className="text-amber-500">✦</span>
+                      <span className="line-clamp-1">{feature}</span>
+                    </div>
+                  ))}
+                  {cat.features.length > 4 && (
+                    <div className="flex items-center gap-2 text-xs text-amber-500">
+                      <span>+{cat.features.length - 4} more</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Enquire Button */}
+                <Link
+                  href="/counselors"
+                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300"
+                >
+                  Enquire Now <ArrowRight size={14} />
+                </Link>
+              </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Categories Pills */}
+        {/* Categories Pills - Quick links */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pt-4 border-t border-gray-200"
+          className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pt-8 mt-6 border-t border-gray-200"
         >
-          <span className="text-gray-400 text-xs font-medium mr-1">Categories:</span>
-          {categories.map((category, idx) => (
+          <span className="text-gray-400 text-xs font-medium mr-1">Quick Links:</span>
+          {categories.map((cat, idx) => (
             <motion.span
-              key={category}
+              key={cat.id}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.3 + idx * 0.03 }}
               whileHover={{ scale: 1.05, backgroundColor: "#FEF3C7" }}
               className="px-3 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-gray-600 text-xs font-medium hover:border-yellow-400 transition-all duration-300 cursor-default"
             >
-              {category}
+              {cat.title}
             </motion.span>
           ))}
-          <span className="px-3 py-1.5 rounded-full bg-gray-100 border border-gray-300 text-gray-500 text-xs font-medium cursor-default">
-            More…
-          </span>
         </motion.div>
       </div>
     </section>

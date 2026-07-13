@@ -1,98 +1,143 @@
 "use client";
-import { useState } from "react";
-import { ArrowRight, Sparkles, GraduationCap, Heart, Brain, Baby, BriefcaseBusiness, Scale, Activity, Leaf, Compass, FileText, Palette } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Sparkles, GraduationCap, Heart, Brain, Baby, BriefcaseBusiness, Scale, Activity, Shield } from "lucide-react";
 import Link from "next/link";
 import EnquiryModal from "@/components/ui/EnquiryModal";
 
-const services = [
+const categories = [
   {
-    id: "career",
+    id: "education-career",
     icon: GraduationCap,
-    title: "Career & Education",
-    desc: "Expert guidance for stream selection, career planning, study abroad, exam prep, and academic success.",
-    features: ["Stream Selection", "Career Planning", "Study Abroad", "Exam Prep"],
+    title: "Education & Career",
+    color: "from-amber-500 to-yellow-600",
+    desc: "Expert guidance for career planning, study abroad, exam prep, and academic success.",
+    features: [
+      "Career Counseling",
+      "Stream Selection (7th onwards)",
+      "College Admissions",
+      "Study Abroad Guidance",
+      "Scholarship Guidance",
+      "Resume Review",
+      "Interview Preparation",
+    ],
   },
   {
-    id: "relationships",
+    id: "relationships-family",
     icon: Heart,
     title: "Relationships & Family",
-    desc: "Build stronger relationships with family, partners, and friends through expert counselling and guidance.",
-    features: ["Couple Counselling", "Family Therapy", "Conflict Resolution", "Communication Skills"],
+    color: "from-rose-500 to-pink-500",
+    desc: "Build stronger relationships with family, partners, and friends through expert counselling.",
+    features: [
+      "Relationship Counseling",
+      "Marriage Counseling",
+      "Premarital Guidance",
+      "Parenting Support",
+      "Teen Counseling",
+      "Family Conflict Resolution",
+      "Divorce & Separation Support",
+    ],
   },
   {
-    id: "mental-wellness",
+    id: "mental-wellbeing",
     icon: Brain,
-    title: "Mental Wellness",
-    desc: "Support for anxiety, depression, stress management, and overall mental well-being with professional care.",
-    features: ["Anxiety Management", "Depression Support", "Stress Relief", "Mindfulness"],
+    title: "Mental & Emotional Well-being",
+    color: "from-purple-500 to-violet-500",
+    desc: "Support for stress, anxiety, depression, and overall mental well-being with professional care.",
+    features: [
+      "Stress Management",
+      "Anxiety Support",
+      "Burnout Recovery",
+      "Confidence Building",
+      "Emotional Wellness",
+      "Life Coaching",
+      "Mindfulness",
+      "Habit Building",
+    ],
   },
   {
     id: "parenting",
     icon: Baby,
     title: "Parenting",
-    desc: "Navigate every stage of parenting — from infancy to adolescence — with trusted expert advice.",
-    features: ["Newborn Care", "Toddler Development", "Teenage Guidance", "Positive Parenting"],
+    color: "from-emerald-500 to-green-500",
+    desc: "Navigate every stage of parenting from infancy to adolescence with trusted expert advice.",
+    features: [
+      "Learning Difficulties",
+      "Child Behaviour",
+      "Parenting Coaching",
+      "School Readiness",
+      "Special Education Guidance",
+    ],
   },
   {
-    id: "business-finance",
-    icon: BriefcaseBusiness,
-    title: "Business & Finance",
-    desc: "Start, grow, or scale your business with expert mentorship, strategy, financial planning, and investment advice.",
-    features: ["Business Strategy", "Financial Planning", "Investment Advice", "Tax Optimization"],
-  },
-  {
-    id: "legal",
+    id: "legal-documentation",
     icon: Scale,
-    title: "Legal",
-    desc: "Get clarity on legal matters — from property and family law to contracts and dispute resolution.",
-    features: ["Property Law", "Family Law", "Contract Review", "Dispute Resolution"],
+    title: "Legal & Documentation",
+    color: "from-blue-600 to-indigo-500",
+    desc: "Get clarity on legal matters from property and family law to contracts and dispute resolution.",
+    features: [
+      "Property Matters",
+      "Consumer Rights",
+      "Employment Law",
+      "Family Law",
+      "Legal Documentation",
+      "Government Schemes",
+      "RTI & Public Services",
+    ],
   },
   {
-    id: "health-wellness",
+    id: "child-safety",
+    icon: Shield,
+    title: "Child Safety & Family Support",
+    color: "from-teal-500 to-cyan-500",
+    desc: "Support for child safety, bullying, trauma, and family well-being.",
+    features: [
+      "Child Abuse Support",
+      "Bullying",
+      "Emotional Trauma",
+      "Parenting Guidance",
+      "Child Behaviour Issues",
+      "School Stress",
+    ],
+  },
+  {
+    id: "health-lifestyle",
     icon: Activity,
-    title: "Health & Wellness",
+    title: "Health & Lifestyle",
+    color: "from-orange-500 to-red-500",
     desc: "Holistic wellness, fitness, nutrition, and lifestyle coaching for a better, healthier you.",
-    features: ["Fitness Coaching", "Nutrition Advice", "Lifestyle Changes", "Holistic Health"],
-  },
-  {
-    id: "life-coaching",
-    icon: Leaf,
-    title: "Life Coaching",
-    desc: "Personal development, goal setting, confidence building, and mindset transformation for a fulfilling life.",
-    features: ["Goal Setting", "Confidence Building", "Mindset Shift", "Personal Growth"],
-  },
-  {
-    id: "study-abroad",
-    icon: Compass,
-    title: "Study Abroad",
-    desc: "Complete guidance for studying abroad — from university selection to visa filing and scholarships.",
-    features: ["University Selection", "Visa Assistance", "Scholarship Guidance", "SOP Writing"],
-  },
-  {
-    id: "resume-interview",
-    icon: FileText,
-    title: "Resume & Interview",
-    desc: "ATS-optimized resumes, LinkedIn makeover, and mock interview sessions to help you land your dream job.",
-    features: ["Resume Writing", "LinkedIn Optimization", "Mock Interviews", "Salary Negotiation"],
-  },
-  {
-    id: "image-personality",
-    icon: Palette,
-    title: "Image & Personality",
-    desc: "Professional grooming, personal branding, style makeover, and corporate etiquette for a confident presence.",
-    features: ["Personal Branding", "Style Makeover", "Corporate Etiquette", "Confidence Building"],
+    features: [
+      "Nutrition",
+      "Diet Planning",
+      "Fitness Coaching",
+      "Women's Health Education",
+      "Men's Health Education",
+      "Senior Care Guidance",
+      "Sleep Improvement",
+    ],
   },
 ];
 
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<string | null>(null);
 
-  const handleServiceClick = (serviceId: string) => {
-    setSelectedService(serviceId);
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 300);
+      }
+    }
+  }, []);
+
+  const handleServiceClick = (categoryId: string) => {
+    setSelectedService(categoryId);
   };
 
   const selectedServiceTitle =
-    services.find((s) => s.id === selectedService)?.title || "";
+    categories.find((c) => c.id === selectedService)?.title || "";
 
   return (
     <div className="min-h-screen bg-white pt-20">
@@ -104,49 +149,56 @@ export default function ServicesPage() {
             Expert Guidance
           </span>
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900">
-            Your Career,{" "}
             <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
-              Our Expertise
+              Expert Guidance
             </span>
+            <br />
+            <span>For Every Stage of Life</span>
           </h1>
           <p className="text-gray-500 mt-4 text-sm md:text-base">
-            One-on-one sessions with verified experts. Personalized guidance for your unique journey.
+            From career and relationships to health, finance, parenting, legal guidance, and personal growth—we connect you with the right expert, anytime.
           </p>
         </div>
       </div>
 
-      {/* Services Grid */}
+      {/* Services Grid - Cards Layout (Pehle Jaisa) */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {services.map((service) => (
+          {categories.map((category) => (
             <div
-              key={service.id}
-              className="group bg-white rounded-2xl border border-gray-200 hover:border-amber-400 hover:-translate-y-1 transition-all duration-300 p-6 shadow-lg hover:shadow-xl cursor-pointer"
-              onClick={() => handleServiceClick(service.id)}
+              key={category.id}
+              id={category.id}
+              className="group bg-white rounded-2xl border border-gray-200 hover:border-amber-400 hover:-translate-y-1 transition-all duration-300 p-6 shadow-lg hover:shadow-xl cursor-pointer scroll-mt-24"
+              onClick={() => handleServiceClick(category.id)}
             >
               {/* Icon */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/20">
-                <service.icon size={24} className="text-white" />
+              <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center mb-4 shadow-lg shadow-amber-500/20`}>
+                <category.icon size={24} className="text-white" />
               </div>
 
               {/* Title */}
               <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">
-                {service.title}
+                {category.title}
               </h3>
 
               {/* Description */}
               <p className="text-gray-500 text-sm leading-relaxed mb-4">
-                {service.desc}
+                {category.desc}
               </p>
 
               {/* Features */}
               <div className="space-y-1.5 mb-5">
-                {service.features.slice(0, 4).map((feature) => (
+                {category.features.slice(0, 5).map((feature) => (
                   <div key={feature} className="flex items-center gap-2 text-xs text-gray-500">
                     <span className="text-amber-500">✦</span>
-                    <span>{feature}</span>
+                    <span className="line-clamp-1">{feature}</span>
                   </div>
                 ))}
+                {category.features.length > 5 && (
+                  <div className="flex items-center gap-2 text-xs text-amber-500">
+                    <span>+{category.features.length - 5} more</span>
+                  </div>
+                )}
               </div>
 
               {/* Button */}
@@ -163,11 +215,8 @@ export default function ServicesPage() {
         isOpen={!!selectedService}
         onClose={() => setSelectedService(null)}
         defaultSubject={`Enquiry for ${selectedServiceTitle}`}
-        defaultMessage={`I would like to know more about ${selectedServiceTitle} service.`}
+        defaultMessage={`I would like to know more about ${selectedServiceTitle} services.`}
       />
     </div>
   );
 }
-
-
-

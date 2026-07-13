@@ -735,7 +735,7 @@ export default function HeroSection() {
                     <span className="flex items-center gap-1.5 bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5">
                       <Video size={14} className="text-amber-500" />
                       <span className="text-gray-700 text-xs font-medium">Video</span>
-                    </span>
+                    </span> 
                   </div>
                 </div>
               </motion.div>
