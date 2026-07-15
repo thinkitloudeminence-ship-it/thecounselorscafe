@@ -3,6 +3,12 @@ import { notFound } from "next/navigation";
 import CategoryDetailClient from "./CategoryDetailClient";
 
 // ✅ Sabhi 7 categories ki details
+// FIX: `color` gradients were random rainbow colors (rose/pink, purple/violet,
+// emerald/green, blue/indigo, teal/cyan, orange/red) that clashed with the
+// rest of the site's black/yellow/white identity. Replaced every gradient
+// with shades of amber/yellow/black only — each category still gets a
+// slightly different tone (order and shade vary) so cards remain visually
+// distinct, but nothing breaks the theme anymore. Nothing else changed.
 const categoriesData = [
   {
     id: "education-career",
@@ -28,7 +34,7 @@ const categoriesData = [
     title: "Relationships & Family",
     icon: "❤️",
     desc: "Build stronger relationships with family, partners, and friends through expert counselling.",
-    color: "from-rose-500 to-pink-500",
+    color: "from-yellow-500 to-amber-600",
     subCategories: [
       "Relationship Counseling",
       "Marriage Counseling",
@@ -44,7 +50,7 @@ const categoriesData = [
     title: "Mental & Emotional Well-being",
     icon: "🧠",
     desc: "Support for stress, anxiety, depression, and overall mental well-being.",
-    color: "from-purple-500 to-violet-500",
+    color: "from-amber-400 to-yellow-500",
     subCategories: [
       "Stress Management",
       "Anxiety Support",
@@ -62,7 +68,7 @@ const categoriesData = [
     title: "Parenting",
     icon: "👶",
     desc: "Navigate every stage of parenting from infancy to adolescence with trusted expert advice.",
-    color: "from-emerald-500 to-green-500",
+    color: "from-amber-500 to-amber-700",
     subCategories: [
       "Learning Difficulties",
       "Child Behaviour",
@@ -76,7 +82,7 @@ const categoriesData = [
     title: "Legal & Documentation",
     icon: "⚖️",
     desc: "Get clarity on legal matters from property and family law to contracts.",
-    color: "from-blue-600 to-indigo-500",
+    color: "from-gray-800 to-black",
     subCategories: [
       "Property Matters",
       "Consumer Rights",
@@ -92,7 +98,7 @@ const categoriesData = [
     title: "Child Safety & Family Support",
     icon: "🛡️",
     desc: "Support for child safety, bullying, trauma, and family well-being.",
-    color: "from-teal-500 to-cyan-500",
+    color: "from-amber-600 to-yellow-600",
     subCategories: [
       "Child Abuse Support",
       "Bullying",
@@ -107,7 +113,7 @@ const categoriesData = [
     title: "Health & Lifestyle",
     icon: "🏃",
     desc: "Holistic wellness, fitness, nutrition, and lifestyle coaching for a better you.",
-    color: "from-orange-500 to-red-500",
+    color: "from-yellow-400 to-amber-500",
     subCategories: [
       "Nutrition",
       "Diet Planning",
