@@ -613,17 +613,6 @@ export default function HeroSection() {
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
-  if (loading) {
-    return (
-      <section className="min-h-screen flex items-center justify-center bg-white">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-500 text-sm">Loading counselors...</p>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <>
       <section ref={heroRef} className="relative min-h-screen bg-white pt-20 overflow-hidden">
@@ -887,7 +876,29 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {counselors.length === 0 ? (
+              {loading ? (
+                <div className="overflow-hidden w-full max-w-full">
+                  <div className="flex gap-5">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="flex-[0_0_85%] sm:flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] min-w-0 max-w-full"
+                      >
+                        <div className="bg-white rounded-2xl p-5 text-center border border-gray-200 h-full animate-pulse">
+                          <div className="w-20 h-20 mx-auto rounded-full bg-gray-200" />
+                          <div className="h-4 bg-gray-200 rounded mt-4 w-2/3 mx-auto" />
+                          <div className="h-3 bg-gray-200 rounded mt-2 w-1/2 mx-auto" />
+                          <div className="mt-4 pt-3 border-t border-gray-200 flex gap-3">
+                            <div className="flex-1 h-12 bg-gray-200 rounded-xl" />
+                            <div className="flex-1 h-12 bg-gray-200 rounded-xl" />
+                          </div>
+                          <div className="h-10 bg-gray-200 rounded-xl mt-3" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : counselors.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500 text-sm">No counselors available</p>
                 </div>

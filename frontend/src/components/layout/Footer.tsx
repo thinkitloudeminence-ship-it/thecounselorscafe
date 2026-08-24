@@ -81,7 +81,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Contact Info */}
+          {/* Column 3: Contact Info */}    
           <div className="text-center lg:text-left">
             <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-3">
               Contact Us
@@ -94,7 +94,7 @@ export default function Footer() {
                 <Mail size={14} className="text-yellow-500 group-hover:text-yellow-400 flex-shrink-0" />
                 <span>counselorscafeindia@gmail.com</span>
               </a>
-              <a 
+              <a  
                 href="tel:+919826667279" 
                 className="flex items-center justify-center lg:justify-start gap-2 text-gray-400 hover:text-yellow-400 transition-colors duration-300 group"
               >

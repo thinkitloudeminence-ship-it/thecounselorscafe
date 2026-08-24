@@ -1,8 +1,10 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const compression = require("compression"); // ✅ NEW: gzip/brotli response compression
 const rateLimit = require("express-rate-limit");
 const path = require("path");
 
@@ -23,8 +25,18 @@ const PORT = process.env.PORT || 5000;
 // ── Connect DB ──────────────────────────────────────────
 connectDB();
 
+// ✅ FIX: "trust proxy" — Render/Vercel jaise hosting providers reverse-proxy
+// ke peeche chalate hain, jo X-Forwarded-For header set karta hai.
+// Isse express-rate-limit ka warning/error khatam ho jaata hai aur
+// rate-limiter user ka sahi IP identify kar paata hai.
+app.set("trust proxy", 1);
+
 // ── Security Middleware ─────────────────────────────────
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+
+// ✅ NEW: Compression — response ko gzip karke bhejta hai, payload size
+// 60-80% tak chhota ho jaata hai, isse network transfer fast hota hai.
+app.use(compression());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -34,25 +46,34 @@ const limiter = rateLimit({
 app.use("/api/", limiter);
 
 // ── Core Middleware ─────────────────────────────────────
-app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://www.counselorscafe.com",
-    "https://thecounselorscafe-uzdc.vercel.app",
-    /\.vercel\.app$/
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://www.counselorscafe.com",
+      "https://thecounselorscafe-uzdc.vercel.app",
+      /\.vercel\.app$/,
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
 
 // ── Static files ───────────────────────────────────────
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"), {
+    // ✅ Uploaded images (counselor photos) ko browser cache mein 1 din rakho
+    maxAge: "1d",
+    immutable: false,
+  })
+);
 
 // ── API Routes ─────────────────────────────────────────
 app.use("/api/auth", authRoutes);

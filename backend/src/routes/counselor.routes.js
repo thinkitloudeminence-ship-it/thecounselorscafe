@@ -2,10 +2,22 @@ const express = require("express");
 const router = express.Router();
 const Counselor = require("../models/Counselor");
 
+// Fields jo hero section card mein actually dikhti hain — bio/email/phone
+// jaisi heavy fields yahan skip, wo sirf single counselor page pe milengi.
+const LIST_FIELDS =
+  "name title slug expertise experience rating reviews image available " +
+  "pricePerSession pricePerMinute pricePerChat isActive order createdAt";
+
 // GET all counselors
 router.get("/", async (req, res) => {
   try {
-    const counselors = await Counselor.find({ isActive: true }).sort({ rating: -1 });
+    const counselors = await Counselor.find({ isActive: true })
+      .select(LIST_FIELDS)
+      .sort({ rating: -1 })
+      .limit(12)
+      .lean();
+
+    res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
     res.json({ success: true, data: counselors });
   } catch (error) {
     console.error("Error fetching counselors:", error);
