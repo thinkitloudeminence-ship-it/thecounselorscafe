@@ -521,10 +521,17 @@ import EnquiryModal from "../ui/EnquiryModal";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  // ✅ Server (page.tsx) se pehle se fetch kiya hua data — agar yeh mile
+  // to client ko dobara API call karne ki zaroorat hi nahi padegi.
+  initialCounselors?: any[];
+}
+
+export default function HeroSection({ initialCounselors = [] }: HeroSectionProps) {
   const [appModal, setAppModal] = useState(false);
-  const [counselors, setCounselors] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [counselors, setCounselors] = useState<any[]>(initialCounselors);
+  // ✅ Agar server se data already mil chuka hai, to loading false se start hoga
+  const [loading, setLoading] = useState(initialCounselors.length === 0);
   const [showContactModal, setShowContactModal] = useState(false);
   const [selectedCounselor, setSelectedCounselor] = useState<any>(null);
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
@@ -577,6 +584,10 @@ export default function HeroSection() {
   }, [emblaApi]);
 
   useEffect(() => {
+    // ✅ Agar page.tsx (server) se data pehle se mil chuka hai, to yahan
+    // dobara fetch karne ki koi zaroorat nahi — sidha skip kar do.
+    if (initialCounselors.length > 0) return;
+
     const fetchCounselors = async () => {
       try {
         setLoading(true);
@@ -598,6 +609,7 @@ export default function HeroSection() {
     };
 
     fetchCounselors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleContactClick = (counselor: any, type: string) => {
