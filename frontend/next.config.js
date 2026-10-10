@@ -31,6 +31,13 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      // ✅ YEH ADD KIYA — Counselor images ka domain
+      {
+        protocol: 'https',
+        hostname: 'cdn.phototourl.com',
+        port: '',
+        pathname: '/**',
+      },
       {
         protocol: 'http',
         hostname: 'localhost',
